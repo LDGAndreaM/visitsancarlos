@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+  <script src="./image-slot.js"></script>
+  <style>
+    body { margin: 0; font-family: 'Poppins', sans-serif; color: #143840; background: #F7FBFC; }
+    a { color: #009BA4; text-decoration: none; }
+    a:hover { color: #EB600A; }
+    * { box-sizing: border-box; }
+    input::placeholder, textarea::placeholder { color: #9DB6B8; }
+  </style>
+</helmet>
+
+<div style="max-width:100%; min-height:100vh; overflow-x:hidden; background:#F7FBFC; display:grid; grid-template-columns:240px 1fr;">
+
+  <!-- SIDEBAR -->
+  <aside style="background:#143840; padding:24px 18px; display:flex; flex-direction:column; gap:6px;">
+    <a href="Visit San Carlos Home.dc.html" style="margin-bottom:10px; padding:0 6px; display:flex; align-items:center; gap:8px;">
+      <img src="uploads/Recurso 1visitsancarlos.png" alt="Visit San Carlos" style="height:34px; width:auto; filter:brightness(0) invert(1);" />
+    </a>
+    <span style="padding:0 6px 14px; font-size:11px; font-weight:700; color:#7FA7AA; letter-spacing:0.06em;">PANEL ADMINISTRATIVO</span>
+    <sc-for list="{{ navItems }}" as="nav" hint-placeholder-count="8">
+      <button onClick="{{ nav.onClick }}" style="display:flex; align-items:center; gap:10px; border:none; background:{{ nav.bg }}; color:{{ nav.color }}; font-weight:700; font-size:13.5px; padding:10px 14px; border-radius:10px; cursor:pointer; text-align:left;">
+        {{ nav.label }}
+        <sc-if value="{{ nav.badge }}"><span style="margin-left:auto; background:#EB600A; color:#ffffff; font-size:11px; font-weight:800; padding:2px 7px; border-radius:999px;">{{ nav.badge }}</span></sc-if>
+      </button>
+    </sc-for>
+    <div style="flex:1;"></div>
+    <a href="Visit San Carlos Login.dc.html" style="display:flex; align-items:center; gap:10px; font-weight:600; font-size:13px; color:#7FA7AA; padding:11px 14px;">Cerrar sesión</a>
+  </aside>
+
+  <!-- CONTENIDO -->
+  <main style="padding:32px 40px; display:flex; flex-direction:column; gap:24px;">
+
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+      <div>
+        <h1 style="margin:0; font-size:24px; font-weight:800; color:#143840;">{{ pageTitle }}</h1>
+        <p style="margin:4px 0 0; font-size:13px; color:#5C7679;">{{ pageSubtitle }}</p>
+      </div>
+      <a href="Visit San Carlos Directorio.dc.html" style="background:#ffffff; border:2px solid #009BA4; color:#009BA4; font-weight:700; font-size:13px; padding:10px 18px; border-radius:10px;">Ver sitio público</a>
+    </div>
+
+    <!-- RESUMEN -->
+    <sc-if value="{{ isResumen }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; flex-direction:column; gap:24px;">
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:18px;">
+          <div style="background:#ffffff; border-radius:16px; padding:20px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:12px; font-weight:700; color:#5C7679;">Usuarios registrados</span>
+            <span style="font-size:24px; font-weight:800; color:#143840;">{{ stats.userCount }}</span>
+          </div>
+          <div style="background:#ffffff; border-radius:16px; padding:20px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:12px; font-weight:700; color:#5C7679;">Negocios publicados</span>
+            <span style="font-size:24px; font-weight:800; color:#009BA4;">{{ stats.publishedCount }}</span>
+          </div>
+          <div style="background:#ffffff; border-radius:16px; padding:20px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:12px; font-weight:700; color:#5C7679;">Pendientes de aprobación</span>
+            <span style="font-size:24px; font-weight:800; color:#EB600A;">{{ stats.pendingCount }}</span>
+          </div>
+          <div style="background:#ffffff; border-radius:16px; padding:20px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:12px; font-weight:700; color:#5C7679;">Ingreso mensual estimado</span>
+            <span style="font-size:24px; font-weight:800; color:#143840;">{{ stats.revenueFmt }}</span>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1.2fr 1fr; gap:20px;">
+          <div style="background:#ffffff; border-radius:18px; padding:24px; box-shadow:0 8px 20px rgba(0,60,66,0.06);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+              <h2 style="margin:0; font-size:16px; font-weight:800; color:#143840;">Aprobaciones pendientes</h2>
+              <button onClick="{{ goApprovals }}" style="border:none; background:none; color:#009BA4; font-weight:700; font-size:13px; cursor:pointer;">Ver todas →</button>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <sc-for list="{{ pendingBusinesses }}" as="biz" hint-placeholder-count="2">
+                <div style="display:flex; align-items:center; gap:14px; padding:12px; border:1px solid #EEF3F3; border-radius:12px;">
+                  <div style="width:44px; height:44px; border-radius:10px; overflow:hidden; flex-shrink:0;"><image-slot id="{{ biz.id }}-thumb" shape="rect" placeholder="Logo"></image-slot></div>
+                  <div style="flex:1;">
+                    <span style="font-size:14px; font-weight:700; color:#143840; display:block;">{{ biz.name }}</span>
+                    <span style="font-size:12px; color:#5C7679;">{{ biz.owner }} · {{ biz.category }}</span>
+                  </div>
+                  <button onClick="{{ biz.onApprove }}" style="border:none; background:#009BA4; color:#ffffff; font-weight:700; font-size:12px; padding:8px 12px; border-radius:8px; cursor:pointer;">Aprobar</button>
+                </div>
+              </sc-for>
+              <sc-if value="{{ noPending }}"><p style="margin:0; font-size:13px; color:#7FA7AA;">No hay negocios pendientes.</p></sc-if>
+            </div>
+          </div>
+
+          <div style="background:#ffffff; border-radius:18px; padding:24px; box-shadow:0 8px 20px rgba(0,60,66,0.06);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+              <h2 style="margin:0; font-size:16px; font-weight:800; color:#143840;">Soporte sin responder</h2>
+              <button onClick="{{ goSupport }}" style="border:none; background:none; color:#009BA4; font-weight:700; font-size:13px; cursor:pointer;">Ver todas →</button>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <sc-for list="{{ unreadChats }}" as="c" hint-placeholder-count="2">
+                <button onClick="{{ c.onOpen }}" style="display:flex; align-items:center; gap:12px; padding:12px; border:1px solid #EEF3F3; background:none; border-radius:12px; cursor:pointer; text-align:left;">
+                  <span style="width:8px; height:8px; border-radius:50%; background:#EB600A; flex-shrink:0;"></span>
+                  <div style="flex:1;">
+                    <span style="font-size:14px; font-weight:700; color:#143840; display:block;">{{ c.userName }}</span>
+                    <span style="font-size:12px; color:#5C7679;">{{ c.lastMessage }}</span>
+                  </div>
+                </button>
+              </sc-for>
+              <sc-if value="{{ noUnread }}"><p style="margin:0; font-size:13px; color:#7FA7AA;">Sin mensajes pendientes. 🎉</p></sc-if>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- USUARIOS -->
+    <sc-if value="{{ isUsuarios }}" hint-placeholder-val="{{ false }}">
+      <div style="background:#ffffff; border-radius:18px; overflow:hidden; box-shadow:0 8px 20px rgba(0,60,66,0.06);">
+        <div style="display:grid; grid-template-columns:1.6fr 1.8fr 0.8fr 1fr 1fr 1fr; padding:14px 20px; background:#F4FAFB; font-size:12px; font-weight:700; color:#5C7679;">
+          <span>Usuario</span><span>Correo</span><span>Negocios</span><span>Registro</span><span>Estado</span><span></span>
+        </div>
+        <sc-for list="{{ users }}" as="u" hint-placeholder-count="5">
+          <div style="display:grid; grid-template-columns:1.6fr 1.8fr 0.8fr 1fr 1fr 1fr; align-items:center; padding:14px 20px; border-top:1px solid #EEF3F3;">
+            <span style="font-size:14px; font-weight:700; color:#143840;">{{ u.name }}</span>
+            <span style="font-size:13px; color:#5C7679;">{{ u.email }}</span>
+            <span style="font-size:13px; color:#5C7679;">{{ u.businessCount }}</span>
+            <span style="font-size:13px; color:#5C7679;">{{ u.joined }}</span>
+            <span style="font-size:12px; font-weight:700; color:{{ u.statusColor }}; background:{{ u.statusBg }}; padding:5px 12px; border-radius:999px; width:fit-content;">{{ u.status }}</span>
+            <button onClick="{{ u.onToggle }}" style="border:2px solid {{ u.toggleBorder }}; background:#ffffff; color:{{ u.toggleColor }}; font-weight:700; font-size:12px; padding:8px 12px; border-radius:8px; cursor:pointer; width:fit-content;">{{ u.toggleLabel }}</button>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <!-- APROBACIONES -->
+    <sc-if value="{{ isAprobaciones }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <sc-for list="{{ pendingBusinesses }}" as="biz" hint-placeholder-count="2">
+          <div style="background:#ffffff; border-radius:18px; padding:20px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; align-items:center; gap:18px;">
+            <div style="width:64px; height:64px; border-radius:14px; overflow:hidden; flex-shrink:0;"><image-slot id="{{ biz.id }}-thumb2" shape="rect" placeholder="Logo"></image-slot></div>
+            <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+              <span style="font-size:16px; font-weight:700; color:#143840;">{{ biz.name }}</span>
+              <span style="font-size:13px; color:#5C7679;">{{ biz.owner }} · {{ biz.category }} · {{ biz.location }}</span>
+              <span style="font-size:12px; color:#7FA7AA;">Enviado el {{ biz.submitted }}</span>
+            </div>
+            <button onClick="{{ biz.onDetail }}" style="border:2px solid #009BA4; background:#ffffff; color:#009BA4; font-weight:700; font-size:13px; padding:10px 16px; border-radius:10px; cursor:pointer; flex-shrink:0;">Ver detalle</button>
+            <button onClick="{{ biz.onApprove }}" style="border:none; background:#009BA4; color:#ffffff; font-weight:700; font-size:13px; padding:10px 16px; border-radius:10px; cursor:pointer; flex-shrink:0;">Aprobar</button>
+            <button onClick="{{ biz.onReject }}" style="border:none; background:none; color:#B94A2E; font-weight:700; font-size:13px; cursor:pointer; flex-shrink:0;">Rechazar</button>
+          </div>
+        </sc-for>
+        <sc-if value="{{ noPending }}">
+          <div style="background:#ffffff; border-radius:18px; padding:40px; text-align:center; box-shadow:0 8px 20px rgba(0,60,66,0.06);"><p style="margin:0; font-size:14px; color:#7FA7AA;">No hay negocios pendientes de aprobación. 🎉</p></div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <!-- DIRECTORIO -->
+    <sc-if value="{{ isDirectorio }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <input value="{{ dirSearch }}" onChange="{{ onDirSearch }}" type="text" placeholder="Buscar negocio..." style="flex:1; min-width:200px; border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:13px;">
+          <select value="{{ dirCategory }}" onChange="{{ onDirCategory }}" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:13px; background:#ffffff;">
+            <option value="Todas">Todas las categorías</option>
+            <option value="Hoteles">Hoteles</option><option value="Restaurantes">Restaurantes</option><option value="Doctores">Doctores</option><option value="Negocios">Negocios</option><option value="Clasificados">Clasificados</option>
+          </select>
+        </div>
+        <div style="background:#ffffff; border-radius:18px; overflow:hidden; box-shadow:0 8px 20px rgba(0,60,66,0.06);">
+          <div style="display:grid; grid-template-columns:1.6fr 1.1fr 0.9fr 0.9fr 0.6fr 1.8fr; padding:14px 20px; background:#F4FAFB; font-size:12px; font-weight:700; color:#5C7679;">
+            <span>Negocio</span><span>Dueño</span><span>Categoría</span><span>Estado</span><span>⭐</span><span></span>
+          </div>
+          <sc-for list="{{ filteredBusinesses }}" as="biz" hint-placeholder-count="5">
+            <div style="display:grid; grid-template-columns:1.6fr 1.1fr 0.9fr 0.9fr 0.6fr 1.8fr; align-items:center; padding:14px 20px; border-top:1px solid #EEF3F3; gap:6px;">
+              <span style="font-size:14px; font-weight:700; color:#143840;">{{ biz.name }}</span>
+              <span style="font-size:13px; color:#5C7679;">{{ biz.owner }}</span>
+              <span style="font-size:13px; color:#5C7679;">{{ biz.category }}</span>
+              <span style="font-size:12px; font-weight:700; color:{{ biz.statusColor }}; background:{{ biz.statusBg }}; padding:5px 12px; border-radius:999px; width:fit-content;">{{ biz.status }}</span>
+              <button onClick="{{ biz.onToggleFeatured }}" style="border:none; background:none; font-size:18px; cursor:pointer; width:fit-content;">{{ biz.featuredIcon }}</button>
+              <div style="display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap;">
+                <button onClick="{{ biz.onEdit }}" style="border:2px solid #009BA4; background:#ffffff; color:#009BA4; font-weight:700; font-size:12px; padding:8px 10px; border-radius:8px; cursor:pointer;">Editar</button>
+                <button onClick="{{ biz.onArchive }}" style="border:2px solid #E2ECED; background:#ffffff; color:#5C7679; font-weight:700; font-size:12px; padding:8px 10px; border-radius:8px; cursor:pointer;">{{ biz.archiveLabel }}</button>
+                <button onClick="{{ biz.onRemove }}" style="border:none; background:none; color:#B94A2E; font-weight:700; font-size:12px; cursor:pointer;">Eliminar</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- BLOG -->
+    <sc-if value="{{ isBlog }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="display:flex; justify-content:flex-end;">
+          <button onClick="{{ openNewPost }}" style="border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:13px; padding:10px 18px; border-radius:10px; cursor:pointer;">+ Nueva entrada</button>
+        </div>
+        <div style="background:#ffffff; border-radius:18px; overflow:hidden; box-shadow:0 8px 20px rgba(0,60,66,0.06);">
+          <div style="display:grid; grid-template-columns:2fr 1.2fr 1fr 1fr 1.2fr; padding:14px 20px; background:#F4FAFB; font-size:12px; font-weight:700; color:#5C7679;">
+            <span>Título</span><span>Autor</span><span>Fecha</span><span>Estado</span><span></span>
+          </div>
+          <sc-for list="{{ blogPosts }}" as="p" hint-placeholder-count="4">
+            <div style="display:grid; grid-template-columns:2fr 1.2fr 1fr 1fr 1.2fr; align-items:center; padding:14px 20px; border-top:1px solid #EEF3F3;">
+              <span style="font-size:14px; font-weight:700; color:#143840;">{{ p.title }}</span>
+              <span style="font-size:13px; color:#5C7679;">{{ p.author }}</span>
+              <span style="font-size:13px; color:#5C7679;">{{ p.date }}</span>
+              <span style="font-size:12px; font-weight:700; color:{{ p.statusColor }}; background:{{ p.statusBg }}; padding:5px 12px; border-radius:999px; width:fit-content;">{{ p.status }}</span>
+              <div style="display:flex; gap:8px; justify-content:flex-end;">
+                <button onClick="{{ p.onToggle }}" style="border:2px solid #009BA4; background:#ffffff; color:#009BA4; font-weight:700; font-size:12px; padding:8px 12px; border-radius:8px; cursor:pointer;">{{ p.toggleLabel }}</button>
+                <button onClick="{{ p.onDelete }}" style="border:none; background:none; color:#B94A2E; font-weight:700; font-size:12px; cursor:pointer;">Eliminar</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- EVENTOS -->
+    <sc-if value="{{ isEventos }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="display:flex; justify-content:flex-end;">
+          <button onClick="{{ openNewEvent }}" style="border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:13px; padding:10px 18px; border-radius:10px; cursor:pointer;">+ Nuevo evento</button>
+        </div>
+        <div style="background:#ffffff; border-radius:18px; overflow:hidden; box-shadow:0 8px 20px rgba(0,60,66,0.06);">
+          <div style="display:grid; grid-template-columns:1.8fr 1fr 0.9fr 0.9fr 0.5fr 2.1fr; padding:14px 20px; background:#F4FAFB; font-size:12px; font-weight:700; color:#5C7679;">
+            <span>Evento</span><span>Fecha</span><span>Categoría</span><span>Estado</span><span>⭐</span><span></span>
+          </div>
+          <sc-for list="{{ events }}" as="ev" hint-placeholder-count="4">
+            <div style="display:grid; grid-template-columns:1.8fr 1fr 0.9fr 0.9fr 0.5fr 2.1fr; align-items:center; padding:14px 20px; border-top:1px solid #EEF3F3; gap:6px;">
+              <span style="font-size:14px; font-weight:700; color:#143840;">{{ ev.name }}</span>
+              <span style="font-size:13px; color:#5C7679;">{{ ev.date }}</span>
+              <span style="font-size:13px; color:#5C7679;">{{ ev.category }}</span>
+              <span style="font-size:12px; font-weight:700; color:{{ ev.statusColor }}; background:{{ ev.statusBg }}; padding:5px 12px; border-radius:999px; width:fit-content;">{{ ev.status }}</span>
+              <button onClick="{{ ev.onToggleFeatured }}" style="border:none; background:none; font-size:18px; cursor:pointer; width:fit-content;">{{ ev.featuredIcon }}</button>
+              <div style="display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap;">
+                <button onClick="{{ ev.onEdit }}" style="border:2px solid #009BA4; background:#ffffff; color:#009BA4; font-weight:700; font-size:12px; padding:8px 10px; border-radius:8px; cursor:pointer;">Editar</button>
+                <button onClick="{{ ev.onArchive }}" style="border:2px solid #E2ECED; background:#ffffff; color:#5C7679; font-weight:700; font-size:12px; padding:8px 10px; border-radius:8px; cursor:pointer;">{{ ev.archiveLabel }}</button>
+                <button onClick="{{ ev.onDelete }}" style="border:none; background:none; color:#B94A2E; font-weight:700; font-size:12px; cursor:pointer;">Eliminar</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- PUBLICIDAD (admin) -->
+    <sc-if value="{{ isPublicidadAdmin }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px;">
+          <div style="background:#ffffff; border-radius:16px; padding:20px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:12px; font-weight:700; color:#5C7679;">Espacios activos</span>
+            <span style="font-size:22px; font-weight:800; color:#009BA4;">{{ adminAdStats.activeCount }}</span>
+          </div>
+          <div style="background:#ffffff; border-radius:16px; padding:20px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:12px; font-weight:700; color:#5C7679;">Pendientes de pago</span>
+            <span style="font-size:22px; font-weight:800; color:#EB600A;">{{ adminAdStats.pendingCount }}</span>
+          </div>
+          <div style="background:#ffffff; border-radius:16px; padding:20px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:12px; font-weight:700; color:#5C7679;">Ingreso mensual estimado</span>
+            <span style="font-size:22px; font-weight:800; color:#143840;">{{ stats.revenueFmt }}</span>
+          </div>
+        </div>
+        <div style="background:#ffffff; border-radius:18px; overflow:hidden; box-shadow:0 8px 20px rgba(0,60,66,0.06);">
+          <div style="display:grid; grid-template-columns:2fr 1.3fr 1.3fr 1fr 1fr; padding:14px 20px; background:#F4FAFB; font-size:12px; font-weight:700; color:#5C7679;">
+            <span>Espacio</span><span>Negocio</span><span>Vigencia</span><span>Precio</span><span>Estado</span>
+          </div>
+          <sc-for list="{{ ads }}" as="ad" hint-placeholder-count="4">
+            <div style="display:grid; grid-template-columns:2fr 1.3fr 1.3fr 1fr 1fr; align-items:center; padding:14px 20px; border-top:1px solid #EEF3F3;">
+              <span style="font-size:14px; font-weight:700; color:#143840;">{{ ad.name }}</span>
+              <span style="font-size:13px; color:#5C7679;">{{ ad.businessName }}</span>
+              <span style="font-size:13px; color:#5C7679;">{{ ad.period }}</span>
+              <span style="font-size:13px; font-weight:700; color:#143840;">{{ ad.priceFmt }}</span>
+              <span style="font-size:12px; font-weight:700; color:{{ ad.statusColor }}; background:{{ ad.statusBg }}; padding:5px 12px; border-radius:999px; width:fit-content;">{{ ad.status }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- SOPORTE (chat) -->
+    <sc-if value="{{ isSoporte }}" hint-placeholder-val="{{ false }}">
+      <div style="background:#ffffff; border-radius:18px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:grid; grid-template-columns:280px 1fr; min-height:520px; overflow:hidden;">
+        <div style="border-right:1px solid #EEF3F3; display:flex; flex-direction:column;">
+          <sc-for list="{{ chats }}" as="c" hint-placeholder-count="4">
+            <button onClick="{{ c.onOpen }}" style="display:flex; align-items:center; gap:10px; border:none; border-bottom:1px solid #EEF3F3; background:{{ c.bg }}; padding:14px 16px; cursor:pointer; text-align:left;">
+              <div style="width:36px; height:36px; border-radius:50%; background:#009BA4; color:#ffffff; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">{{ c.initial }}</div>
+              <div style="flex:1; min-width:0;">
+                <span style="font-size:13.5px; font-weight:700; color:#143840; display:block;">{{ c.userName }}</span>
+                <span style="font-size:12px; color:#5C7679; display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ c.lastMessage }}</span>
+              </div>
+              <sc-if value="{{ c.unread }}"><span style="width:8px; height:8px; border-radius:50%; background:#EB600A; flex-shrink:0;"></span></sc-if>
+            </button>
+          </sc-for>
+        </div>
+        <div style="display:flex; flex-direction:column;">
+          <div style="padding:16px 20px; border-bottom:1px solid #EEF3F3; font-size:14px; font-weight:800; color:#143840;">{{ activeChat.userName }}</div>
+          <div style="flex:1; padding:20px; display:flex; flex-direction:column; gap:10px; overflow-y:auto;">
+            <sc-for list="{{ activeChat.messages }}" as="m" hint-placeholder-count="4">
+              <div style="max-width:70%; align-self:{{ m.align }}; background:{{ m.bg }}; color:{{ m.color }}; padding:10px 14px; border-radius:14px; font-size:13.5px;">{{ m.text }}</div>
+            </sc-for>
+          </div>
+          <div style="display:flex; gap:10px; padding:16px 20px; border-top:1px solid #EEF3F3;">
+            <input value="{{ chatDraft }}" onChange="{{ onChatDraft }}" type="text" placeholder="Escribe una respuesta..." style="flex:1; border:1px solid #E2ECED; outline:none; border-radius:999px; padding:11px 16px; font-size:13.5px;">
+            <button onClick="{{ sendChat }}" style="border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:13px; padding:11px 20px; border-radius:999px; cursor:pointer;">Enviar</button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+  </main>
+
+  <!-- MODAL DETALLE APROBACIÓN -->
+  <sc-if value="{{ showApprovalDetail }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeApprovalDetail }}" style="position:fixed; inset:0; background:rgba(20,56,64,0.55); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px;">
+      <div onClick="{{ stop }}" style="background:#ffffff; border-radius:20px; padding:32px; max-width:480px; width:100%; max-height:88vh; overflow-y:auto; display:flex; flex-direction:column; gap:14px; box-shadow:0 24px 50px rgba(0,0,0,0.25);">
+        <h3 style="margin:0; font-size:20px; font-weight:800; color:#143840;">{{ approvalDetail.name }}</h3>
+        <div style="width:100%; height:140px; border-radius:12px; overflow:hidden;"><image-slot id="{{ approvalDetail.id }}-modal" shape="rect" placeholder="Foto del negocio"></image-slot></div>
+        <span style="font-size:13px; color:#5C7679;">{{ approvalDetail.category }} · {{ approvalDetail.location }}</span>
+        <span style="font-size:13px; color:#5C7679;">Dueño: {{ approvalDetail.owner }} · Tel. {{ approvalDetail.phone }}</span>
+        <p style="margin:0; font-size:13.5px; color:#3B5C61; line-height:1.5;">{{ approvalDetail.description }}</p>
+        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:6px;">
+          <button onClick="{{ closeApprovalDetail }}" style="border:2px solid #E2ECED; background:#ffffff; color:#5C7679; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">Cerrar</button>
+          <button onClick="{{ rejectFromDetail }}" style="border:none; background:none; color:#B94A2E; font-weight:700; font-size:14px; cursor:pointer;">Rechazar</button>
+          <button onClick="{{ approveFromDetail }}" style="border:none; background:#009BA4; color:#ffffff; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">Aprobar</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- MODAL NUEVA ENTRADA BLOG -->
+  <sc-if value="{{ showNewPost }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeNewPost }}" style="position:fixed; inset:0; background:rgba(20,56,64,0.55); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px;">
+      <div onClick="{{ stop }}" style="background:#ffffff; border-radius:20px; padding:32px; max-width:440px; width:100%; display:flex; flex-direction:column; gap:14px; box-shadow:0 24px 50px rgba(0,0,0,0.25);">
+        <h3 style="margin:0; font-size:20px; font-weight:800; color:#143840;">Nueva entrada de blog</h3>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Título</label>
+          <input value="{{ postDraft.title }}" onChange="{{ onPostTitle }}" type="text" placeholder="Ej. 5 playas imperdibles en San Carlos" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Autor</label>
+          <input value="{{ postDraft.author }}" onChange="{{ onPostAuthor }}" type="text" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:6px;">
+          <button onClick="{{ closeNewPost }}" style="border:2px solid #E2ECED; background:#ffffff; color:#5C7679; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">Cancelar</button>
+          <button onClick="{{ saveNewPost }}" style="border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">Guardar borrador</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- MODAL NUEVO EVENTO -->
+  <sc-if value="{{ showNewEvent }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeNewEvent }}" style="position:fixed; inset:0; background:rgba(20,56,64,0.55); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px;">
+      <div onClick="{{ stop }}" style="background:#ffffff; border-radius:20px; padding:32px; max-width:440px; width:100%; display:flex; flex-direction:column; gap:14px; box-shadow:0 24px 50px rgba(0,0,0,0.25);">
+        <h3 style="margin:0; font-size:20px; font-weight:800; color:#143840;">Nuevo evento</h3>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Nombre del evento</label>
+          <input value="{{ eventDraft.name }}" onChange="{{ onEventName }}" type="text" placeholder="Ej. Torneo de pesca San Carlos" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Fecha</label>
+          <input value="{{ eventDraft.date }}" onChange="{{ onEventDate }}" type="text" placeholder="Ej. 12 oct 2026" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:6px;">
+          <button onClick="{{ closeNewEvent }}" style="border:2px solid #E2ECED; background:#ffffff; color:#5C7679; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">Cancelar</button>
+          <button onClick="{{ saveNewEvent }}" style="border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">Guardar borrador</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- MODAL EDITAR NEGOCIO (ADMIN) -->
+  <sc-if value="{{ showEditBusiness }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeEditBusiness }}" style="position:fixed; inset:0; background:rgba(20,56,64,0.55); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px;">
+      <div onClick="{{ stop }}" style="background:#ffffff; border-radius:20px; padding:32px; max-width:480px; width:100%; max-height:88vh; overflow-y:auto; display:flex; flex-direction:column; gap:14px; box-shadow:0 24px 50px rgba(0,0,0,0.25);">
+        <h3 style="margin:0; font-size:20px; font-weight:800; color:#143840;">Editar negocio (admin)</h3>
+        <p style="margin:0; font-size:12.5px; color:#7FA7AA;">Estos cambios se aplican aunque el dueño no los haya hecho desde su panel.</p>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Nombre</label>
+          <input value="{{ bizDraft.name }}" onChange="{{ onBizField_name }}" type="text" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Categoría</label>
+          <select value="{{ bizDraft.category }}" onChange="{{ onBizField_category }}" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px; background:#ffffff;">
+            <option>Hoteles</option><option>Restaurantes</option><option>Doctores</option><option>Negocios</option><option>Clasificados</option>
+          </select>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Ubicación</label>
+          <input value="{{ bizDraft.location }}" onChange="{{ onBizField_location }}" type="text" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Teléfono</label>
+          <input value="{{ bizDraft.phone }}" onChange="{{ onBizField_phone }}" type="tel" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Descripción</label>
+          <textarea value="{{ bizDraft.description }}" onChange="{{ onBizField_description }}" rows="3" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px; resize:vertical;"></textarea>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Estado</label>
+          <select value="{{ bizDraft.status }}" onChange="{{ onBizField_status }}" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px; background:#ffffff;">
+            <option>Publicado</option><option>Invisible</option><option>Pendiente</option><option>Archivado</option>
+          </select>
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:6px;">
+          <button onClick="{{ closeEditBusiness }}" style="border:2px solid #E2ECED; background:#ffffff; color:#5C7679; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">Cancelar</button>
+          <button onClick="{{ saveBizEdit }}" style="border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- MODAL EDITAR EVENTO (ADMIN) -->
+  <sc-if value="{{ showEditEvent }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeEditEvent }}" style="position:fixed; inset:0; background:rgba(20,56,64,0.55); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px;">
+      <div onClick="{{ stop }}" style="background:#ffffff; border-radius:20px; padding:32px; max-width:440px; width:100%; display:flex; flex-direction:column; gap:14px; box-shadow:0 24px 50px rgba(0,0,0,0.25);">
+        <h3 style="margin:0; font-size:20px; font-weight:800; color:#143840;">Editar evento (admin)</h3>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Nombre del evento</label>
+          <input value="{{ evDraft.name }}" onChange="{{ onEvField_name }}" type="text" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Fecha</label>
+          <input value="{{ evDraft.date }}" onChange="{{ onEvField_date }}" type="text" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Categoría</label>
+          <input value="{{ evDraft.category }}" onChange="{{ onEvField_category }}" type="text" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Estado</label>
+          <select value="{{ evDraft.status }}" onChange="{{ onEvField_status }}" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px; background:#ffffff;">
+            <option>Publicado</option><option>Borrador</option><option>Archivado</option>
+          </select>
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:6px;">
+          <button onClick="{{ closeEditEvent }}" style="border:2px solid #E2ECED; background:#ffffff; color:#5C7679; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">Cancelar</button>
+          <button onClick="{{ saveEvEdit }}" style="border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    tab: 'resumen',
+    dirSearch: '', dirCategory: 'Todas',
+    approvalDetailId: null,
+    showNewPost: false, showNewEvent: false,
+    postDraft: { title: '', author: 'Equipo Visit San Carlos' },
+    eventDraft: { name: '', date: '' },
+    activeChatId: 'chat-1',
+    chatDraft: '',
+    editingBusinessId: null, bizDraft: {},
+    editingEventId: null, evDraft: {},
+    users: [
+      { id: 'u1', name: 'Andrea Solís', email: 'andrea@correo.com', businessCount: 2, joined: '12 ene 2026', status: 'Activo', statusColor: '#009BA4', statusBg: '#E5F6F7' },
+      { id: 'u2', name: 'Marco Valdez', email: 'marco.valdez@correo.com', businessCount: 1, joined: '3 mar 2026', status: 'Activo', statusColor: '#009BA4', statusBg: '#E5F6F7' },
+      { id: 'u3', name: 'Lupita Rentería', email: 'lupita.r@correo.com', businessCount: 1, joined: '20 abr 2026', status: 'Activo', statusColor: '#009BA4', statusBg: '#E5F6F7' },
+      { id: 'u4', name: 'Carlos Beltrán', email: 'cbeltran@correo.com', businessCount: 1, joined: '2 jun 2026', status: 'Suspendido', statusColor: '#B94A2E', statusBg: '#FBEAE6' },
+      { id: 'u5', name: 'Fernanda Ibarra', email: 'fer.ibarra@correo.com', businessCount: 3, joined: '18 ago 2026', status: 'Activo', statusColor: '#009BA4', statusBg: '#E5F6F7' },
+    ],
+    businesses: [
+      { id: 'b1', name: 'Hotel Playa Bonita', owner: 'Andrea Solís', category: 'Hoteles', location: 'San Carlos, Sonora', status: 'Publicado', featured: true, phone: '622 114 5316', submitted: '10 ene 2026', description: 'Hotel frente al mar con alberca y restaurante propio.' },
+      { id: 'b2', name: 'Buceo Sonora Adventures', owner: 'Andrea Solís', category: 'Negocios', location: 'San Carlos, Sonora', status: 'Pendiente', featured: false, phone: '622 155 6677', submitted: '18 sep 2026', description: 'Tours de buceo y snorkel en la bahía de San Carlos.' },
+      { id: 'b3', name: 'Mariscos El Zarpe', owner: 'Marco Valdez', category: 'Restaurantes', location: 'San Carlos, Sonora', status: 'Publicado', featured: false, phone: '622 200 1122', submitted: '5 mar 2026', description: 'Mariscos frescos frente a la marina de San Carlos.' },
+      { id: 'b4', name: 'Clínica Dental Guaymas', owner: 'Lupita Rentería', category: 'Doctores', location: 'Guaymas, Sonora', status: 'Publicado', featured: false, phone: '622 210 3344', submitted: '22 abr 2026', description: 'Atención dental general y estética.' },
+      { id: 'b5', name: 'Renta de Kayaks Bahía', owner: 'Carlos Beltrán', category: 'Negocios', location: 'San Carlos, Sonora', status: 'Invisible', featured: false, phone: '622 300 5566', submitted: '4 jun 2026', description: 'Renta de kayaks y equipo para explorar la bahía.' },
+      { id: 'b6', name: 'Casa Vacacional Vista Mar', owner: 'Fernanda Ibarra', category: 'Clasificados', location: 'San Carlos, Sonora', status: 'Pendiente', featured: false, phone: '622 400 7788', submitted: '19 sep 2026', description: 'Renta vacacional con vista al mar, 3 recámaras.' },
+      { id: 'b7', name: 'Ferretería San Carlos', owner: 'Fernanda Ibarra', category: 'Negocios', location: 'San Carlos, Sonora', status: 'Publicado', featured: true, phone: '622 500 8899', submitted: '25 ago 2026', description: 'Materiales de construcción y ferretería general.' },
+    ],
+    blogPosts: [
+      { id: 'p1', title: 'Guía de playas en San Carlos', author: 'Equipo Visit San Carlos', date: '2 sep 2026', status: 'Publicado' },
+      { id: 'p2', title: 'Mejores atardeceres en Bahía Algodones', author: 'Equipo Visit San Carlos', date: '10 ago 2026', status: 'Publicado' },
+      { id: 'p3', title: '5 restaurantes frente al mar', author: 'Andrea Solís', date: '1 sep 2026', status: 'Borrador' },
+    ],
+    events: [
+      { id: 'e1', name: 'Torneo de pesca San Carlos', date: '12 oct 2026', category: 'Deportes', status: 'Publicado', featured: true },
+      { id: 'e2', name: 'Festival gastronómico de mariscos', date: '25 oct 2026', category: 'Gastronomía', status: 'Publicado', featured: false },
+      { id: 'e3', name: 'Carrera nocturna Bahía San Carlos', date: '8 nov 2026', category: 'Deportes', status: 'Borrador', featured: false },
+    ],
+    ads: [
+      { id: 'ad-1', name: 'Vistas Doradas — Carrusel Home', businessId: 'b1', businessName: 'Hotel Playa Bonita', price: 1500, period: '1 sep – 30 sep 2026', status: 'Activo', statusColor: '#009BA4', statusBg: '#E5F6F7' },
+      { id: 'ad-2', name: 'Directorio Premium', businessId: 'b3', businessName: 'Mariscos El Zarpe', price: 1900, period: '1 jul – 1 ago 2026', status: 'Vencido', statusColor: '#B94A2E', statusBg: '#FBEAE6' },
+      { id: 'ad-3', name: 'Eventos Destacados', businessId: 'b7', businessName: 'Ferretería San Carlos', price: 4320, period: '15 sep – 15 dic 2026', status: 'Activo', statusColor: '#009BA4', statusBg: '#E5F6F7' },
+      { id: 'ad-4', name: 'Sabor local', businessId: 'b6', businessName: 'Casa Vacacional Vista Mar', price: 1000, period: '20 sep – 20 oct 2026', status: 'Pendiente de pago', statusColor: '#EB600A', statusBg: '#FDEEE4' },
+    ],
+    chats: [
+      { id: 'chat-1', userName: 'Marco Valdez', unread: true, messages: [
+        { from: 'user', text: 'Hola, ¿por qué mi negocio sigue en revisión?' },
+        { from: 'admin', text: 'Hola Marco, lo estamos revisando, te confirmamos hoy mismo.' },
+        { from: 'user', text: '¡Gracias! Quedo al pendiente.' },
+      ]},
+      { id: 'chat-2', userName: 'Fernanda Ibarra', unread: true, messages: [
+        { from: 'user', text: '¿Puedo pagar el paquete trimestral por transferencia?' },
+      ]},
+      { id: 'chat-3', userName: 'Lupita Rentería', unread: false, messages: [
+        { from: 'user', text: '¿Cómo agrego más fotos a mi galería?' },
+        { from: 'admin', text: 'Desde tu panel, en "Mis negocios" > Editar > Galería, puedes subir hasta 10 fotos.' },
+        { from: 'user', text: 'Perfecto, ¡gracias!' },
+      ]},
+    ],
+  };
+
+  setTab(t) { this.setState({ tab: t }); }
+  onDirSearch(e) { this.setState({ dirSearch: e.target.value }); }
+  onDirCategory(e) { this.setState({ dirCategory: e.target.value }); }
+
+  approveBusiness(id) { this.setState(s => ({ businesses: s.businesses.map(b => b.id === id ? { ...b, status: 'Publicado' } : b) })); }
+  rejectBusiness(id) { this.setState(s => ({ businesses: s.businesses.map(b => b.id === id ? { ...b, status: 'Invisible' } : b) })); }
+  toggleFeatured(id) { this.setState(s => ({ businesses: s.businesses.map(b => b.id === id ? { ...b, featured: !b.featured } : b) })); }
+  toggleArchiveBusiness(id) { this.setState(s => ({ businesses: s.businesses.map(b => b.id === id ? { ...b, status: b.status === 'Archivado' ? 'Publicado' : 'Archivado' } : b) })); }
+  removeBusiness(id) { this.setState(s => ({ businesses: s.businesses.filter(b => b.id !== id) })); }
+  openEditBusiness(id) { const b = this.state.businesses.find(x => x.id === id); this.setState({ editingBusinessId: id, bizDraft: { ...b } }); }
+  closeEditBusiness() { this.setState({ editingBusinessId: null }); }
+  onBizField(field, value) { this.setState(s => ({ bizDraft: { ...s.bizDraft, [field]: value } })); }
+  saveBizEdit() {
+    const { editingBusinessId, bizDraft } = this.state;
+    this.setState(s => ({ businesses: s.businesses.map(b => b.id === editingBusinessId ? { ...b, ...bizDraft } : b), editingBusinessId: null }));
+  }
+  toggleSuspendUser(id) { this.setState(s => ({ users: s.users.map(u => u.id === id ? { ...u, status: u.status === 'Activo' ? 'Suspendido' : 'Activo' } : u) })); }
+
+  openApprovalDetail(id) { this.setState({ approvalDetailId: id }); }
+  closeApprovalDetail() { this.setState({ approvalDetailId: null }); }
+  approveFromDetail() { const id = this.state.approvalDetailId; this.approveBusiness(id); this.closeApprovalDetail(); }
+  rejectFromDetail() { const id = this.state.approvalDetailId; this.rejectBusiness(id); this.closeApprovalDetail(); }
+
+  togglePostStatus(id) { this.setState(s => ({ blogPosts: s.blogPosts.map(p => p.id === id ? { ...p, status: p.status === 'Publicado' ? 'Borrador' : 'Publicado' } : p) })); }
+  deletePost(id) { this.setState(s => ({ blogPosts: s.blogPosts.filter(p => p.id !== id) })); }
+  openNewPost() { this.setState({ showNewPost: true, postDraft: { title: '', author: 'Equipo Visit San Carlos' } }); }
+  closeNewPost() { this.setState({ showNewPost: false }); }
+  onPostTitle(e) { this.setState(s => ({ postDraft: { ...s.postDraft, title: e.target.value } })); }
+  onPostAuthor(e) { this.setState(s => ({ postDraft: { ...s.postDraft, author: e.target.value } })); }
+  saveNewPost() {
+    const { title, author } = this.state.postDraft;
+    if (!title) { this.closeNewPost(); return; }
+    const today = new Date().toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+    this.setState(s => ({ blogPosts: [...s.blogPosts, { id: 'p-' + Date.now(), title, author, date: today, status: 'Borrador' }], showNewPost: false }));
+  }
+
+  toggleEventFeatured(id) { this.setState(s => ({ events: s.events.map(ev => ev.id === id ? { ...ev, featured: !ev.featured } : ev) })); }
+  toggleArchiveEvent(id) { this.setState(s => ({ events: s.events.map(ev => ev.id === id ? { ...ev, status: ev.status === 'Archivado' ? 'Publicado' : 'Archivado' } : ev) })); }
+  deleteEvent(id) { this.setState(s => ({ events: s.events.filter(ev => ev.id !== id) })); }
+  openEditEvent(id) { const ev = this.state.events.find(x => x.id === id); this.setState({ editingEventId: id, evDraft: { ...ev } }); }
+  closeEditEvent() { this.setState({ editingEventId: null }); }
+  onEvField(field, value) { this.setState(s => ({ evDraft: { ...s.evDraft, [field]: value } })); }
+  saveEvEdit() {
+    const { editingEventId, evDraft } = this.state;
+    this.setState(s => ({ events: s.events.map(ev => ev.id === editingEventId ? { ...ev, ...evDraft } : ev), editingEventId: null }));
+  }
+  openNewEvent() { this.setState({ showNewEvent: true, eventDraft: { name: '', date: '' } }); }
+  closeNewEvent() { this.setState({ showNewEvent: false }); }
+  onEventName(e) { this.setState(s => ({ eventDraft: { ...s.eventDraft, name: e.target.value } })); }
+  onEventDate(e) { this.setState(s => ({ eventDraft: { ...s.eventDraft, date: e.target.value } })); }
+  saveNewEvent() {
+    const { name, date } = this.state.eventDraft;
+    if (!name) { this.closeNewEvent(); return; }
+    this.setState(s => ({ events: [...s.events, { id: 'e-' + Date.now(), name, date: date || 'Por definir', category: 'General', status: 'Borrador', featured: false }], showNewEvent: false }));
+  }
+
+  selectChat(id) { this.setState(s => ({ activeChatId: id, chats: s.chats.map(c => c.id === id ? { ...c, unread: false } : c) })); }
+  onChatDraft(e) { this.setState({ chatDraft: e.target.value }); }
+  sendChat() {
+    const { chatDraft, activeChatId } = this.state;
+    if (!chatDraft.trim()) return;
+    this.setState(s => ({
+      chats: s.chats.map(c => c.id === activeChatId ? { ...c, messages: [...c.messages, { from: 'admin', text: chatDraft }] } : c),
+      chatDraft: '',
+    }));
+  }
+  stop(e) { e.stopPropagation(); }
+
+  renderVals() {
+    const { tab, users, businesses, blogPosts, events, ads, chats, activeChatId, chatDraft, dirSearch, dirCategory, approvalDetailId, showNewPost, showNewEvent, postDraft, eventDraft } = this.state;
+    const fmtMoney = n => '$' + n.toLocaleString('es-MX') + ' MXN';
+
+    const NAV = [
+      { id: 'resumen', label: 'Resumen' }, { id: 'usuarios', label: 'Usuarios' },
+      { id: 'aprobaciones', label: 'Aprobaciones', badgeKey: 'pending' }, { id: 'directorio', label: 'Directorio' },
+      { id: 'blog', label: 'Blog' }, { id: 'eventos', label: 'Eventos' },
+      { id: 'publicidad', label: 'Publicidad' }, { id: 'soporte', label: 'Soporte', badgeKey: 'unread' },
+    ];
+    const pendingBusinessesAll = businesses.filter(b => b.status === 'Pendiente');
+    const unreadChatsAll = chats.filter(c => c.unread);
+    const navItems = NAV.map(n => ({
+      label: n.label, bg: tab === n.id ? '#1D5158' : 'transparent', color: tab === n.id ? '#ffffff' : '#B7CBCD',
+      onClick: () => this.setTab(n.id),
+      badge: n.badgeKey === 'pending' ? (pendingBusinessesAll.length || null) : n.badgeKey === 'unread' ? (unreadChatsAll.length || null) : null,
+    }));
+    const titles = {
+      resumen: ['Panel administrativo', 'Resumen general de Visit San Carlos'],
+      usuarios: ['Usuarios', 'Cuentas registradas en la plataforma'],
+      aprobaciones: ['Aprobaciones', 'Negocios pendientes de revisión'],
+      directorio: ['Directorio', 'Todas las entradas publicadas en el sitio'],
+      blog: ['Blog', 'Entradas del blog de Visit San Carlos'],
+      eventos: ['Eventos', 'Eventos publicados en el sitio'],
+      publicidad: ['Publicidad', 'Espacios contratados por todos los negocios'],
+      soporte: ['Soporte', 'Conversaciones con usuarios'],
+    };
+    const [pageTitle, pageSubtitle] = titles[tab] || titles.resumen;
+
+    const publishedCount = businesses.filter(b => b.status === 'Publicado').length;
+    const activeAds = ads.filter(a => a.status === 'Activo');
+    const stats = {
+      userCount: users.length, publishedCount, pendingCount: pendingBusinessesAll.length,
+      revenueFmt: fmtMoney(activeAds.reduce((sum, a) => sum + a.price, 0)),
+    };
+    const adminAdStats = { activeCount: activeAds.length, pendingCount: ads.filter(a => a.status === 'Pendiente de pago').length };
+
+    const pendingBusinesses = pendingBusinessesAll.map(b => ({ ...b, onApprove: () => this.approveBusiness(b.id), onReject: () => this.rejectBusiness(b.id), onDetail: () => this.openApprovalDetail(b.id) }));
+    const unreadChats = unreadChatsAll.map(c => ({ ...c, lastMessage: c.messages[c.messages.length - 1].text, onOpen: () => { this.setTab('soporte'); this.selectChat(c.id); } }));
+
+    const usersOut = users.map(u => ({
+      ...u, toggleLabel: u.status === 'Activo' ? 'Suspender' : 'Reactivar',
+      toggleBorder: u.status === 'Activo' ? '#E2ECED' : '#009BA4', toggleColor: u.status === 'Activo' ? '#5C7679' : '#009BA4',
+      onToggle: () => this.toggleSuspendUser(u.id),
+    }));
+
+    const STATUS_COLORS = { Publicado: ['#009BA4', '#E5F6F7'], Pendiente: ['#EB600A', '#FDEEE4'], Invisible: ['#5C7679', '#EEF3F3'], Archivado: ['#9DB6B8', '#F4FAFB'] };
+    let filteredBusinesses = businesses.filter(b => (dirCategory === 'Todas' || b.category === dirCategory) && b.name.toLowerCase().includes(dirSearch.toLowerCase()));
+    filteredBusinesses = filteredBusinesses.map(b => {
+      const [sc, sb] = STATUS_COLORS[b.status] || STATUS_COLORS.Invisible;
+      return {
+        ...b, statusColor: sc, statusBg: sb, featuredIcon: b.featured ? '⭐' : '☆',
+        archiveLabel: b.status === 'Archivado' ? 'Reactivar' : 'Archivar',
+        onToggleFeatured: () => this.toggleFeatured(b.id), onEdit: () => this.openEditBusiness(b.id), onArchive: () => this.toggleArchiveBusiness(b.id), onRemove: () => this.removeBusiness(b.id),
+      };
+    });
+
+    const blogPostsOut = blogPosts.map(p => ({
+      ...p, statusColor: p.status === 'Publicado' ? '#009BA4' : '#5C7679', statusBg: p.status === 'Publicado' ? '#E5F6F7' : '#EEF3F3',
+      toggleLabel: p.status === 'Publicado' ? 'Despublicar' : 'Publicar',
+      onToggle: () => this.togglePostStatus(p.id), onDelete: () => this.deletePost(p.id),
+    }));
+
+    const EVENT_STATUS_COLORS = { Publicado: ['#009BA4', '#E5F6F7'], Borrador: ['#5C7679', '#EEF3F3'], Archivado: ['#9DB6B8', '#F4FAFB'] };
+    const eventsOut = events.map(ev => {
+      const [sc, sb] = EVENT_STATUS_COLORS[ev.status] || EVENT_STATUS_COLORS.Borrador;
+      return {
+        ...ev, statusColor: sc, statusBg: sb, featuredIcon: ev.featured ? '⭐' : '☆',
+        archiveLabel: ev.status === 'Archivado' ? 'Reactivar' : 'Archivar',
+        onEdit: () => this.openEditEvent(ev.id), onToggleFeatured: () => this.toggleEventFeatured(ev.id), onArchive: () => this.toggleArchiveEvent(ev.id), onDelete: () => this.deleteEvent(ev.id),
+      };
+    });
+
+    const adsOut = ads.map(a => ({ ...a, priceFmt: fmtMoney(a.price) }));
+
+    const activeChatRaw = chats.find(c => c.id === activeChatId) || chats[0] || { userName: '', messages: [] };
+    const activeChat = {
+      userName: activeChatRaw.userName,
+      messages: activeChatRaw.messages.map(m => ({
+        text: m.text, align: m.from === 'admin' ? 'flex-end' : 'flex-start',
+        bg: m.from === 'admin' ? '#EB600A' : '#F4FAFB', color: m.from === 'admin' ? '#ffffff' : '#143840',
+      })),
+    };
+    const chatsOut = chats.map(c => ({
+      ...c, initial: c.userName.charAt(0), lastMessage: c.messages[c.messages.length - 1].text,
+      bg: c.id === activeChatId ? '#F4FAFB' : 'transparent', onOpen: () => this.selectChat(c.id),
+    }));
+
+    const approvalDetail = businesses.find(b => b.id === approvalDetailId) || {};
+
+    return {
+      pageTitle, pageSubtitle, navItems,
+      isResumen: tab === 'resumen', isUsuarios: tab === 'usuarios', isAprobaciones: tab === 'aprobaciones',
+      isDirectorio: tab === 'directorio', isBlog: tab === 'blog', isEventos: tab === 'eventos',
+      isPublicidadAdmin: tab === 'publicidad', isSoporte: tab === 'soporte',
+      goApprovals: () => this.setTab('aprobaciones'), goSupport: () => this.setTab('soporte'),
+      stats, adminAdStats, pendingBusinesses, noPending: pendingBusinesses.length === 0, unreadChats, noUnread: unreadChats.length === 0,
+      users: usersOut,
+      dirSearch, dirCategory, onDirSearch: (e) => this.onDirSearch(e), onDirCategory: (e) => this.onDirCategory(e), filteredBusinesses,
+      blogPosts: blogPostsOut, openNewPost: () => this.openNewPost(),
+      events: eventsOut, openNewEvent: () => this.openNewEvent(),
+      ads: adsOut,
+      chats: chatsOut, activeChat, chatDraft, onChatDraft: (e) => this.onChatDraft(e), sendChat: () => this.sendChat(),
+      showApprovalDetail: !!approvalDetailId, approvalDetail,
+      closeApprovalDetail: () => this.closeApprovalDetail(), approveFromDetail: () => this.approveFromDetail(), rejectFromDetail: () => this.rejectFromDetail(),
+      showNewPost, postDraft, onPostTitle: (e) => this.onPostTitle(e), onPostAuthor: (e) => this.onPostAuthor(e), closeNewPost: () => this.closeNewPost(), saveNewPost: () => this.saveNewPost(),
+      showNewEvent, eventDraft, onEventName: (e) => this.onEventName(e), onEventDate: (e) => this.onEventDate(e), closeNewEvent: () => this.closeNewEvent(), saveNewEvent: () => this.saveNewEvent(),
+      showEditBusiness: !!this.state.editingBusinessId, bizDraft: this.state.bizDraft,
+      onBizField_name: (e) => this.onBizField('name', e.target.value),
+      onBizField_category: (e) => this.onBizField('category', e.target.value),
+      onBizField_location: (e) => this.onBizField('location', e.target.value),
+      onBizField_phone: (e) => this.onBizField('phone', e.target.value),
+      onBizField_description: (e) => this.onBizField('description', e.target.value),
+      onBizField_status: (e) => this.onBizField('status', e.target.value),
+      closeEditBusiness: () => this.closeEditBusiness(), saveBizEdit: () => this.saveBizEdit(),
+      showEditEvent: !!this.state.editingEventId, evDraft: this.state.evDraft,
+      onEvField_name: (e) => this.onEvField('name', e.target.value),
+      onEvField_date: (e) => this.onEvField('date', e.target.value),
+      onEvField_category: (e) => this.onEvField('category', e.target.value),
+      onEvField_status: (e) => this.onEvField('status', e.target.value),
+      closeEditEvent: () => this.closeEditEvent(), saveEvEdit: () => this.saveEvEdit(),
+      stop: (e) => this.stop(e),
+    };
+  }
+}
+</script>
+</body>
+</html>

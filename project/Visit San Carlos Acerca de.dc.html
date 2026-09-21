@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&amp;family=Caveat:wght@600;700&amp;display=swap" rel="stylesheet">
+  <script src="./image-slot.js"></script>
+  <style>
+    body { margin: 0; font-family: 'Poppins', sans-serif; color: #143840; background: #ffffff; }
+    a { color: #009BA4; text-decoration: none; }
+    a:hover { color: #EB600A; }
+    * { box-sizing: border-box; }
+  </style>
+</helmet>
+
+<div style="max-width:100%; overflow-x:hidden; background:#ffffff;">
+
+  <!-- HEADER -->
+  <header style="position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; gap:24px; padding:14px 48px; background:#ffffff; box-shadow:0 2px 14px rgba(0,60,66,0.08);">
+    <img src="uploads/Recurso 1visitsancarlos.png" alt="Visit San Carlos" style="height:52px; width:auto; flex-shrink:0;">
+    <nav style="display:flex; align-items:center; gap:32px; flex-wrap:wrap;">
+      <a href="Visit San Carlos Home.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Inicio</a>
+      <a href="#" style="font-weight:600; font-size:15px; color:#009BA4;">Acerca de</a>
+      <a href="Visit San Carlos Directorio.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Directorio</a>
+      <a href="Visit San Carlos Eventos.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Eventos</a>
+      <a href="Visit San Carlos Blog.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Blog</a>
+      <a href="Visit San Carlos Contacto.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Contacto</a>
+    </nav>
+    <a href="Visit San Carlos Login.dc.html" style="flex-shrink:0; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; letter-spacing:0.02em; padding:12px 24px; border-radius:999px; box-shadow:0 6px 16px rgba(235,96,10,0.35);">AGREGAR NEGOCIO</a>
+  </header>
+
+  <!-- QUIÉNES SOMOS -->
+  <section style="background: #6AC7E2; padding: 64px 48px 0; display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; height: 474px; padding-top: 19px; margin-top: 3px">
+    <div style="display:flex; flex-direction:column; gap:16px;">
+      <h1 style="margin:0; font-size:36px; font-weight:800; color:#ffffff;">Acerca de Visit San Carlos</h1>
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#ffffff;">Somos un grupo de personas amantes de la playa, los atardeceres naranjas de San Carlos y los tacos de marlin bien servidos. Creemos que San Carlos y Guaymas son destinos increíbles, pero hacía falta una plataforma clara, bonita y fácil de usar donde turistas y locales pudieran encontrar TODO en un solo lugar.</p>
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#ffffff;">Así nació Visit San Carlos: una guía digital que reúne los mejores lugares para comer, dormir, explorar, disfrutar y vivir la experiencia del mar de Cortés… sin perderte en cien páginas de Facebook o recomendaciones incompletas.</p>
+    </div>
+    <div style="position:relative; height:340px;">
+      <div style="position:absolute; top:0; left:0; width:64%; height:210px; border-radius:20px; overflow:hidden; box-shadow:0 16px 32px rgba(0,60,66,0.2); border:4px solid #ffffff;">
+        <image-slot id="acerca-equipo-1" shape="rect" placeholder="Foto: equipo Visit San Carlos"></image-slot>
+      </div>
+      <div style="position:absolute; bottom:0; right:0; width:58%; height:190px; border-radius:20px; overflow:hidden; box-shadow:0 16px 32px rgba(0,60,66,0.2); border:4px solid #ffffff;">
+        <image-slot id="acerca-equipo-2" shape="rect" placeholder="Foto: atardecer en San Carlos"></image-slot>
+      </div>
+    </div>
+  </section>
+
+  <!-- POR QUÉ EXISTE -->
+  <section style="background:#ffffff; padding:64px 48px;">
+    <div style="max-width:780px; margin:0 auto; display:flex; flex-direction:column; gap:18px; text-align:center;">
+      <h2 style="margin:0; font-size:28px; font-weight:800; color:#143840;">¿Por qué existe este sitio?</h2>
+      <p style="margin:0; font-size:15px; line-height:1.7; color:#3B5C61;">Porque todos hemos escuchado: "¿y qué se hace en San Carlos?", "¿dónde puedo quedarme?", "¿hay tours o eventos este fin de semana?" Queríamos resolver eso. Queríamos:</p>
+      <div style="display:flex; flex-direction:column; gap:10px; align-items:center;">
+        <span style="display:flex; align-items:center; gap:10px; font-size:15px; color:#143840; font-weight:600;"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" fill="#009BA4"></circle><path d="M5 9l3 3 5-6" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>Ser la guía para el turista.</span>
+        <span style="display:flex; align-items:center; gap:10px; font-size:15px; color:#143840; font-weight:600;"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" fill="#009BA4"></circle><path d="M5 9l3 3 5-6" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>Dar visibilidad a los negocios locales.</span>
+        <span style="display:flex; align-items:center; gap:10px; font-size:15px; color:#143840; font-weight:600;"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" fill="#009BA4"></circle><path d="M5 9l3 3 5-6" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>Promover el turismo responsable y el amor por nuestra comunidad.</span>
+      </div>
+      <p style="margin:16px 0 0; font-family:'Caveat',cursive; font-weight:700; font-size:28px; color:#EB600A;">Somos ese amigo local que te dice a dónde ir, qué pedir y dónde ver el atardecer perfecto.</p>
+    </div>
+  </section>
+
+  <!-- MISIÓN / VISIÓN / VALORES -->
+  <section style="padding:70px 48px; background:#F4FAFB;">
+    <div style="max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 0.9fr 1fr 1fr; gap: 40px; margin-bottom: 56px">
+      <div style="height:210px; border-radius:20px; overflow:hidden; box-shadow:0 14px 28px rgba(0,60,66,0.1);">
+        <image-slot id="acerca-mision-foto" shape="rect" placeholder="Foto: negocio local"></image-slot>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px; text-align:center;">
+        <h2 style="margin:0; font-size:22px; font-weight:800; color:#EB600A;">Nuestra misión</h2>
+        <p style="margin:0; font-size:14px; line-height:1.7; color:#3B5C61;">Promover San Carlos y Guaymas como destinos turísticos únicos, ofreciendo información confiable, actualizada y auténtica, mientras apoyamos a los negocios locales y fomentamos experiencias memorables.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px; text-align:center;">
+        
+        <h2 style="margin:0; font-size:22px; font-weight:800; color:#EB600A;">Nuestra visión</h2><p style="margin:0; font-size:14px; line-height:1.7; color:#3B5C61;">Ser la plataforma digital más completa y confiable de San Carlos y Guaymas, reconocida por viajeros, empresas y locales como el punto de encuentro entre la comunidad y el turismo.</p>
+      </div>
+    </div>
+
+    <div style="text-align:center; max-width:640px; margin:0 auto 40px;">
+      <h2 style="margin:0 0 10px; font-size:26px; font-weight:800; color:#EB600A;">Nuestros valores</h2>
+      <p style="margin:0; font-size:15px; color:#3B5C61;">Nuestra forma de trabajar y compartir San Carlos está basada en estos valores, que reflejan lo que somos y lo que queremos aportar.</p>
+    </div>
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:32px; max-width:1000px; margin:0 auto;">
+      <div style="display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; width:270px;">
+        <span style="width:52px; height:52px; display:flex; align-items:center; justify-content:center;"><span style="width:48px; height:48px; background-color:#B8860B; -webkit-mask-image:url(uploads/heart-partner-handshake.svg); mask-image:url(uploads/heart-partner-handshake.svg); -webkit-mask-size:contain; mask-size:contain; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; display:inline-block;"></span></span>
+        <h3 style="margin:0; font-family:'Caveat',cursive; font-size:19px; font-weight:700; color:#EB600A;">Honestidad</h3>
+        <p style="margin:0; font-size:13px; color:#3B5C61; line-height:1.5;">Recomendamos lo que conocemos, lo que vale la pena y lo que realmente disfrutarías.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; width:270px;">
+        <span style="width:52px; height:52px; display:flex; align-items:center; justify-content:center;"><span style="width:48px; height:48px; background-color:#B8860B; -webkit-mask-image:url(uploads/hr-group.svg); mask-image:url(uploads/hr-group.svg); -webkit-mask-size:contain; mask-size:contain; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; display:inline-block;"></span></span>
+        <h3 style="margin:0; font-family:'Caveat',cursive; font-size:19px; font-weight:700; color:#EB600A;">Amor por lo local</h3>
+        <p style="margin:0; font-size:13px; color:#3B5C61; line-height:1.5;">Apoyamos a pequeños negocios, emprendedores y talento regional.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; width:270px;">
+        <span style="width:52px; height:52px; display:flex; align-items:center; justify-content:center;"><span style="width:48px; height:48px; background-color:#B8860B; -webkit-mask-image:url(uploads/people-roof.svg); mask-image:url(uploads/people-roof.svg); -webkit-mask-size:contain; mask-size:contain; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; display:inline-block;"></span></span>
+        <h3 style="margin:0; font-family:'Caveat',cursive; font-size:19px; font-weight:700; color:#EB600A;">Hospitalidad</h3>
+        <p style="margin:0; font-size:13px; color:#3B5C61; line-height:1.5;">Queremos que todos se sientan como en casa… con mar, ceviche y buena vibra.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; width:270px;">
+        <span style="width:52px; height:52px; display:flex; align-items:center; justify-content:center;"><span style="width:48px; height:48px; background-color:#B8860B; -webkit-mask-image:url(uploads/task-checklist.svg); mask-image:url(uploads/task-checklist.svg); -webkit-mask-size:contain; mask-size:contain; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; display:inline-block;"></span></span>
+        <h3 style="margin:0; font-family:'Caveat',cursive; font-size:19px; font-weight:700; color:#EB600A;">Responsabilidad</h3>
+        <p style="margin:0; font-size:13px; color:#3B5C61; line-height:1.5;">Cuidamos la naturaleza, respetamos el mar y promovemos el turismo consciente.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; width:270px;">
+        <span style="width:52px; height:52px; display:flex; align-items:center; justify-content:center;"><span style="width:48px; height:48px; background-color:#B8860B; -webkit-mask-image:url(uploads/Recurso-1.svg); mask-image:url(uploads/Recurso-1.svg); -webkit-mask-size:contain; mask-size:contain; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; -webkit-mask-position:center; mask-position:center; display:inline-block;"></span></span>
+        <h3 style="margin:0; font-family:'Caveat',cursive; font-size:19px; font-weight:700; color:#EB600A;">Calidad &amp; autenticidad</h3>
+        <p style="margin:0; font-size:13px; color:#3B5C61; line-height:1.5;">Nada de contenido genérico: todo es local, real y hecho con cariño.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUÉ OFRECEMOS -->
+  <section style="background:#6AC7E2; padding:64px 48px;">
+    <div style="max-width:1080px; margin:0 auto; display:grid; grid-template-columns:1fr 1.1fr; gap:48px; align-items:center;">
+      <div style="height:320px; border-radius:22px; overflow:hidden; box-shadow:0 16px 36px rgba(0,60,66,0.15);">
+        <image-slot id="acerca-ofrecemos" shape="rect" placeholder="Foto: letrero de San Carlos"></image-slot>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <h2 style="margin:0; font-size:26px; font-weight:800; color:#ffffff;">¿Qué ofrecemos?</h2>
+        <p style="margin:0; font-size:14px; font-weight:700; color:#E9F8FB;">Dentro de Visit San Carlos encontrarás:</p>
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <span style="display:flex; align-items:flex-start; gap:10px; font-size:14px; color:#ffffff; line-height:1.5;"><svg width="16" height="16" viewBox="0 0 18 18" style="flex-shrink:0; margin-top:3px;"><path d="M4 9l3 4 7-8" stroke="#EB600A" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>Directorio de negocios: restaurantes, cafés, bares, hoteles, rentas vacacionales, tours, salones de eventos, servicios médicos y más.</span>
+          <span style="display:flex; align-items:flex-start; gap:10px; font-size:14px; color:#ffffff; line-height:1.5;"><svg width="16" height="16" viewBox="0 0 18 18" style="flex-shrink:0; margin-top:3px;"><path d="M4 9l3 4 7-8" stroke="#EB600A" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>Blog y guías locales: qué hacer, qué comer, qué llevar, mejores playas, miradores y rutas.</span>
+          <span style="display:flex; align-items:flex-start; gap:10px; font-size:14px; color:#ffffff; line-height:1.5;"><svg width="16" height="16" viewBox="0 0 18 18" style="flex-shrink:0; margin-top:3px;"><path d="M4 9l3 4 7-8" stroke="#EB600A" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>Calendario de eventos: festivales, conciertos, eventos deportivos, ferias y actividades comunitarias.</span>
+          <span style="display:flex; align-items:flex-start; gap:10px; font-size:14px; color:#ffffff; line-height:1.5;"><svg width="16" height="16" viewBox="0 0 18 18" style="flex-shrink:0; margin-top:3px;"><path d="M4 9l3 4 7-8" stroke="#EB600A" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>Publicidad local: espacios para que negocios se den a conocer (desde planes básicos hasta apariciones destacadas).</span>
+          <span style="display:flex; align-items:flex-start; gap:10px; font-size:14px; color:#ffffff; line-height:1.5;"><svg width="16" height="16" viewBox="0 0 18 18" style="flex-shrink:0; margin-top:3px;"><path d="M4 9l3 4 7-8" stroke="#EB600A" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>Colaboraciones con influencers, fotógrafos y viajeros.</span>
+        </div>
+        <a href="#" style="display:inline-flex; align-items:center; gap:8px; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; padding:13px 24px; border-radius:10px; width:fit-content; margin-top:8px;">+ Agregar mi negocio</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section style="padding:70px 48px;">
+    <h2 style="margin:0 0 44px; text-align:center; font-size:30px; font-weight:800; color:#143840;">Preguntas frecuentes</h2>
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:36px; max-width:1280px; margin:0 auto;">
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <h3 style="margin:0 0 10px; font-size:13px; font-weight:800; color:#EB600A; letter-spacing:0.03em;">SOBRE VISIT SAN CARLOS</h3>
+        <sc-for list="{{ faqSobre }}" as="item" hint-placeholder-count="6">
+          <div style="border-bottom:1px solid #EEF3F3;">
+            <button onClick="{{ item.toggle }}" style="display:flex; align-items:flex-start; gap:8px; width:100%; background:transparent; border:none; padding:10px 0; cursor:pointer; text-align:left; font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:600; color:#009BA4;">
+              <span style="flex-shrink:0; color:#EB600A; font-weight:700;">{{ item.icon }}</span>
+              <span>{{ item.q }}</span>
+            </button>
+            <sc-if value="{{ item.open }}">
+              <p style="margin:0 0 12px 22px; font-size:13px; color:#3B5C61; line-height:1.6;">{{ item.a }}</p>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <h3 style="margin:0 0 10px; font-size:13px; font-weight:800; color:#EB600A; letter-spacing:0.03em;">DIRECTORIO, NEGOCIOS Y PUBLICIDAD</h3>
+        <sc-for list="{{ faqDirectorio }}" as="item" hint-placeholder-count="6">
+          <div style="border-bottom:1px solid #EEF3F3;">
+            <button onClick="{{ item.toggle }}" style="display:flex; align-items:flex-start; gap:8px; width:100%; background:transparent; border:none; padding:10px 0; cursor:pointer; text-align:left; font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:600; color:#009BA4;">
+              <span style="flex-shrink:0; color:#EB600A; font-weight:700;">{{ item.icon }}</span>
+              <span>{{ item.q }}</span>
+            </button>
+            <sc-if value="{{ item.open }}">
+              <p style="margin:0 0 12px 22px; font-size:13px; color:#3B5C61; line-height:1.6;">{{ item.a }}</p>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <h3 style="margin:0 0 10px; font-size:13px; font-weight:800; color:#EB600A; letter-spacing:0.03em;">EVENTOS, RESTAURANTES Y HOSPEDAJE</h3>
+        <sc-for list="{{ faqEventos }}" as="item" hint-placeholder-count="6">
+          <div style="border-bottom:1px solid #EEF3F3;">
+            <button onClick="{{ item.toggle }}" style="display:flex; align-items:flex-start; gap:8px; width:100%; background:transparent; border:none; padding:10px 0; cursor:pointer; text-align:left; font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:600; color:#009BA4;">
+              <span style="flex-shrink:0; color:#EB600A; font-weight:700;">{{ item.icon }}</span>
+              <span>{{ item.q }}</span>
+            </button>
+            <sc-if value="{{ item.open }}">
+              <p style="margin:0 0 12px 22px; font-size:13px; color:#3B5C61; line-height:1.6;">{{ item.a }}</p>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <h3 style="margin:0 0 10px; font-size:13px; font-weight:800; color:#EB600A; letter-spacing:0.03em;">SUSCRIPCIONES, USABILIDAD Y CONTACTO</h3>
+        <sc-for list="{{ faqSuscripciones }}" as="item" hint-placeholder-count="5">
+          <div style="border-bottom:1px solid #EEF3F3;">
+            <button onClick="{{ item.toggle }}" style="display:flex; align-items:flex-start; gap:8px; width:100%; background:transparent; border:none; padding:10px 0; cursor:pointer; text-align:left; font-family:'Poppins',sans-serif; font-size:13.5px; font-weight:600; color:#009BA4;">
+              <span style="flex-shrink:0; color:#EB600A; font-weight:700;">{{ item.icon }}</span>
+              <span>{{ item.q }}</span>
+            </button>
+            <sc-if value="{{ item.open }}">
+              <p style="margin:0 0 12px 22px; font-size:13px; color:#3B5C61; line-height:1.6;">{{ item.a }}</p>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA NEWSLETTER -->
+  <section style="margin:20px 48px 56px; padding:48px 56px; border-radius:24px; background:linear-gradient(120deg,#009BA4,#00767E); display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;">
+    <div style="display:flex; flex-direction:column; gap:8px; max-width:480px;">
+      <h2 style="margin:0; font-size:24px; font-weight:800; color:#ffffff;">No te pierdas nada de San Carlos y Guaymas</h2>
+      <p style="margin:0; font-size:14px; color:#DFF6F8;">Eventos, promociones y novedades directo a tu correo.</p>
+    </div>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; flex:1; max-width:420px;">
+      <input type="email" placeholder="tu@correo.com" style="flex:1; min-width:200px; border:none; outline:none; border-radius:10px; padding:13px 16px; font-family:'Poppins',sans-serif; font-size:14px; color:#143840; background:#ffffff;">
+      <button style="border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; padding:13px 24px; border-radius:10px; cursor:pointer; flex-shrink:0;">Suscribirme</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="margin-top:0; background:#ffffff; color:#5C7679; padding:0 48px 28px; border-top:1px solid #EEF3F3;">
+    <div style="display:grid; grid-template-columns:auto 1fr 1fr 1fr 1fr; gap:40px; align-items:start; padding:36px 0;">
+
+      <img src="uploads/Recurso 4pin.png" alt="Visit San Carlos" style="width:96px; height:auto; flex-shrink:0;">
+
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <h3 style="margin:0; font-size:19px; font-weight:800; color:#143840;">Contáctanos</h3>
+        <div style="display:flex; gap:8px; align-items:center; font-size:14px;">
+          
+          <span>Guaymas, Sonora</span>
+        </div>
+        <a href="mailto:visit.sancarlos.son@gmail.com" style="font-size:14px; color:#5C7679;">visit.sancarlos.son@gmail.com</a>
+        <a href="tel:+526221145316" style="font-size:14px; color:#5C7679;">+52 622 114 5316</a>
+        <div style="display:flex; gap:10px; margin-top:4px;">
+          <a href="#" aria-label="Facebook" style="width:30px; height:30px; border-radius:50%; background:#009BA4; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#ffffff;">f</a>
+          <a href="#" aria-label="Instagram" style="width:30px; height:30px; border-radius:50%; background:#009BA4; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#ffffff;">ig</a>
+          <a href="#" aria-label="Twitter" style="width:30px; height:30px; border-radius:50%; background:#009BA4; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#ffffff;">x</a>
+          <a href="#" aria-label="LinkedIn" style="width:30px; height:30px; border-radius:50%; background:#009BA4; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#ffffff;">in</a>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <h3 style="margin:0 0 4px; font-size:19px; font-weight:800; color:#143840;">Sitios de interés</h3>
+        <a href="#" style="font-size:14px; color:#5C7679;">Tabla de mareas</a>
+        <a href="#" style="font-size:14px; color:#5C7679;">Agregar mi negocio</a>
+        <a href="Visit San Carlos Publicidad.dc.html" style="font-size:14px; color:#5C7679;">Publicidad</a>
+        <a href="Visit San Carlos Galeria.dc.html" style="font-size:14px; color:#5C7679;">Galería</a>
+        <a href="#" style="font-size:14px; color:#5C7679;">Blog</a>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <h3 style="margin:0 0 4px; font-size:19px; font-weight:800; color:#143840;">Más información</h3>
+        <a href="#" style="font-size:14px; color:#5C7679;">FAQ</a>
+        <a href="Visit San Carlos Politicas de Privacidad.dc.html" style="font-size:14px; color:#5C7679;">Políticas de privacidad</a>
+        <a href="#" style="font-size:14px; color:#5C7679;">Soporte</a>
+        <a href="Visit San Carlos Terminos y Condiciones.dc.html" style="font-size:14px; color:#5C7679;">Términos y condiciones</a>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <h3 style="margin:0 0 4px; font-size:19px; font-weight:800; color:#143840;">Números de emergencia</h3>
+        <a href="tel:911" style="font-size:14px; color:#5C7679;">Emergencias</a>
+        <a href="tel:+526222241573" style="font-size:14px; color:#5C7679;">Bomberos</a>
+        <a href="tel:+526222241234" style="font-size:14px; color:#5C7679;">Cruz roja</a>
+        <a href="tel:+526622260911" style="font-size:14px; color:#5C7679;">Rescate San Carlos</a>
+        <a href="tel:+526222210911" style="font-size:14px; color:#5C7679;">Policía y transito Guaymas</a>
+      </div>
+
+    </div>
+    <div style="padding-top:22px; border-top:1px solid #EEF3F3; text-align:center; font-size:12px; color:#A9BCBE;">© Derechos reservados Visit San Carlos 2026 | Creado por Black &amp; White Studio</div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { openFaq: {} };
+  toggleFaq = (id) => this.setState(s => ({ openFaq: { ...s.openFaq, [id]: !s.openFaq[id] } }));
+
+  mkFaq(id, q, a) {
+    return { id, q, a, open: !!this.state.openFaq[id], icon: this.state.openFaq[id] ? '–' : '+', toggle: () => this.toggleFaq(id) };
+  }
+
+  renderVals() {
+    return {
+      faqSobre: [
+        this.mkFaq('s1', '¿Qué es Visit San Carlos?', 'Es una plataforma digital que reúne negocios, eventos, blog y toda la información útil de San Carlos y Guaymas en un solo lugar.'),
+        this.mkFaq('s2', '¿Visit San Carlos es una agencia de viajes?', 'No. Somos una guía y directorio digital: te conectamos directamente con los negocios y servicios locales.'),
+        this.mkFaq('s3', '¿La información del sitio es confiable?', 'Sí, trabajamos directamente con los negocios y verificamos la información antes de publicarla.'),
+        this.mkFaq('s4', '¿Cómo funciona la plataforma?', 'Navega por categorías o usa el buscador para encontrar negocios, eventos y contenido del blog de San Carlos y Guaymas.'),
+        this.mkFaq('s5', '¿Qué tipo de contenido puedo encontrar en Visit San Carlos?', 'Directorio de negocios, calendario de eventos, blog con guías locales, galería y tabla de mareas.'),
+        this.mkFaq('s6', '¿Puedo sugerir mejoras o reportar información incorrecta?', 'Claro, puedes escribirnos desde la página de Contacto o por redes sociales.'),
+      ],
+      faqDirectorio: [
+        this.mkFaq('d1', '¿Cómo puedo agregar mi negocio al directorio?', 'Desde el botón "Agregar negocio" llenas un formulario breve y tu perfil queda publicado sin costo.'),
+        this.mkFaq('d2', '¿Mi negocio necesita estar en San Carlos para aparecer en el sitio?', 'No, también incluimos negocios de Guaymas y alrededores.'),
+        this.mkFaq('d3', '¿Cuánto cuesta aparecer en el sitio?', 'Aparecer en el directorio es gratis; solo los espacios publicitarios destacados tienen costo.'),
+        this.mkFaq('d4', '¿Qué incluye un perfil de negocio?', 'Fotos, descripción, ubicación, horarios, contacto, redes sociales y rango de precios.'),
+        this.mkFaq('d5', '¿Puedo actualizar mi información cuando quiera?', 'Sí, desde tu panel de negocio puedes editar tu perfil en cualquier momento.'),
+        this.mkFaq('d6', '¿Qué opciones de publicidad tienen?', 'Banners en Home, carruseles patrocinados y paquetes combinados con redes sociales.'),
+      ],
+      faqEventos: [
+        this.mkFaq('e1', '¿Cómo puedo agregar un evento al calendario?', 'Desde tu panel de negocio o escribiéndonos directamente con los detalles del evento.'),
+        this.mkFaq('e2', '¿Tiene costo publicar un evento?', 'Publicar un evento comunitario básico es gratuito; promociones destacadas tienen costo.'),
+        this.mkFaq('e3', '¿Qué tipo de eventos aceptan?', 'Festivales, deportivos, culturales, ferias y actividades comunitarias de la región.'),
+        this.mkFaq('e4', '¿Puedo reservar directamente desde Visit San Carlos?', 'Por ahora te conectamos con el negocio vía teléfono, web o redes para reservar.'),
+        this.mkFaq('e5', '¿Los precios mostrados en hoteles o restaurantes son exactos?', 'Son de referencia; siempre confirma el precio final directamente con el negocio.'),
+        this.mkFaq('e6', '¿Cómo se calcula el ranking de estrellas?', 'Con base en reseñas y calificaciones de visitantes en la plataforma.'),
+      ],
+      faqSuscripciones: [
+        this.mkFaq('n1', '¿Cómo me suscribo al newsletter?', 'Ingresa tu correo en el banner de suscripción al final del sitio.'),
+        this.mkFaq('n2', '¿Necesito crear una cuenta para usar el sitio?', 'No, solo los negocios necesitan cuenta para gestionar su perfil y publicidad.'),
+        this.mkFaq('n3', '¿Cómo puedo contactarlos?', 'Por correo, teléfono o el formulario de la página de Contacto.'),
+        this.mkFaq('n4', '¿Tienen redes sociales?', 'Sí, síguenos en Facebook, Instagram, Twitter y LinkedIn.'),
+        this.mkFaq('n5', '¿Cómo reporto un error, una foto incorrecta o un link roto?', 'Escríbenos por Contacto o Soporte con el detalle y lo corregimos lo antes posible.'),
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&amp;family=Caveat:wght@600;700&amp;display=swap" rel="stylesheet">
+  <script src="./image-slot.js"></script>
+  <style>
+    body { margin: 0; font-family: 'Poppins', sans-serif; color: #143840; background: #ffffff; }
+    a { color: #009BA4; text-decoration: none; }
+    a:hover { color: #EB600A; }
+    * { box-sizing: border-box; }
+    .vsc-scroll { scrollbar-width: none; }
+    .vsc-scroll::-webkit-scrollbar { display: none; }
+    textarea::placeholder, input::placeholder { color: #9DB6B8; }
+  </style>
+</helmet>
+
+<div style="max-width:100%; overflow-x:hidden; background:#ffffff;">
+
+  <!-- HEADER -->
+  <header style="position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; gap:24px; padding:14px 48px; background:#ffffff; box-shadow:0 2px 14px rgba(0,60,66,0.08);">
+    <img src="uploads/Recurso 1visitsancarlos.png" alt="Visit San Carlos" style="height:52px; width:auto; flex-shrink:0;" />
+    <nav style="display:flex; align-items:center; gap:32px; flex-wrap:wrap;">
+      <a href="Visit San Carlos Home.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Inicio</a>
+      <a href="Visit San Carlos Acerca de.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Acerca de</a>
+      <a href="Visit San Carlos Directorio.dc.html" style="font-weight:600; font-size:15px; color:#009BA4;">Directorio</a>
+      <a href="Visit San Carlos Eventos.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Eventos</a>
+      <a href="Visit San Carlos Blog.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Blog</a>
+      <a href="Visit San Carlos Contacto.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Contacto</a>
+    </nav>
+    <a href="Visit San Carlos Login.dc.html" style="flex-shrink:0; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; letter-spacing:0.02em; padding:12px 24px; border-radius:999px; box-shadow:0 6px 16px rgba(235,96,10,0.35);">AGREGAR NEGOCIO</a>
+  </header>
+
+  <!-- ACCIONES SUPERIORES -->
+  <section style="padding:20px 48px 0; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; max-width:1180px; margin:0 auto;">
+    <a href="Visit San Carlos Directorio.dc.html" style="display:flex; align-items:center; gap:6px; background:#F4FAFB; color:#009BA4; font-weight:700; font-size:13px; padding:9px 16px; border-radius:8px;">← Volver</a>
+    <div style="display:flex; gap:10px;">
+      <button onClick="{{ onShare }}" style="display:flex; align-items:center; gap:6px; border:1px solid #E2ECED; background:#ffffff; color:#3B5C61; font-weight:700; font-size:13px; padding:9px 16px; border-radius:8px; cursor:pointer;">
+        <svg width="14" height="14" viewBox="0 0 18 18" fill="none"><circle cx="14" cy="4" r="2" stroke="#3B5C61" stroke-width="1.4"></circle><circle cx="14" cy="14" r="2" stroke="#3B5C61" stroke-width="1.4"></circle><circle cx="4" cy="9" r="2" stroke="#3B5C61" stroke-width="1.4"></circle><line x1="5.7" y1="8" x2="12.3" y2="4.8" stroke="#3B5C61" stroke-width="1.4"></line><line x1="5.7" y1="10" x2="12.3" y2="13.2" stroke="#3B5C61" stroke-width="1.4"></line></svg>
+        Compartir
+      </button>
+      <button onClick="{{ onToggleFav }}" style="display:flex; align-items:center; gap:6px; border:1px solid #E2ECED; background:{{ favBg }}; color:{{ favColor }}; font-weight:700; font-size:13px; padding:9px 16px; border-radius:8px; cursor:pointer;">
+        <svg width="14" height="13" viewBox="0 0 20 18" fill="{{ favColor }}"><path d="M10 17S1 11.5 1 5.8C1 2.6 3.4 1 5.9 1c1.7 0 3.2 1 4.1 2.4C10.9 2 12.4 1 14.1 1 16.6 1 19 2.6 19 5.8 19 11.5 10 17 10 17z"></path></svg>
+        {{ favLabel }}
+      </button>
+      <button style="display:flex; align-items:center; gap:6px; border:1px solid #E2ECED; background:#ffffff; color:#3B5C61; font-weight:700; font-size:13px; padding:9px 16px; border-radius:8px; cursor:pointer;">
+        <svg width="13" height="13" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7.5" stroke="#3B5C61" stroke-width="1.4"></circle><line x1="9" y1="6" x2="9" y2="10" stroke="#3B5C61" stroke-width="1.4"></line><circle cx="9" cy="12.4" r="0.9" fill="#3B5C61"></circle></svg>
+        Reportar
+      </button>
+    </div>
+  </section>
+
+  <!-- TITULO -->
+  <section style="padding:16px 48px 0; max-width:1180px; margin:0 auto;">
+    <h1 style="margin:0 0 10px; font-size:30px; font-weight:800; color:#143840;">El Pargo Rojo</h1>
+    <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+      <span style="background:#E23E7E; color:#ffffff; font-size:11px; font-weight:700; padding:5px 12px; border-radius:999px;">Popular</span>
+      <span style="font-size:14px; font-weight:800; color:#143840;">$$<span style="color:#D8E2E3;">$</span></span>
+      <span style="display:flex; gap:1px;">
+        <sc-for list="{{ starsArr }}" as="st" hint-placeholder-count="5"><span style="font-size:14px; color:{{ st.color }};">★</span></sc-for>
+      </span>
+      <a href="#reviews" style="font-size:13px; color:#009BA4; font-weight:600;">4.6 (28 reseñas)</a>
+      <span style="font-size:13px; color:#5C7679;">Restaurantes, Mariscos, Terraza</span>
+    </div>
+  </section>
+
+  <!-- GALERÍA -->
+  <section style="padding:24px 48px 0; max-width:1180px; margin:0 auto;">
+    <div style="height:420px; border-radius:20px; overflow:hidden; box-shadow:0 16px 36px rgba(0,60,66,0.1);">
+      <image-slot id="{{ activeImageId }}" shape="rect" placeholder="{{ activeImagePlaceholder }}"></image-slot>
+    </div>
+    <div class="vsc-scroll" style="display:flex; gap:12px; margin-top:14px; overflow-x:auto;">
+      <sc-for list="{{ thumbs }}" as="t" hint-placeholder-count="6">
+        <button onClick="{{ t.onClick }}" style="flex:0 0 110px; height:78px; border-radius:10px; overflow:hidden; border:{{ t.border }}; padding:0; cursor:pointer; background:none;">
+          <image-slot id="{{ t.id }}" shape="rect" placeholder="{{ t.placeholder }}"></image-slot>
+        </button>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- DESCRIPCIÓN -->
+  <section style="padding:36px 48px 0; max-width:1180px; margin:0 auto;">
+    <div style="background:#ffffff; border:1px solid #EEF3F3; border-radius:18px; padding:28px;">
+      <h2 style="margin:0 0 12px; font-size:19px; font-weight:800; color:#143840;">Descripción</h2>
+      <p style="margin:0; font-size:14px; line-height:1.7; color:#3B5C61;">Restaurante familiar frente a la bahía de San Carlos, especializado en mariscos frescos de la región. Nuestra terraza ofrece vista directa al mar, ideal para comer al atardecer. Contamos con menú de temporada, cortes de pescado del día y coctelería de mariscos.</p>
+    </div>
+  </section>
+
+  <!-- CARACTERÍSTICAS -->
+  <section style="padding:24px 48px 0; max-width:1180px; margin:0 auto;">
+    <div style="background:#ffffff; border:1px solid #EEF3F3; border-radius:18px; padding:28px;">
+      <h2 style="margin:0 0 16px; font-size:19px; font-weight:800; color:#143840;">Características</h2>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:14px;">
+        <sc-for list="{{ features }}" as="f" hint-placeholder-count="6">
+          <div style="display:flex; align-items:center; gap:8px; font-size:14px; color:#3B5C61;">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="8" fill="#E5F6F7"></circle><path d="M5 9l3 3 5-6" stroke="#009BA4" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            {{ f }}
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAPA -->
+  <section style="padding:24px 48px 0; max-width:1180px; margin:0 auto;">
+    <div style="background:#ffffff; border:1px solid #EEF3F3; border-radius:18px; padding:28px;">
+      <h2 style="margin:0 0 14px; font-size:19px; font-weight:800; color:#143840;">Ubicación</h2>
+      <p style="margin:0 0 14px; font-size:14px; color:#3B5C61;">Malecón San Carlos, San Carlos, Sonora, México</p>
+      <div style="border-radius:14px; overflow:hidden; height:280px; border:1px solid #EEF3F3;">
+        <iframe src="https://maps.google.com/maps?q=Malec%C3%B3n%20San%20Carlos%2C%20Sonora&output=embed" style="width:100%; height:100%; border:none;" loading="lazy"></iframe>
+      </div>
+      <a href="https://www.google.com/maps/dir/?api=1&destination=Malec%C3%B3n%20San%20Carlos%2C%20Sonora" target="_blank" style="display:inline-flex; align-items:center; gap:8px; margin-top:14px; background:#009BA4; color:#ffffff; font-weight:700; font-size:14px; padding:11px 20px; border-radius:10px;">Cómo llegar</a>
+    </div>
+  </section>
+
+  <!-- RESEÑAS -->
+  <section id="reviews" style="padding:24px 48px 60px; max-width:1180px; margin:0 auto;">
+    <div style="background:#ffffff; border:1px solid #EEF3F3; border-radius:18px; padding:28px; display:flex; flex-direction:column; gap:20px;">
+      <h2 style="margin:0; font-size:19px; font-weight:800; color:#143840;">Reseñas ({{ reviewCount }})</h2>
+
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="3">
+          <div style="border-bottom:1px solid #EEF3F3; padding-bottom:16px; display:flex; flex-direction:column; gap:6px;">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <span style="font-size:14px; font-weight:700; color:#143840;">{{ r.name }}</span>
+              <span style="font-size:12px; color:#7FA7AA;">{{ r.date }}</span>
+            </div>
+            <span style="display:flex; gap:1px;">
+              <sc-for list="{{ r.starsArr }}" as="st" hint-placeholder-count="5"><span style="font-size:12px; color:{{ st.color }};">★</span></sc-for>
+            </span>
+            <p style="margin:0; font-size:13px; color:#3B5C61; line-height:1.6;">{{ r.comment }}</p>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="border-top:1px solid #EEF3F3; padding-top:20px; display:flex; flex-direction:column; gap:12px;">
+        <h3 style="margin:0; font-size:15px; font-weight:800; color:#143840;">Deja tu reseña</h3>
+        <div style="display:grid; grid-template-columns:1fr 160px; gap:12px;">
+          <input ref="{{ nameRef }}" type="text" placeholder="Tu nombre" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+          <select ref="{{ ratingRef }}" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px; color:#143840; background:#ffffff;">
+            <option value="5">5 estrellas</option>
+            <option value="4">4 estrellas</option>
+            <option value="3">3 estrellas</option>
+            <option value="2">2 estrellas</option>
+            <option value="1">1 estrella</option>
+          </select>
+        </div>
+        <textarea ref="{{ commentRef }}" rows="3" placeholder="Comparte tu experiencia..." style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px; resize:vertical;"></textarea>
+        <button onClick="{{ submitReview }}" style="border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; padding:12px 24px; border-radius:10px; cursor:pointer; align-self:flex-start;">Publicar reseña</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="margin-top:0; background:#ffffff; color:#5C7679; padding:0 48px 28px; border-top:1px solid #EEF3F3;">
+    <div style="display:grid; grid-template-columns:auto 1fr 1fr 1fr 1fr; gap:40px; align-items:start; padding:36px 0;">
+
+      <img src="uploads/Recurso 4pin.png" alt="Visit San Carlos" style="width:96px; height:auto; flex-shrink:0;">
+
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <h3 style="margin:0; font-size:19px; font-weight:800; color:#143840;">Contáctanos</h3>
+        <div style="display:flex; gap:8px; align-items:center; font-size:14px;">
+          <span style="width:14px; height:18px; border-radius:7px 7px 7px 0; background:#EB600A; flex-shrink:0;"></span>
+          <span>Guaymas, Sonora</span>
+        </div>
+        <a href="mailto:visit.sancarlos.son@gmail.com" style="font-size:14px; color:#5C7679;">visit.sancarlos.son@gmail.com</a>
+        <a href="tel:+526221145316" style="font-size:14px; color:#5C7679;">+52 622 114 5316</a>
+        <div style="display:flex; gap:10px; margin-top:4px;">
+          <a href="#" aria-label="Facebook" style="width:30px; height:30px; border-radius:50%; background:#009BA4; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#ffffff;">f</a>
+          <a href="#" aria-label="Instagram" style="width:30px; height:30px; border-radius:50%; background:#009BA4; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#ffffff;">ig</a>
+          <a href="#" aria-label="TikTok" style="width:30px; height:30px; border-radius:50%; background:#009BA4; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#ffffff;">tt</a>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <h3 style="margin:0 0 4px; font-size:19px; font-weight:800; color:#143840;">Sitios de interés</h3>
+        <a href="#" style="font-size:14px; color:#5C7679;">Tabla de mareas</a>
+        <a href="#" style="font-size:14px; color:#5C7679;">Agregar mi negocio</a>
+        <a href="Visit San Carlos Publicidad.dc.html" style="font-size:14px; color:#5C7679;">Publicidad</a>
+        <a href="Visit San Carlos Galeria.dc.html" style="font-size:14px; color:#5C7679;">Galería</a>
+        <a href="Visit San Carlos Blog.dc.html" style="font-size:14px; color:#5C7679;">Blog</a>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <h3 style="margin:0 0 4px; font-size:19px; font-weight:800; color:#143840;">Más información</h3>
+        <a href="#" style="font-size:14px; color:#5C7679;">FAQ</a>
+        <a href="Visit San Carlos Politicas de Privacidad.dc.html" style="font-size:14px; color:#5C7679;">Políticas de privacidad</a>
+        <a href="#" style="font-size:14px; color:#5C7679;">Soporte</a>
+        <a href="Visit San Carlos Terminos y Condiciones.dc.html" style="font-size:14px; color:#5C7679;">Términos y condiciones</a>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <h3 style="margin:0 0 4px; font-size:19px; font-weight:800; color:#143840;">Números de emergencia</h3>
+        <a href="tel:911" style="font-size:14px; color:#5C7679;">Emergencias</a>
+        <a href="tel:+526222241573" style="font-size:14px; color:#5C7679;">Bomberos</a>
+        <a href="tel:+526222241234" style="font-size:14px; color:#5C7679;">Cruz roja</a>
+        <a href="tel:+526622260911" style="font-size:14px; color:#5C7679;">Rescate San Carlos</a>
+        <a href="tel:+526222210911" style="font-size:14px; color:#5C7679;">Policía y transito Guaymas</a>
+      </div>
+
+    </div>
+    <div style="padding-top:22px; border-top:1px solid #EEF3F3; text-align:center; font-size:12px; color:#A9BCBE;">© Derechos reservados Visit San Carlos 2026 | Creado por Black &amp; White Studio</div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.nameRef = React.createRef();
+    this.ratingRef = React.createRef();
+    this.commentRef = React.createRef();
+  }
+
+  state = {
+    activeImage: 0,
+    isFav: false,
+    reviews: [
+      { id: 'r1', name: 'Marcela R.', rating: 5, comment: 'Excelente vista y los camarones al mojo de ajo son increíbles.', date: '2 sep 2026' },
+      { id: 'r2', name: 'Jorge T.', rating: 4, comment: 'Buen servicio, un poco de espera en fin de semana pero vale la pena.', date: '20 ago 2026' },
+      { id: 'r3', name: 'Diana P.', rating: 5, comment: 'Nuestro lugar favorito para ver el atardecer con buena comida.', date: '5 ago 2026' },
+    ],
+  };
+
+  toggleFav() { this.setState(s => ({ isFav: !s.isFav })); }
+  setActiveImage(i) { this.setState({ activeImage: i }); }
+  share() {
+    if (navigator.share) navigator.share({ title: 'El Pargo Rojo', url: window.location.href });
+    else if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
+  }
+  submitReview() {
+    const name = this.nameRef.current ? this.nameRef.current.value : '';
+    const rating = this.ratingRef.current ? Number(this.ratingRef.current.value) : 5;
+    const comment = this.commentRef.current ? this.commentRef.current.value : '';
+    if (!comment) return;
+    const newReview = { id: 'r' + Date.now(), name: name || 'Anónimo', rating, comment, date: 'Hoy' };
+    this.setState(s => ({ reviews: [newReview, ...s.reviews] }));
+    if (this.nameRef.current) this.nameRef.current.value = '';
+    if (this.commentRef.current) this.commentRef.current.value = '';
+  }
+
+  renderVals() {
+    const { activeImage, isFav, reviews } = this.state;
+    const images = [
+      { id: 'biz-img-0', placeholder: 'Foto: fachada El Pargo Rojo' },
+      { id: 'biz-img-1', placeholder: 'Foto: terraza frente al mar' },
+      { id: 'biz-img-2', placeholder: 'Foto: platillo de mariscos' },
+      { id: 'biz-img-3', placeholder: 'Foto: menú' },
+      { id: 'biz-img-4', placeholder: 'Foto: interior del restaurante' },
+      { id: 'biz-img-5', placeholder: 'Foto: coctel de camarón' },
+    ];
+    const thumbs = images.map((img, i) => ({ ...img, border: i === activeImage ? '2px solid #EB600A' : '2px solid transparent', onClick: () => this.setActiveImage(i) }));
+
+    const starsFor = (rating) => [0, 1, 2, 3, 4].map(i => ({ color: i < Math.round(rating) ? '#F2A93B' : '#E3E9EA' }));
+    const reviewsView = reviews.map(r => ({ ...r, starsArr: starsFor(r.rating) }));
+
+    return {
+      starsArr: starsFor(4.6),
+      activeImageId: images[activeImage].id,
+      activeImagePlaceholder: images[activeImage].placeholder,
+      thumbs,
+      features: ['WiFi gratis', 'Terraza con vista al mar', 'Acepta tarjetas', 'Estacionamiento', 'Apto para niños', 'Reservaciones'],
+      reviews: reviewsView,
+      reviewCount: reviewsView.length,
+      nameRef: this.nameRef, ratingRef: this.ratingRef, commentRef: this.commentRef,
+      submitReview: () => this.submitReview(),
+      isFav, favBg: isFav ? '#FDEEE4' : '#ffffff', favColor: isFav ? '#EB600A' : '#3B5C61', favLabel: isFav ? 'Guardado' : 'Favoritos',
+      onToggleFav: () => this.toggleFav(),
+      onShare: () => this.share(),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

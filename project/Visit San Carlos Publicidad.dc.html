@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&amp;family=Caveat:wght@600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Poppins', sans-serif; color: #143840; background: #ffffff; }
+    a { color: #009BA4; text-decoration: none; }
+    a:hover { color: #EB600A; }
+    * { box-sizing: border-box; }
+  </style>
+</helmet>
+
+<div style="max-width:100%; overflow-x:hidden; background:#ffffff;">
+
+  <!-- HEADER -->
+  <header style="position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; gap:24px; padding:14px 48px; background:#ffffff; box-shadow:0 2px 14px rgba(0,60,66,0.08);">
+    <img src="uploads/Recurso 1visitsancarlos.png" alt="Visit San Carlos" style="height:52px; width:auto; flex-shrink:0;">
+    <nav style="display:flex; align-items:center; gap:32px; flex-wrap:wrap;">
+      <a href="Visit San Carlos Home.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Inicio</a>
+      <a href="Visit San Carlos Acerca de.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Acerca de</a>
+      <a href="Visit San Carlos Directorio.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Directorio</a>
+      <a href="Visit San Carlos Eventos.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Eventos</a>
+      <a href="Visit San Carlos Blog.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Blog</a>
+      <a href="Visit San Carlos Contacto.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Contacto</a>
+    </nav>
+    <a href="Visit San Carlos Login.dc.html" style="flex-shrink:0; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; letter-spacing:0.02em; padding:12px 24px; border-radius:999px; box-shadow:0 6px 16px rgba(235,96,10,0.35);">AGREGAR NEGOCIO</a>
+  </header>
+
+  <!-- HERO -->
+  <section style="padding:56px 48px 20px; text-align:center; display:flex; flex-direction:column; gap:14px; align-items:center;">
+    <h1 style="margin:0; font-size:38px; font-weight:800; color:#143840;">Da visibilidad a tu negocio</h1>
+    <p style="margin:0; font-size:15px; color:#3B5C61; max-width:560px;">Espacios publicitarios pensados para que miles de visitantes y residentes de San Carlos y Guaymas conozcan tu negocio.</p>
+    <span style="font-size:12px; font-weight:700; color:#7FA7AA; letter-spacing:0.03em;">Tarifario comercial actualizado · precios en pesos mexicanos</span>
+  </section>
+
+  <!-- 1. PUBLICIDAD EN EL SITIO WEB -->
+  <section style="padding:20px 48px 8px;">
+    <div style="max-width:1180px; margin:0 auto;">
+      <h2 style="margin:0 0 6px; font-size:24px; font-weight:800; color:#143840; text-align:center;">Publicidad en el sitio web</h2>
+      <p style="margin:0 0 26px; font-size:13px; color:#5C7679; text-align:center;">Contrata mensual o trimestral — el trimestral incluye descuento y beneficio de fotografía.</p>
+      <div style="display:flex; flex-wrap:wrap; gap:18px; justify-content:center;">
+        <sc-for list="{{ webCards }}" as="p" hint-placeholder-count="7">
+          <div style="width:260px; background:#ffffff; border:1px solid #EEF3F3; border-radius:16px; padding:22px; display:flex; flex-direction:column; gap:10px; box-shadow:0 8px 20px rgba(0,60,66,0.05);">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="width:26px; height:26px; border-radius:50%; background:#009BA4; color:#ffffff; font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0;">{{ p.letter }}</span>
+              <span style="font-size:11px; font-weight:700; color:#EB600A; letter-spacing:0.03em; text-transform:uppercase;">{{ p.space }}</span>
+            </div>
+            <h3 style="margin:0; font-size:16px; font-weight:800; color:#143840;">{{ p.name }}</h3>
+            <div style="display:flex; flex-direction:column; gap:2px; padding:10px 0; border-top:1px solid #F4FAFB; border-bottom:1px solid #F4FAFB;">
+              <div style="display:flex; align-items:baseline; gap:5px;"><span style="font-size:20px; font-weight:800; color:#143840;">{{ p.mensualFmt }}</span><span style="font-size:11px; color:#5C7679;">MXN / mes</span></div>
+              <div style="display:flex; align-items:baseline; gap:5px;"><span style="font-size:13px; font-weight:700; color:#009BA4;">{{ p.trimestralFmt }}</span><span style="font-size:11px; color:#5C7679;">MXN / trimestre</span></div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px; margin-top:2px;">
+              <sc-for list="{{ p.features }}" as="f" hint-placeholder-count="3">
+                <span style="font-size:12.5px; color:#3B5C61; line-height:1.4;">✓ {{ f }}</span>
+              </sc-for>
+            </div>
+            <a href="Visit San Carlos Login.dc.html" style="margin-top:auto; text-align:center; background:#ffffff; border:2px solid #009BA4; color:#009BA4; font-weight:700; font-size:13px; padding:10px; border-radius:10px;">Contratar</a>
+          </div>
+        </sc-for>
+      </div>
+      <p style="margin:22px 0 0; font-size:12.5px; color:#7FA7AA; text-align:center; max-width:760px; margin-left:auto; margin-right:auto;">La inclusión de un perfil básico en el Directorio es gratuita. Lo que obtienes con estos paquetes es el ⭐ Perfil Destacado "POPULAR", que aumenta tu visibilidad frente a los perfiles gratuitos.</p>
+    </div>
+  </section>
+
+  <!-- 2. PERFIL POPULAR -->
+  <section style="padding:36px 48px 8px;">
+    <div style="max-width:1000px; margin:0 auto; background:#F4FAFB; border-radius:20px; padding:36px 40px; display:flex; flex-direction:column; gap:18px;">
+      <h2 style="margin:0; font-size:20px; font-weight:800; color:#143840;">⭐ ¿Qué incluye el Perfil Destacado "POPULAR"?</h2>
+      <p style="margin:0; font-size:13.5px; color:#3B5C61;">El perfil básico de tu negocio puede aparecer gratis en el Directorio. Al anunciarte obtienes el distintivo ⭐ POPULAR y una presentación destacada frente a los perfiles gratuitos.</p>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px 24px;">
+        <sc-for list="{{ popularFeatures }}" as="f" hint-placeholder-count="9">
+          <span style="font-size:13px; color:#143840;">✓ {{ f }}</span>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. PAQUETES DE REDES SOCIALES -->
+  <section style="padding:36px 48px 8px;">
+    <div style="max-width:1000px; margin:0 auto;">
+      <h2 style="margin:0 0 22px; font-size:24px; font-weight:800; color:#143840; text-align:center;">Paquetes de redes sociales</h2>
+      <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:20px;">
+
+        <div style="background:#ffffff; border:1px solid #EEF3F3; border-radius:20px; padding:30px; display:flex; flex-direction:column; gap:14px; box-shadow:0 10px 24px rgba(0,60,66,0.06);">
+          <span style="font-size:12px; font-weight:700; color:#009BA4; letter-spacing:0.04em;">REDES SOCIALES</span>
+          <h3 style="margin:0; font-size:18px; font-weight:800; color:#143840;">Presencia Digital</h3>
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <div style="display:flex; align-items:baseline; gap:5px;"><span style="font-size:26px; font-weight:800; color:#143840;">$1,400</span><span style="font-size:12px; color:#5C7679;">MXN / mes</span></div>
+            <span style="font-size:13px; font-weight:700; color:#009BA4;">$3,780 MXN / trimestre</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-top:4px;">
+            <span style="font-size:13px; color:#3B5C61;">✓ 4 posts al mes</span>
+            <span style="font-size:13px; color:#3B5C61;">✓ 2 stories en nuestras cuentas</span>
+            <span style="font-size:13px; color:#3B5C61;">✓ Etiquetado del negocio</span>
+            <span style="font-size:13px; color:#3B5C61;">✓ Copy promocional básico</span>
+          </div>
+          <a href="Visit San Carlos Login.dc.html" style="margin-top:auto; text-align:center; background:#ffffff; border:2px solid #009BA4; color:#009BA4; font-weight:700; font-size:14px; padding:12px; border-radius:10px;">Contratar</a>
+        </div>
+
+        <div style="background:#ffffff; border:2px solid #EB600A; border-radius:20px; padding:30px; display:flex; flex-direction:column; gap:14px; box-shadow:0 16px 34px rgba(235,96,10,0.12); position:relative;">
+          <span style="position:absolute; top:-14px; left:24px; background:#EB600A; color:#ffffff; font-size:11px; font-weight:700; padding:5px 12px; border-radius:999px;">MÁS COMPLETO</span>
+          <span style="font-size:12px; font-weight:700; color:#EB600A; letter-spacing:0.04em;">REDES SOCIALES</span>
+          <h3 style="margin:0; font-size:18px; font-weight:800; color:#143840;">Promoción Premium</h3>
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <div style="display:flex; align-items:baseline; gap:5px;"><span style="font-size:26px; font-weight:800; color:#143840;">$2,600</span><span style="font-size:12px; color:#5C7679;">MXN / mes</span></div>
+            <span style="font-size:13px; font-weight:700; color:#009BA4;">$7,020 MXN / trimestre</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-top:4px;">
+            <span style="font-size:13px; color:#3B5C61;">✓ 8 publicaciones al mes</span>
+            <span style="font-size:13px; color:#3B5C61;">✓ 4 stories/reels en nuestras cuentas</span>
+            <span style="font-size:13px; color:#3B5C61;">✓ Etiquetado del negocio</span>
+            <span style="font-size:13px; color:#3B5C61;">✓ Diseño gráfico básico + copywriting</span>
+            <span style="font-size:12px; color:#EB600A;">📸 Trimestral: sesión de fotos (2h) + dron*</span>
+          </div>
+          <a href="Visit San Carlos Login.dc.html" style="margin-top:auto; text-align:center; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; padding:12px; border-radius:10px;">Contratar</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. PAQUETES COMBINADOS -->
+  <section style="padding:36px 48px 8px;">
+    <div style="max-width:1180px; margin:0 auto;">
+      <h2 style="margin:0 0 6px; font-size:24px; font-weight:800; color:#143840; text-align:center;">Paquetes combinados</h2>
+      <p style="margin:0 0 26px; font-size:13px; color:#5C7679; text-align:center;">Exposición dentro de Visit San Carlos + difusión en redes, con tarifa preferencial.</p>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+
+        <div style="background:#ffffff; border:1px solid #EEF3F3; border-radius:18px; padding:24px; display:flex; flex-direction:column; gap:10px; box-shadow:0 8px 20px rgba(0,60,66,0.05);">
+          <h3 style="margin:0; font-size:15px; font-weight:800; color:#143840;">Presencia Estratégica</h3>
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <span style="font-size:22px; font-weight:800; color:#143840;">$3,500<span style="font-size:11px; font-weight:600; color:#5C7679;"> /mes</span></span>
+            <span style="font-size:12px; font-weight:700; color:#009BA4;">$9,450 /trimestre</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px; margin-top:4px;">
+            <span style="font-size:12px; color:#3B5C61;">✓ Carrusel Home – Vistas Doradas</span>
+            <span style="font-size:12px; color:#3B5C61;">✓ ⭐ Perfil Destacado en Directorio</span>
+            <span style="font-size:12px; color:#3B5C61;">✓ Mención en newsletter</span>
+            <span style="font-size:12px; color:#3B5C61;">✓ 4 posts + 2 stories al mes</span>
+            <span style="font-size:12px; color:#3B5C61;">✓ Copy y diseño básico</span>
+          </div>
+          <a href="Visit San Carlos Login.dc.html" style="margin-top:auto; text-align:center; background:#ffffff; border:2px solid #009BA4; color:#009BA4; font-weight:700; font-size:13px; padding:10px; border-radius:10px;">Contratar</a>
+        </div>
+
+        <div style="background:#ffffff; border:1px solid #EEF3F3; border-radius:18px; padding:24px; display:flex; flex-direction:column; gap:10px; box-shadow:0 8px 20px rgba(0,60,66,0.05);">
+          <h3 style="margin:0; font-size:15px; font-weight:800; color:#143840;">Visibilidad Plus</h3>
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <span style="font-size:22px; font-weight:800; color:#143840;">$5,000<span style="font-size:11px; font-weight:600; color:#5C7679;"> /mes</span></span>
+            <span style="font-size:12px; font-weight:700; color:#009BA4;">$13,500 /trimestre</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px; margin-top:4px;">
+            <span style="font-size:12px; color:#3B5C61;">✓ Carrusel Home – Vistas Doradas</span>
+            <span style="font-size:12px; color:#3B5C61;">✓ Presencia adicional en otra sección</span>
+            <span style="font-size:12px; color:#3B5C61;">✓ ⭐ Perfil Destacado + newsletter</span>
+            <span style="font-size:12px; color:#3B5C61;">✓ 8 posts + 4 stories/reels al mes</span>
+            <span style="font-size:12px; color:#3B5C61;">✓ Diseño y copywriting</span>
+          </div>
+          <a href="Visit San Carlos Login.dc.html" style="margin-top:auto; text-align:center; background:#ffffff; border:2px solid #009BA4; color:#009BA4; font-weight:700; font-size:13px; padding:10px; border-radius:10px;">Contratar</a>
+        </div>
+
+        <div style="background:#ffffff; border:1px solid #EEF3F3; border-radius:18px; padding:24px; display:flex; flex-direction:column; gap:10px; box-shadow:0 8px 20px rgba(0,60,66,0.05);">
+          <h3 style="margin:0; font-size:15px; font-weight:800; color:#143840;">Impacto Total</h3>
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <span style="font-size:22px; font-weight:800; color:#143840;">$6,500<span style="font-size:11px; font-weight:600; color:#5C7679;"> /mes</span></span>
+            <span style="font-size:12px; font-weight:700; color:#009BA4;">$17,550 /trimestre</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px; margin-top:4px;">
+            <span style="font-size:12px; color:#3B5C61;">✓ Banner destacado – Estrella del mes</span>
+            <span style="font-size:12px; color:#3B5C61;">✓ ⭐ Perfil Destacado + newsletter</span>
+            <span style="font-size:12px; color:#3B5C61;">✓ 8 posts + 4 stories/reels al mes</span>
+            <span style="font-size:12px; color:#3B5C61;">✓ Diseño, copywriting</span>
+            <span style="font-size:12px; color:#3B5C61;">✓ Mayor exposición en el sitio</span>
+          </div>
+          <a href="Visit San Carlos Login.dc.html" style="margin-top:auto; text-align:center; background:#ffffff; border:2px solid #009BA4; color:#009BA4; font-weight:700; font-size:13px; padding:10px; border-radius:10px;">Contratar</a>
+        </div>
+
+        <div style="background:#ffffff; border:2px solid #EB600A; border-radius:18px; padding:24px; display:flex; flex-direction:column; gap:10px; box-shadow:0 16px 34px rgba(235,96,10,0.14); position:relative;">
+          <span style="position:absolute; top:-14px; left:20px; background:#EB600A; color:#ffffff; font-size:10.5px; font-weight:700; padding:5px 12px; border-radius:999px;">TOP · SOCIO ELITE</span>
+          <h3 style="margin:0; font-size:15px; font-weight:800; color:#143840;">Socio Elite Visit San Carlos</h3>
+          <div style="display:flex; flex-direction:column; gap:2px;">
+            <span style="font-size:22px; font-weight:800; color:#143840;">$8,500<span style="font-size:11px; font-weight:600; color:#5C7679;"> /mes</span></span>
+            <span style="font-size:12px; font-weight:700; color:#EB600A;">$22,950 /trimestre</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px; margin-top:4px;">
+            <span style="font-size:12px; color:#3B5C61;">✓ Banner exclusivo – Estrella del mes</span>
+            <span style="font-size:12px; color:#3B5C61;">✓ Carrusel Directorio Premium</span>
+            <span style="font-size:12px; color:#3B5C61;">✓ Perfil completo + ⭐ Destacado</span>
+            <span style="font-size:12px; color:#3B5C61;">✓ 8 posts + 4 stories/reels al mes</span>
+            <span style="font-size:12px; color:#3B5C61;">✓ Prioridad en campañas especiales</span>
+          </div>
+          <a href="Visit San Carlos Login.dc.html" style="margin-top:auto; text-align:center; background:#EB600A; color:#ffffff; font-weight:700; font-size:13px; padding:10px; border-radius:10px;">Contratar</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFICIO TRIMESTRAL -->
+  <section style="padding:30px 48px 8px;">
+    <div style="max-width:1000px; margin:0 auto; background:linear-gradient(120deg,#EFF9FA,#F4FAFB); border-radius:16px; padding:20px 28px; display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+      <span style="font-size:22px;">📸</span>
+      <p style="margin:0; font-size:13px; color:#3B5C61;"><strong style="color:#143840;">Beneficio por contratación trimestral:</strong> sesión de fotografía de hasta 2 horas del establecimiento, personal y ambiente, más vuelo de dron cuando la ubicación y las condiciones lo permitan.</p>
+    </div>
+  </section>
+
+  <!-- MENSAJE COMERCIAL -->
+  <section style="padding:30px 48px 20px; text-align:center;">
+    <p style="margin:0; font-size:15px; color:#3B5C61; max-width:640px; margin-left:auto; margin-right:auto;">Tu negocio puede aparecer <strong style="color:#143840;">gratis</strong> en nuestro Directorio. Con nuestros paquetes publicitarios, además de estar presente, obtienes el distintivo ⭐ POPULAR y una mayor exposición dentro de Visit San Carlos.</p>
+    <p style="margin:10px 0 0; font-family:'Caveat',cursive; font-size:24px; font-weight:700; color:#EB600A;">San Carlos no solo se visita… se vive.</p>
+  </section>
+
+  <!-- NOTA -->
+  <section style="padding:6px 48px 20px; text-align:center;">
+    <p style="margin:0; font-size:13px; color:#7FA7AA;">¿Buscas un paquete a tu medida? <a href="Visit San Carlos Contacto.dc.html">Contáctanos</a>.</p>
+  </section>
+
+  <!-- CTA -->
+  <section style="margin:20px 48px 56px; padding:48px 56px; border-radius:24px; background:linear-gradient(120deg,#009BA4,#00767E); display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;">
+    <div style="display:flex; flex-direction:column; gap:8px; max-width:480px;">
+      <h2 style="margin:0; font-size:24px; font-weight:800; color:#ffffff;">Empieza a promocionar tu negocio hoy</h2>
+      <p style="margin:0; font-size:14px; color:#DFF6F8;">Crea tu cuenta gratis y elige el plan que mejor se adapte a ti.</p>
+    </div>
+    <a href="Visit San Carlos Login.dc.html" style="background:#EB600A; color:#ffffff; font-weight:700; font-size:15px; padding:14px 28px; border-radius:10px; flex-shrink:0;">Crear cuenta gratis</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="margin-top:0; background:#ffffff; color:#5C7679; padding:0 48px 28px; border-top:1px solid #EEF3F3;">
+    <div style="display:grid; grid-template-columns:auto 1fr 1fr 1fr 1fr; gap:40px; align-items:start; padding:36px 0;">
+
+      <img src="uploads/Recurso 4pin.png" alt="Visit San Carlos" style="width:96px; height:auto; flex-shrink:0;">
+
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <h3 style="margin:0; font-size:19px; font-weight:800; color:#143840;">Contáctanos</h3>
+        <div style="display:flex; gap:8px; align-items:center; font-size:14px;">
+          <span style="width:14px; height:18px; border-radius:7px 7px 7px 0; background:#EB600A; flex-shrink:0;"></span>
+          <span>Guaymas, Sonora</span>
+        </div>
+        <a href="mailto:visit.sancarlos.son@gmail.com" style="font-size:14px; color:#5C7679;">visit.sancarlos.son@gmail.com</a>
+        <a href="tel:+526221145316" style="font-size:14px; color:#5C7679;">+52 622 114 5316</a>
+        <div style="display:flex; gap:10px; margin-top:4px;">
+          <a href="#" aria-label="Facebook" style="width:30px; height:30px; border-radius:50%; background:#009BA4; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#ffffff;">f</a>
+          <a href="#" aria-label="Instagram" style="width:30px; height:30px; border-radius:50%; background:#009BA4; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#ffffff;">ig</a>
+          <a href="#" aria-label="TikTok" style="width:30px; height:30px; border-radius:50%; background:#009BA4; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#ffffff;">tt</a>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <h3 style="margin:0 0 4px; font-size:19px; font-weight:800; color:#143840;">Sitios de interés</h3>
+        <a href="#" style="font-size:14px; color:#5C7679;">Tabla de mareas</a>
+        <a href="#" style="font-size:14px; color:#5C7679;">Agregar mi negocio</a>
+        <a href="#" style="font-size:14px; color:#009BA4;">Publicidad</a>
+        <a href="Visit San Carlos Galeria.dc.html" style="font-size:14px; color:#5C7679;">Galería</a>
+        <a href="Visit San Carlos Blog.dc.html" style="font-size:14px; color:#5C7679;">Blog</a>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <h3 style="margin:0 0 4px; font-size:19px; font-weight:800; color:#143840;">Más información</h3>
+        <a href="#" style="font-size:14px; color:#5C7679;">FAQ</a>
+        <a href="Visit San Carlos Politicas de Privacidad.dc.html" style="font-size:14px; color:#5C7679;">Políticas de privacidad</a>
+        <a href="#" style="font-size:14px; color:#5C7679;">Soporte</a>
+        <a href="Visit San Carlos Terminos y Condiciones.dc.html" style="font-size:14px; color:#5C7679;">Términos y condiciones</a>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <h3 style="margin:0 0 4px; font-size:19px; font-weight:800; color:#143840;">Números de emergencia</h3>
+        <a href="tel:911" style="font-size:14px; color:#5C7679;">Emergencias</a>
+        <a href="tel:+526222241573" style="font-size:14px; color:#5C7679;">Bomberos</a>
+        <a href="tel:+526222241234" style="font-size:14px; color:#5C7679;">Cruz roja</a>
+        <a href="tel:+526622260911" style="font-size:14px; color:#5C7679;">Rescate San Carlos</a>
+        <a href="tel:+526222210911" style="font-size:14px; color:#5C7679;">Policía y transito Guaymas</a>
+      </div>
+
+    </div>
+    <div style="padding-top:22px; border-top:1px solid #EEF3F3; text-align:center; font-size:12px; color:#A9BCBE;">© Derechos reservados Visit San Carlos 2026 | Creado por Black &amp; White Studio</div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  webPackages = [
+    { letter: 'A', name: 'Vistas Doradas', space: 'Carrusel Home', mensual: 1500, trimestral: 4050, features: ['Máx. 6 anunciantes', '⭐ Perfil Destacado "POPULAR"', 'Newsletter'] },
+    { letter: 'B', name: 'Sueño con vista al mar', space: 'Carrusel Hospedaje', mensual: 1200, trimestral: 3240, features: ['Máx. 6 establecimientos', '⭐ Perfil Destacado "POPULAR"', 'Newsletter'] },
+    { letter: 'C', name: 'Sabor local', space: 'Sección Restaurantes', mensual: 1000, trimestral: 2700, features: ['Presencia en "Dónde comer"', '⭐ Perfil "POPULAR"', 'Logo/foto · Rango de precio · Ranking', 'Newsletter'] },
+    { letter: 'D', name: 'Escápate a San Carlos', space: 'Anuncio lateral', mensual: 800, trimestral: 2160, features: ['360×440 px · CTA/enlace', '⭐ Perfil "POPULAR"', '2 stories fotográficas/mes', 'Newsletter'] },
+    { letter: 'E', name: 'Estrella del mes', space: 'Banner exclusivo', mensual: 2500, trimestral: 6750, features: ['1146×272 px · CTA/enlace', '⭐ Perfil "POPULAR"', 'Newsletter'] },
+    { letter: 'F', name: 'Directorio Premium', space: 'Carrusel Directorio', mensual: 1900, trimestral: 5130, features: ['1451×260 px · CTA', 'Máx. 5 anunciantes', '⭐ Perfil "POPULAR"', 'Newsletter'] },
+    { letter: 'G', name: 'Eventos Destacados', space: 'Carrusel Eventos', mensual: 1600, trimestral: 4320, features: ['1451×260 px · CTA', 'Máx. 5 anunciantes', '⭐ Perfil "POPULAR"', 'Newsletter'] }
+  ];
+  popularFeatures = ['Etiqueta ⭐ POPULAR visible en el listado', 'Mayor destaque visual frente a perfiles gratuitos', 'Fotografías / galería', 'Descripción del negocio', 'Ubicación y mapa', 'Horarios', 'Teléfono y sitio web', 'Redes sociales', 'Rango de precios y botón de contacto'];
+  renderVals() {
+    const fmt = n => '$' + n.toLocaleString('es-MX');
+    const webCards = this.webPackages.map(p => ({ ...p, mensualFmt: fmt(p.mensual), trimestralFmt: fmt(p.trimestral) }));
+    return { webCards, popularFeatures: this.popularFeatures };
+  }
+}
+</script>
+</body>
+</html>

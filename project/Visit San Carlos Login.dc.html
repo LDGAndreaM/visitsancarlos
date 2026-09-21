@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&amp;family=Caveat:wght@600;700&amp;display=swap" rel="stylesheet">
+  <script src="./image-slot.js"></script>
+  <style>
+    body { margin: 0; font-family: 'Poppins', sans-serif; color: #143840; background: #ffffff; }
+    a { color: #009BA4; text-decoration: none; }
+    a:hover { color: #EB600A; }
+    * { box-sizing: border-box; }
+    input::placeholder { color: #9DB6B8; }
+  </style>
+</helmet>
+
+<div style="max-width:100%; min-height:100vh; overflow-x:hidden; background:#ffffff; display:grid; grid-template-columns:1fr 1fr;">
+
+  <!-- PANEL IZQUIERDO -->
+  <div style="position:relative; overflow:hidden;">
+    <div style="position:absolute; inset:0;">
+      <image-slot id="login-photo" shape="rect" placeholder="Foto: bahía de San Carlos"></image-slot>
+    </div>
+    <div style="position:absolute; inset:0; background:linear-gradient(150deg, rgba(0,155,164,0.82), rgba(0,118,126,0.88));"></div>
+    <div style="position:relative; z-index:1; height:100%; display:flex; flex-direction:column; justify-content:space-between; padding:44px;">
+      <a href="Visit San Carlos Home.dc.html">
+        <img src="uploads/Recurso 1visitsancarlos.png" alt="Visit San Carlos" style="height:44px; width:auto; filter:brightness(0) invert(1) opacity(0.95);" />
+      </a>
+      <div></div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <p style="margin:0; font-family:'Caveat',cursive; font-weight:700; font-size:28px; color:#ffffff;">"San Carlos no solo se visita… se vive."</p>
+        <p style="margin:0; font-size:14px; color:#ffffff; max-width:420px;">Da visibilidad a tu negocio ante miles de visitantes y residentes de San Carlos y Guaymas.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL FORMULARIO -->
+  <div style="display:flex; align-items:center; justify-content:center; padding:44px;">
+    <div style="width:100%; max-width:400px; display:flex; flex-direction:column; gap:24px;">
+
+      <div style="display:flex; background:#F4FAFB; border-radius:12px; padding:4px;">
+        <button onClick="{{ setLogin }}" style="flex:1; border:none; background:{{ loginTabBg }}; color:{{ loginTabColor }}; font-weight:700; font-size:14px; padding:10px; border-radius:9px; cursor:pointer;">Iniciar sesión</button>
+        <button onClick="{{ setRegister }}" style="flex:1; border:none; background:{{ registerTabBg }}; color:{{ registerTabColor }}; font-weight:700; font-size:14px; padding:10px; border-radius:9px; cursor:pointer;">Crear cuenta</button>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <h1 style="margin:0; font-size:24px; font-weight:800; color:#143840;">{{ heading }}</h1>
+        <p style="margin:0; font-size:13px; color:#3B5C61;">{{ subheading }}</p>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <button style="display:flex; align-items:center; justify-content:center; gap:10px; border:1px solid #E2ECED; background:#ffffff; border-radius:10px; padding:12px; font-size:14px; font-weight:600; color:#143840; cursor:pointer;">
+          <span style="width:20px; height:20px; border-radius:50%; background:#1877F2; color:#ffffff; font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center;">f</span>
+          Continuar con Facebook
+        </button>
+        <button style="display:flex; align-items:center; justify-content:center; gap:10px; border:1px solid #E2ECED; background:#ffffff; border-radius:10px; padding:12px; font-size:14px; font-weight:600; color:#143840; cursor:pointer;">
+          <span style="width:20px; height:20px; border-radius:50%; background:#F4FAFB; color:#EB600A; font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center;">G</span>
+          Continuar con Google
+        </button>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="flex:1; height:1px; background:#E2ECED;"></span>
+        <span style="font-size:12px; color:#9DB6B8;">o con tu correo</span>
+        <span style="flex:1; height:1px; background:#E2ECED;"></span>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <sc-if value="{{ isRegister }}" hint-placeholder-val="{{ false }}">
+          <input type="text" placeholder="Nombre del negocio" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:12px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+        </sc-if>
+        <input type="email" placeholder="Correo electrónico" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:12px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+        <input type="password" placeholder="Contraseña" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:12px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+        <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ true }}">
+          <a href="#" style="font-size:12px; font-weight:600; align-self:flex-end;">¿Olvidaste tu contraseña?</a>
+        </sc-if>
+        <a href="Visit San Carlos Dashboard.dc.html" style="display:block; text-align:center; border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; padding:13px; border-radius:10px; cursor:pointer;">{{ ctaLabel }}</a>
+      </div>
+
+      <p style="margin:0; text-align:center; font-size:13px; color:#5C7679;">{{ switchPrompt }} <button onClick="{{ switchAction }}" style="border:none; background:none; color:#009BA4; font-weight:700; font-size:13px; cursor:pointer; padding:0;">{{ switchLabel }}</button></p>
+    </div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { isLogin: true };
+  setLogin() { this.setState({ isLogin: true }); }
+  setRegister() { this.setState({ isLogin: false }); }
+
+  renderVals() {
+    const { isLogin } = this.state;
+    return {
+      isLogin, isRegister: !isLogin,
+      loginTabBg: isLogin ? '#009BA4' : 'transparent', loginTabColor: isLogin ? '#ffffff' : '#3B5C61',
+      registerTabBg: !isLogin ? '#009BA4' : 'transparent', registerTabColor: !isLogin ? '#ffffff' : '#3B5C61',
+      setLogin: () => this.setLogin(), setRegister: () => this.setRegister(),
+      heading: isLogin ? 'Accede a tu cuenta de negocio' : 'Registra tu negocio gratis',
+      subheading: isLogin ? 'Gestiona tu perfil y tu publicidad en Visit San Carlos.' : 'Crea tu cuenta para publicar tu negocio en el directorio.',
+      ctaLabel: isLogin ? 'Iniciar sesión' : 'Crear cuenta',
+      switchPrompt: isLogin ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?',
+      switchLabel: isLogin ? 'Regístrate' : 'Inicia sesión',
+      switchAction: isLogin ? () => this.setRegister() : () => this.setLogin(),
+    };
+  }
+}
+
+</script>
+</body>
+</html>

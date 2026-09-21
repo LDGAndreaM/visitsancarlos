@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&amp;family=Caveat:wght@600;700&amp;display=swap" rel="stylesheet">
+  <script src="./image-slot.js"></script>
+  <style>
+    body { margin: 0; font-family: 'Poppins', sans-serif; color: #143840; background: #ffffff; }
+    a { color: #009BA4; text-decoration: none; }
+    a:hover { color: #EB600A; }
+    * { box-sizing: border-box; }
+    input::placeholder, textarea::placeholder { color: #9DB6B8; }
+  </style>
+</helmet>
+
+<div style="max-width:100%; overflow-x:hidden; background:#ffffff; position:relative;">
+
+  <!-- HEADER -->
+  <header style="position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; gap:24px; padding:14px 48px; background:#ffffff; box-shadow:0 2px 14px rgba(0,60,66,0.08);">
+    <img src="uploads/Recurso 1visitsancarlos.png" alt="Visit San Carlos" style="height:52px; width:auto; flex-shrink:0;">
+    <nav style="display:flex; align-items:center; gap:32px; flex-wrap:wrap;">
+      <a href="Visit San Carlos Home.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Inicio</a>
+      <a href="Visit San Carlos Acerca de.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Acerca de</a>
+      <a href="Visit San Carlos Directorio.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Directorio</a>
+      <a href="#" style="font-weight:600; font-size:15px; color:#009BA4;">Eventos</a>
+      <a href="Visit San Carlos Blog.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Blog</a>
+      <a href="Visit San Carlos Contacto.dc.html" style="font-weight:600; font-size:15px; color:#143840;">Contacto</a>
+    </nav>
+    <a href="Visit San Carlos Login.dc.html" style="flex-shrink:0; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; letter-spacing:0.02em; padding:12px 24px; border-radius:999px; box-shadow:0 6px 16px rgba(235,96,10,0.35);">AGREGAR NEGOCIO</a>
+  </header>
+
+  <!-- HERO -->
+  <!-- CARRUSEL PROMOCIONAL -->
+  <section style="position:relative; height:280px; overflow:hidden;">
+    <sc-for list="{{ banners }}" as="b" hint-placeholder-count="4">
+      <div style="position:absolute; inset:0; background:{{ b.bg }}; opacity:{{ b.opacity }}; pointer-events:{{ b.pe }}; z-index:{{ b.z }}; transition:opacity 0.8s ease; display:grid; grid-template-columns:1fr 1fr; align-items:center; padding:0 56px;">
+        <div></div>
+        <div style="display:flex; flex-direction:column; gap:12px; align-items:flex-end; text-align:right;">
+          <h2 style="margin:0; font-size:30px; font-weight:800; color:#ffffff;">{{ b.title }}</h2>
+          <p style="margin:0; font-size:15px; color:#ffffff; max-width:420px;">{{ b.subtitle }}</p>
+          <a href="#" style="border:2px solid #ffffff; color:#ffffff; font-weight:700; font-size:14px; padding:10px 22px; border-radius:8px;">{{ b.cta }}</a>
+        </div>
+      </div>
+    </sc-for>
+    <div style="position:absolute; bottom:16px; left:50%; transform:translateX(-50%); display:flex; gap:8px; z-index:5;">
+      <sc-for list="{{ banners }}" as="b" hint-placeholder-count="4">
+        <span style="width:8px; height:8px; border-radius:50%; background:{{ b.dotColor }};"></span>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- HERO -->
+  <section style="padding:56px 48px 10px; text-align:center; display:flex; flex-direction:column; gap:10px; align-items:center;">
+    
+    <h1 style="margin:0; font-size:36px; font-weight:800; color:#143840;">Qué está pasando en San Carlos</h1>
+    <p style="margin: 0; font-size: 15px; color: #3B5C61; max-width: 520px; width: 457px; height: 43px">Festivales, deportes, gastronomía y actividades comunitarias de la región.</p>
+  </section>
+
+  <!-- CONTROLES -->
+  <section style="padding:30px 48px 0;">
+    <div style="max-width:1080px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <button onClick="{{ isMonth ? prevMonth : prevWeek }}" style="width:34px; height:34px; border-radius:50%; border:1px solid #DCEEEF; background:#ffffff; cursor:pointer; font-size:16px; color:#009BA4;">‹</button>
+        <span style="font-size:18px; font-weight:800; color:#143840; min-width:200px; text-align:center;">{{ monthLabel }}</span>
+        <button onClick="{{ isMonth ? nextMonth : nextWeek }}" style="width:34px; height:34px; border-radius:50%; border:1px solid #DCEEEF; background:#ffffff; cursor:pointer; font-size:16px; color:#009BA4;">›</button>
+      </div>
+      <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
+        <div style="display:flex; background:#F4FAFB; border-radius:999px; padding:4px;">
+          <button onClick="{{ setMonthView }}" style="border:none; background:{{ monthBtnBg }}; color:{{ monthBtnColor }}; font-weight:700; font-size:13px; padding:8px 18px; border-radius:999px; cursor:pointer;">Mes</button>
+          <button onClick="{{ setWeekView }}" style="border:none; background:{{ weekBtnBg }}; color:{{ weekBtnColor }}; font-weight:700; font-size:13px; padding:8px 18px; border-radius:999px; cursor:pointer;">Semana</button>
+        </div>
+        <button onClick="{{ openAdd }}" style="border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">+ Agregar evento</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISTA MES -->
+  <sc-if value="{{ isMonth }}" hint-placeholder-val="{{ true }}">
+    <section style="padding:24px 48px 0;">
+      <div style="max-width:1080px; margin:0 auto;">
+        <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-bottom:8px;">
+          <sc-for list="{{ weekdayLabels }}" as="wl" hint-placeholder-count="7">
+            <span style="font-size:12px; font-weight:700; color:#7FA7AA; text-align:center;">{{ wl }}</span>
+          </sc-for>
+        </div>
+        <sc-for list="{{ weeks }}" as="week" hint-placeholder-count="5">
+          <div style="display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-bottom:8px;">
+            <sc-for list="{{ week }}" as="cell" hint-placeholder-count="7">
+              <div onClick="{{ cell.onClick }}" style="min-height:76px; border:1px solid #EEF3F3; border-radius:10px; padding:8px; display:flex; flex-direction:column; gap:4px; cursor:pointer; background:#ffffff; overflow:hidden;">
+                <span style="font-size:12px; font-weight:700; color:#3B5C61;">{{ cell.day }}</span>
+                <sc-if value="{{ cell.hasEvents }}">
+                  <span style="font-size:10px; font-weight:700; color:#ffffff; background:#EB600A; border-radius:6px; padding:2px 6px; display:inline-block; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ cell.firstEvent.name }}</span>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- VISTA SEMANA -->
+  <sc-if value="{{ isWeek }}" hint-placeholder-val="{{ false }}">
+    <section style="padding:24px 48px 0;">
+      <div style="max-width:1080px; margin:0 auto; display:grid; grid-template-columns:repeat(7,1fr); gap:10px;">
+        <sc-for list="{{ weekDays }}" as="d" hint-placeholder-count="7">
+          <div style="display:flex; flex-direction:column; gap:8px; min-height:180px; border:1px solid #EEF3F3; border-radius:12px; padding:10px;">
+            <span style="font-size:11px; font-weight:700; color:#7FA7AA;">{{ d.weekday }}</span>
+            <span style="font-size:16px; font-weight:800; color:#143840;">{{ d.day }}</span>
+            <sc-for list="{{ d.events }}" as="e" hint-placeholder-count="1">
+              <div onClick="{{ e.onClick }}" style="background:#E5F6F7; border-radius:8px; padding:6px 8px; cursor:pointer;">
+                <span style="font-size:11px; font-weight:700; color:#009BA4; display:block;">{{ e.time }}</span>
+                <span style="font-size:12px; color:#143840; display:block;">{{ e.name }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- LISTA DE LA SEMANA -->
+  <section style="padding:48px 48px 60px;">
+    <div style="max-width:1080px; margin:0 auto;">
+      <h2 style="margin:0 0 20px; font-size:22px; font-weight:800; color:#143840;">Eventos de esta semana</h2>
+      <sc-if value="{{ hasWeekList }}">
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <sc-for list="{{ weekList }}" as="e" hint-placeholder-count="3">
+            <div onClick="{{ e.onClick }}" style="display:flex; align-items:center; gap:16px; background:#ffffff; border-radius:14px; padding:14px 18px; box-shadow:0 8px 20px rgba(0,60,66,0.08); cursor:pointer;">
+              <div style="width:54px; height:54px; border-radius:12px; background:#E5F6F7; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <span style="font-size:13px; font-weight:800; color:#009BA4;">{{ e.dayNum }}</span>
+              </div>
+              <div style="flex:1; display:flex; flex-direction:column; gap:2px;">
+                <span style="font-size:11px; font-weight:700; color:#EB600A;">{{ e.category }}</span>
+                <span style="font-size:15px; font-weight:700; color:#143840;">{{ e.name }}</span>
+                <span style="font-size:13px; color:#3B5C61;">{{ e.time }} · {{ e.place }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ emptyWeekList }}">
+        <p style="margin:0; font-size:14px; color:#7FA7AA;">No hay eventos programados esta semana.</p>
+      </sc-if>
+    </div>
+  </section>
+
+  <!-- POPUP DETALLE -->
+  <sc-if value="{{ showDetail }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeDetail }}" style="position:fixed; inset:0; background:rgba(20,56,64,0.55); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px;">
+      <div onClick="{{ stop }}" style="background:#ffffff; border-radius:20px; padding:0; max-width:480px; width:100%; max-height:90vh; overflow-y:auto; display:flex; flex-direction:column; box-shadow:0 24px 50px rgba(0,0,0,0.25);">
+        <div style="height:180px;"><image-slot id="{{ detail.id }}" shape="rect" placeholder="Foto del evento"></image-slot></div>
+        <div style="padding:28px; display:flex; flex-direction:column; gap:12px;">
+          <span style="font-size:12px; font-weight:700; color:#EB600A; letter-spacing:0.03em;">{{ detail.category }}</span>
+          <h3 style="margin:0; font-size:22px; font-weight:800; color:#143840;">{{ detail.name }}</h3>
+          <span style="font-size:13px; color:#3B5C61; font-weight:600;">{{ detail.dateRangeLabel }} · {{ detail.timeRangeLabel }}</span>
+          <span style="font-size:13px; color:#3B5C61;">Costo: {{ detail.cost }}</span>
+          <sc-if value="{{ detail.hasOrganizers }}">
+            <span style="font-size:13px; color:#3B5C61;">Organiza: {{ detail.organizers }}</span>
+          </sc-if>
+          <p style="margin:0; font-size:14px; color:#3B5C61; line-height:1.6;">{{ detail.description }}</p>
+
+          <span style="font-size:13px; font-weight:700; color:#143840; margin-top:4px;">{{ detail.place }}</span>
+          <div style="border-radius:12px; overflow:hidden; height:160px; border:1px solid #EEF3F3;">
+            <iframe src="{{ detail.mapSrc }}" style="width:100%; height:100%; border:none;" loading="lazy"></iframe>
+          </div>
+
+          <div style="display:flex; gap:10px; margin-top:6px; flex-wrap:wrap;">
+            <sc-if value="{{ detail.hasPhone }}">
+              <a href="tel:{{ detail.phone }}" aria-label="Teléfono" style="width:36px; height:36px; border-radius:50%; background:#E5F6F7; display:flex; align-items:center; justify-content:center;"><svg width="16" height="16" viewBox="0 0 20 20" fill="none"><rect x="6" y="2" width="8" height="16" rx="2" stroke="#009BA4" stroke-width="1.6"></rect></svg></a>
+            </sc-if>
+            <sc-if value="{{ detail.hasEmail }}">
+              <a href="mailto:{{ detail.email }}" aria-label="Correo" style="width:36px; height:36px; border-radius:50%; background:#E5F6F7; display:flex; align-items:center; justify-content:center;"><svg width="17" height="17" viewBox="0 0 20 20" fill="none"><rect x="2" y="4" width="16" height="12" rx="2" stroke="#009BA4" stroke-width="1.6"></rect><path d="M3 5l7 6 7-6" stroke="#009BA4" stroke-width="1.6" fill="none"></path></svg></a>
+            </sc-if>
+            <sc-if value="{{ detail.hasFacebook }}">
+              <a href="{{ detail.facebook }}" aria-label="Facebook" style="width:36px; height:36px; border-radius:50%; background:#009BA4; display:flex; align-items:center; justify-content:center; color:#ffffff; font-weight:700; font-size:12px;">f</a>
+            </sc-if>
+            <sc-if value="{{ detail.hasInstagram }}">
+              <a href="{{ detail.instagram }}" aria-label="Instagram" style="width:36px; height:36px; border-radius:50%; background:#EB600A; display:flex; align-items:center; justify-content:center; color:#ffffff; font-weight:700; font-size:12px;">ig</a>
+            </sc-if>
+            <sc-if value="{{ detail.hasWebsite }}">
+              <a href="{{ detail.website }}" target="_blank" style="font-size:13px; font-weight:700; color:#009BA4; display:flex; align-items:center;">Sitio web →</a>
+            </sc-if>
+          </div>
+
+          <div style="display:flex; gap:10px; margin-top:10px;">
+            <button onClick="{{ detail.addToCal }}" style="border:2px solid #009BA4; background:#ffffff; color:#009BA4; font-weight:700; font-size:14px; padding:11px 20px; border-radius:10px; cursor:pointer;">+ Agregar al calendario</button>
+            <button onClick="{{ closeDetail }}" style="border:none; background:#009BA4; color:#ffffff; font-weight:700; font-size:14px; padding:11px 20px; border-radius:10px; cursor:pointer;">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- POPUP AGREGAR EVENTO -->
+  <sc-if value="{{ showAdd }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeAdd }}" style="position:fixed; inset:0; background:rgba(20,56,64,0.55); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px;">
+      <div onClick="{{ stop }}" style="background:#ffffff; border-radius:20px; padding:36px; max-width:480px; width:100%; max-height:88vh; overflow-y:auto; display:flex; flex-direction:column; gap:14px; box-shadow:0 24px 50px rgba(0,0,0,0.25);">
+        <h3 style="margin:0; font-size:20px; font-weight:800; color:#143840;">Agregar evento</h3>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Nombre del evento</label>
+          <input ref="{{ nameRef }}" type="text" placeholder="Nombre del evento" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <label style="font-size:13px; font-weight:700; color:#143840;">Fecha de inicio</label>
+            <input ref="{{ startDateRef }}" type="date" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <label style="font-size:13px; font-weight:700; color:#143840;">Fecha de término</label>
+            <input ref="{{ endDateRef }}" type="date" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <label style="font-size:13px; font-weight:700; color:#143840;">Hora de inicio</label>
+            <input ref="{{ startTimeRef }}" type="time" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <label style="font-size:13px; font-weight:700; color:#143840;">Hora de término</label>
+            <input ref="{{ endTimeRef }}" type="time" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Categoría</label>
+          <select ref="{{ catRef }}" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px; color:#143840; background:#ffffff;">
+            <option>Cultural</option>
+            <option>Deportivo</option>
+            <option>Gastronomía</option>
+            <option>Comunidad</option>
+            <option>Entretenimiento</option>
+          </select>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Descripción</label>
+          <textarea ref="{{ descRef }}" rows="3" placeholder="Detalles del evento" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px; resize:vertical;"></textarea>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Costo</label>
+          <input ref="{{ costRef }}" type="text" placeholder="Ej. Gratis o $150 MXN" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Organizador(es)</label>
+          <input ref="{{ organizersRef }}" type="text" placeholder="Nombre del organizador" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Dirección</label>
+          <input ref="{{ addressRef }}" type="text" placeholder="Ej. Malecón San Carlos, San Carlos, Sonora" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <label style="font-size:13px; font-weight:700; color:#143840;">Teléfono</label>
+            <input ref="{{ phoneRef }}" type="tel" placeholder="+52 622 000 0000" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <label style="font-size:13px; font-weight:700; color:#143840;">Correo</label>
+            <input ref="{{ emailRef }}" type="email" placeholder="correo@evento.com" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <label style="font-size:13px; font-weight:700; color:#143840;">Facebook</label>
+            <input ref="{{ facebookRef }}" type="url" placeholder="https://facebook.com/..." style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <label style="font-size:13px; font-weight:700; color:#143840;">Instagram</label>
+            <input ref="{{ instagramRef }}" type="url" placeholder="https://instagram.com/..." style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Página web</label>
+          <input ref="{{ websiteRef }}" type="url" placeholder="https://..." style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-family:'Poppins',sans-serif; font-size:14px;">
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:6px;">
+          <button onClick="{{ closeAdd }}" style="border:2px solid #009BA4; background:#ffffff; color:#009BA4; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">Cancelar</button>
+          <button onClick="{{ submitAdd }}" style="border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">Guardar evento</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- FOOTER -->
+  <footer style="margin-top:0; background:#ffffff; color:#5C7679; padding:0 48px 28px; border-top:1px solid #EEF3F3;">
+    <div style="display:grid; grid-template-columns:auto 1fr 1fr 1fr 1fr; gap:40px; align-items:start; padding:36px 0;">
+
+      <img src="uploads/Recurso 4pin.png" alt="Visit San Carlos" style="width:96px; height:auto; flex-shrink:0;">
+
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <h3 style="margin:0; font-size:19px; font-weight:800; color:#143840;">Contáctanos</h3>
+        <div style="display:flex; gap:8px; align-items:center; font-size:14px;">
+          <span style="width:14px; height:18px; border-radius:7px 7px 7px 0; background:#EB600A; flex-shrink:0;"></span>
+          <span>Guaymas, Sonora</span>
+        </div>
+        <a href="mailto:visit.sancarlos.son@gmail.com" style="font-size:14px; color:#5C7679;">visit.sancarlos.son@gmail.com</a>
+        <a href="tel:+526221145316" style="font-size:14px; color:#5C7679;">+52 622 114 5316</a>
+        <div style="display:flex; gap:10px; margin-top:4px;">
+          <a href="#" aria-label="Facebook" style="width:30px; height:30px; border-radius:50%; background:#009BA4; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#ffffff;">f</a>
+          <a href="#" aria-label="Instagram" style="width:30px; height:30px; border-radius:50%; background:#009BA4; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#ffffff;">ig</a>
+          <a href="#" aria-label="TikTok" style="width:30px; height:30px; border-radius:50%; background:#009BA4; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#ffffff;">tt</a>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <h3 style="margin:0 0 4px; font-size:19px; font-weight:800; color:#143840;">Sitios de interés</h3>
+        <a href="#" style="font-size:14px; color:#5C7679;">Tabla de mareas</a>
+        <a href="#" style="font-size:14px; color:#5C7679;">Agregar mi negocio</a>
+        <a href="Visit San Carlos Publicidad.dc.html" style="font-size:14px; color:#5C7679;">Publicidad</a>
+        <a href="Visit San Carlos Galeria.dc.html" style="font-size:14px; color:#5C7679;">Galería</a>
+        <a href="Visit San Carlos Blog.dc.html" style="font-size:14px; color:#5C7679;">Blog</a>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <h3 style="margin:0 0 4px; font-size:19px; font-weight:800; color:#143840;">Más información</h3>
+        <a href="#" style="font-size:14px; color:#5C7679;">FAQ</a>
+        <a href="Visit San Carlos Politicas de Privacidad.dc.html" style="font-size:14px; color:#5C7679;">Políticas de privacidad</a>
+        <a href="#" style="font-size:14px; color:#5C7679;">Soporte</a>
+        <a href="Visit San Carlos Terminos y Condiciones.dc.html" style="font-size:14px; color:#5C7679;">Términos y condiciones</a>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <h3 style="margin:0 0 4px; font-size:19px; font-weight:800; color:#143840;">Números de emergencia</h3>
+        <a href="tel:911" style="font-size:14px; color:#5C7679;">Emergencias</a>
+        <a href="tel:+526222241573" style="font-size:14px; color:#5C7679;">Bomberos</a>
+        <a href="tel:+526222241234" style="font-size:14px; color:#5C7679;">Cruz roja</a>
+        <a href="tel:+526622260911" style="font-size:14px; color:#5C7679;">Rescate San Carlos</a>
+        <a href="tel:+526222210911" style="font-size:14px; color:#5C7679;">Policía y transito Guaymas</a>
+      </div>
+
+    </div>
+    <div style="padding-top:22px; border-top:1px solid #EEF3F3; text-align:center; font-size:12px; color:#A9BCBE;">© Derechos reservados Visit San Carlos 2026 | Creado por Black &amp; White Studio</div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const MONTH_NAMES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const WEEKDAY_LABELS = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+
+function pad(n) { return String(n).padStart(2, '0'); }
+function toDateStr(y, m, d) { return `${y}-${pad(m + 1)}-${pad(d)}`; }
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.nameRef = React.createRef();
+    this.startDateRef = React.createRef();
+    this.endDateRef = React.createRef();
+    this.startTimeRef = React.createRef();
+    this.endTimeRef = React.createRef();
+    this.catRef = React.createRef();
+    this.descRef = React.createRef();
+    this.costRef = React.createRef();
+    this.organizersRef = React.createRef();
+    this.addressRef = React.createRef();
+    this.phoneRef = React.createRef();
+    this.emailRef = React.createRef();
+    this.facebookRef = React.createRef();
+    this.instagramRef = React.createRef();
+    this.websiteRef = React.createRef();
+  }
+
+  state = {
+    bannerIndex: 0,
+    view: 'month',
+    current: new Date(2026, 8, 19),
+    detail: null,
+    showAdd: false,
+    events: [
+      { id: 'e1', date: '2026-09-20', endDate: '2026-09-20', time: '18:00', endTime: '22:00', name: 'Festival del Mar', place: 'Malecón San Carlos, San Carlos, Sonora', category: 'CULTURAL', description: 'Música, gastronomía y arte local para celebrar la bahía de San Carlos.', cost: 'Entrada libre', organizers: 'Ayuntamiento de Guaymas, Colectivo San Carlos', phone: '+526221145316', email: 'eventos@visitsancarlos.com', facebook: 'https://facebook.com', instagram: 'https://instagram.com', website: 'https://visitsancarlos.com/festival-del-mar' },
+      { id: 'e2', date: '2026-09-22', endDate: '2026-09-22', time: '07:00', endTime: '13:00', name: 'Torneo de Pesca', place: 'Marina San Carlos, San Carlos, Sonora', category: 'DEPORTIVO', description: 'Competencia anual de pesca deportiva abierta a locales y visitantes.', cost: '$500 MXN por equipo', organizers: 'Club de Pesca San Carlos', phone: '+526221145316', email: 'eventos@visitsancarlos.com', facebook: 'https://facebook.com', instagram: '', website: '' },
+      { id: 'e3', date: '2026-09-25', endDate: '2026-09-25', time: '19:30', endTime: '23:00', name: 'Noche de Música en Vivo', place: 'Plaza San Carlos, San Carlos, Sonora', category: 'ENTRETENIMIENTO', description: 'Bandas locales en vivo con food trucks y ambiente familiar.', cost: 'Gratis', organizers: 'Visit San Carlos', phone: '+526221145316', email: 'visit.sancarlos.son@gmail.com', facebook: 'https://facebook.com', instagram: 'https://instagram.com', website: '' },
+      { id: 'e4', date: '2026-09-27', endDate: '2026-09-27', time: '10:00', endTime: '15:00', name: 'Mercado Local', place: 'Guaymas Centro, Guaymas, Sonora', category: 'COMUNIDAD', description: 'Productores y artesanos locales ofrecen sus productos frescos.', cost: 'Gratis', organizers: 'Comunidad de Guaymas', phone: '', email: '', facebook: 'https://facebook.com', instagram: '', website: '' },
+      { id: 'e5', date: '2026-10-03', endDate: '2026-10-04', time: '12:00', endTime: '20:00', name: 'Feria Gastronómica', place: 'Malecón Guaymas, Guaymas, Sonora', category: 'GASTRONOMÍA', description: 'Los mejores restaurantes de la región reunidos en un solo lugar.', cost: '$100 MXN entrada', organizers: 'Cámara de Restaurantes de Guaymas', phone: '+526221145316', email: 'eventos@visitsancarlos.com', facebook: 'https://facebook.com', instagram: 'https://instagram.com', website: 'https://visitsancarlos.com/feria-gastronomica' },
+      { id: 'e6', date: '2026-10-10', endDate: '2026-10-11', time: '09:00', endTime: '17:00', name: 'Regata San Carlos', place: 'Bahía San Carlos, San Carlos, Sonora', category: 'DEPORTIVO', description: 'Competencia de vela con equipos nacionales e internacionales.', cost: '$1,200 MXN por tripulación', organizers: 'Club Náutico San Carlos', phone: '+526221145316', email: 'regata@visitsancarlos.com', facebook: 'https://facebook.com', instagram: 'https://instagram.com', website: 'https://visitsancarlos.com/regata' },
+    ],
+  };
+
+  componentDidMount() {
+    this._bannerInterval = setInterval(() => {
+      this.setState(s => ({ bannerIndex: (s.bannerIndex + 1) % 4 }));
+    }, 10000);
+  }
+  componentWillUnmount() {
+    clearInterval(this._bannerInterval);
+  }
+
+  shiftMonth(delta) {
+    this.setState(s => { const d = new Date(s.current); d.setDate(1); d.setMonth(d.getMonth() + delta); return { current: d }; });
+  }
+  shiftWeek(delta) {
+    this.setState(s => { const d = new Date(s.current); d.setDate(d.getDate() + delta * 7); return { current: d }; });
+  }
+  setView(v) { this.setState({ view: v }); }
+  openDetail(ev) { this.setState({ detail: ev }); }
+  closeDetail() { this.setState({ detail: null }); }
+  openAdd() { this.setState({ showAdd: true }); }
+  closeAdd() { this.setState({ showAdd: false }); }
+  stop(e) { e.stopPropagation(); }
+
+  submitAdd() {
+    const val = r => (r.current ? r.current.value : '');
+    const dateVal = val(this.startDateRef) || toDateStr(this.state.current.getFullYear(), this.state.current.getMonth(), this.state.current.getDate());
+    const newEv = {
+      id: 'e' + Date.now(),
+      date: dateVal,
+      endDate: val(this.endDateRef) || dateVal,
+      time: val(this.startTimeRef) || '00:00',
+      endTime: val(this.endTimeRef) || '',
+      name: val(this.nameRef) || 'Nuevo evento',
+      place: val(this.addressRef) || 'Por confirmar',
+      category: (val(this.catRef) || 'General').toUpperCase(),
+      description: val(this.descRef) || '',
+      cost: val(this.costRef) || 'Por confirmar',
+      organizers: val(this.organizersRef) || '',
+      phone: val(this.phoneRef) || '',
+      email: val(this.emailRef) || '',
+      facebook: val(this.facebookRef) || '',
+      instagram: val(this.instagramRef) || '',
+      website: val(this.websiteRef) || '',
+    };
+    this.setState(s => ({ events: [...s.events, newEv], showAdd: false }));
+  }
+
+  fmtDateLabel(dateStr) {
+    if (!dateStr) return '';
+    const [y, m, d] = dateStr.split('-').map(Number);
+    return `${d} de ${MONTH_NAMES[m - 1]} ${y}`;
+  }
+
+  addToCalendar(ev) {
+    const dt = (dateStr, timeStr) => `${(dateStr || '').replace(/-/g, '')}T${(timeStr || '00:00').replace(':', '')}00`;
+    const ics = [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'BEGIN:VEVENT',
+      `DTSTART:${dt(ev.date, ev.time)}`,
+      `DTEND:${dt(ev.endDate || ev.date, ev.endTime || ev.time)}`,
+      `SUMMARY:${ev.name}`,
+      `DESCRIPTION:${(ev.description || '').replace(/\n/g, ' ')}`,
+      `LOCATION:${ev.place || ''}`,
+      'END:VEVENT', 'END:VCALENDAR',
+    ].join('\r\n');
+    const blob = new Blob([ics], { type: 'text/calendar' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${ev.name || 'evento'}.ics`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  monthMatrix(year, month, events) {
+    const startDow = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const cells = [];
+    for (let i = 0; i < startDow; i++) cells.push({ day: '', dateStr: '', events: [] });
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = toDateStr(year, month, d);
+      cells.push({ day: d, dateStr, events: events.filter(e => e.date === dateStr) });
+    }
+    while (cells.length % 7 !== 0) cells.push({ day: '', dateStr: '', events: [] });
+    const weeks = [];
+    for (let i = 0; i < cells.length; i += 7) {
+      weeks.push(cells.slice(i, i + 7).map(cell => ({
+        ...cell,
+        hasEvents: cell.events.length > 0,
+        firstEvent: cell.events[0] || null,
+        onClick: cell.events.length > 0 ? () => this.openDetail(cell.events[0]) : null,
+      })));
+    }
+    return weeks;
+  }
+
+  weekDaysOf(current, events) {
+    const d = new Date(current);
+    const sunday = new Date(d);
+    sunday.setDate(d.getDate() - d.getDay());
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      const dd = new Date(sunday);
+      dd.setDate(sunday.getDate() + i);
+      const dateStr = toDateStr(dd.getFullYear(), dd.getMonth(), dd.getDate());
+      const dayEvents = events.filter(e => e.date === dateStr).map(e => ({ ...e, onClick: () => this.openDetail(e) }));
+      days.push({ day: dd.getDate(), dateStr, weekday: WEEKDAY_LABELS[dd.getDay()], events: dayEvents });
+    }
+    return days;
+  }
+
+  weekEventsList(current, events) {
+    const days = this.weekDaysOf(current, events);
+    const dateStrs = days.map(d => d.dateStr);
+    return events
+      .filter(e => dateStrs.includes(e.date))
+      .sort((a, b) => (a.date === b.date ? a.time.localeCompare(b.time) : a.date.localeCompare(b.date)))
+      .map(e => ({ ...e, dayNum: Number(e.date.slice(-2)), onClick: () => this.openDetail(e) }));
+  }
+
+  renderVals() {
+    const { view, current, detail, showAdd, events, bannerIndex } = this.state;
+    const year = current.getFullYear();
+    const month = current.getMonth();
+    const isMonth = view === 'month';
+    const weekList = this.weekEventsList(current, events);
+    const bannerData = [
+      { bg: 'linear-gradient(120deg,#009BA4,#00767E)', title: 'Festival del Mar 2026', subtitle: 'Música, arte y gastronomía frente a la bahía.', cta: 'Ver evento' },
+      { bg: 'linear-gradient(120deg,#EB600A,#C94C05)', title: 'Torneo de Pesca San Carlos', subtitle: 'Inscríbete y compite por los mejores premios.', cta: 'Inscribirme' },
+      { bg: 'linear-gradient(120deg,#6AC7E2,#3FA8C4)', title: 'Feria Gastronómica Guaymas', subtitle: 'Los mejores sabores de la región en un solo lugar.', cta: 'Más información' },
+      { bg: 'linear-gradient(120deg,#143840,#0B2B30)', title: 'Regata San Carlos', subtitle: 'Vela y competencia náutica en la bahía.', cta: 'Ver detalles' },
+    ];
+    const banners = bannerData.map((b, i) => ({ ...b, opacity: i === bannerIndex ? 1 : 0, pe: i === bannerIndex ? 'auto' : 'none', z: i === bannerIndex ? 1 : 0, dotColor: i === bannerIndex ? '#EB600A' : 'rgba(255,255,255,0.6)' }));
+
+    return {
+      banners,
+      isMonth,
+      isWeek: !isMonth,
+      monthLabel: isMonth ? `${MONTH_NAMES[month]} ${year}` : `Semana del ${this.weekDaysOf(current, events)[0].day} de ${MONTH_NAMES[month]}`,
+      weeks: this.monthMatrix(year, month, events),
+      weekDays: this.weekDaysOf(current, events),
+      weekdayLabels: WEEKDAY_LABELS,
+      weekList,
+      hasWeekList: weekList.length > 0,
+      emptyWeekList: weekList.length === 0,
+      prevMonth: () => this.shiftMonth(-1),
+      nextMonth: () => this.shiftMonth(1),
+      prevWeek: () => this.shiftWeek(-1),
+      nextWeek: () => this.shiftWeek(1),
+      setMonthView: () => this.setView('month'),
+      setWeekView: () => this.setView('week'),
+      monthBtnBg: isMonth ? '#009BA4' : 'transparent',
+      monthBtnColor: isMonth ? '#ffffff' : '#3B5C61',
+      weekBtnBg: !isMonth ? '#009BA4' : 'transparent',
+      weekBtnColor: !isMonth ? '#ffffff' : '#3B5C61',
+      openAdd: () => this.openAdd(),
+      closeAdd: () => this.closeAdd(),
+      submitAdd: () => this.submitAdd(),
+      showAdd,
+      detail: detail ? {
+        ...detail,
+        dateRangeLabel: detail.endDate && detail.endDate !== detail.date ? `${this.fmtDateLabel(detail.date)} – ${this.fmtDateLabel(detail.endDate)}` : this.fmtDateLabel(detail.date),
+        timeRangeLabel: detail.endTime ? `${detail.time} – ${detail.endTime}` : detail.time,
+        mapSrc: `https://maps.google.com/maps?q=${encodeURIComponent(detail.place || '')}&output=embed`,
+        hasPhone: !!detail.phone, hasEmail: !!detail.email, hasFacebook: !!detail.facebook, hasInstagram: !!detail.instagram, hasWebsite: !!detail.website, hasOrganizers: !!detail.organizers,
+        addToCal: () => this.addToCalendar(detail),
+      } : null,
+      showDetail: !!detail,
+      closeDetail: () => this.closeDetail(),
+      stop: (e) => this.stop(e),
+      nameRef: this.nameRef,
+      startDateRef: this.startDateRef,
+      endDateRef: this.endDateRef,
+      startTimeRef: this.startTimeRef,
+      endTimeRef: this.endTimeRef,
+      catRef: this.catRef,
+      descRef: this.descRef,
+      costRef: this.costRef,
+      organizersRef: this.organizersRef,
+      addressRef: this.addressRef,
+      phoneRef: this.phoneRef,
+      emailRef: this.emailRef,
+      facebookRef: this.facebookRef,
+      instagramRef: this.instagramRef,
+      websiteRef: this.websiteRef,
+    };
+  }
+}
+
+</script>
+</body>
+</html>

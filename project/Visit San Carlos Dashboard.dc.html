@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+  <script src="./image-slot.js"></script>
+  <style>
+    body { margin: 0; font-family: 'Poppins', sans-serif; color: #143840; background: #F7FBFC; }
+    a { color: #009BA4; text-decoration: none; }
+    a:hover { color: #EB600A; }
+    * { box-sizing: border-box; }
+    input::placeholder, textarea::placeholder { color: #9DB6B8; }
+  </style>
+</helmet>
+
+<div style="max-width:100%; min-height:100vh; overflow-x:hidden; background:#F7FBFC; display:grid; grid-template-columns:240px 1fr;">
+
+  <!-- SIDEBAR -->
+  <aside style="background:#ffffff; border-right:1px solid #EEF3F3; padding:24px 18px; display:flex; flex-direction:column; gap:6px;">
+    <a href="Visit San Carlos Home.dc.html" style="margin-bottom:20px; padding:0 6px;">
+      <img src="uploads/Recurso 1visitsancarlos.png" alt="Visit San Carlos" style="height:38px; width:auto;" />
+    </a>
+    <button onClick="{{ setResumen }}" style="display:flex; align-items:center; gap:10px; border:none; background:{{ resumenBg }}; color:{{ resumenColor }}; font-weight:700; font-size:14px; padding:11px 14px; border-radius:10px; cursor:pointer; text-align:left;">
+      <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" fill="currentColor"></rect><rect x="10" y="2" width="6" height="6" fill="currentColor"></rect><rect x="2" y="10" width="6" height="6" fill="currentColor"></rect><rect x="10" y="10" width="6" height="6" fill="currentColor"></rect></svg>
+      Resumen
+    </button>
+    <button onClick="{{ setNegocios }}" style="display:flex; align-items:center; gap:10px; border:none; background:{{ negociosBg }}; color:{{ negociosColor }}; font-weight:700; font-size:14px; padding:11px 14px; border-radius:10px; cursor:pointer; text-align:left;">
+      <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><rect x="2" y="10" width="14" height="4" stroke="currentColor" stroke-width="1.4"></rect><rect x="3" y="6" width="4" height="4" stroke="currentColor" stroke-width="1.4"></rect></svg>
+      Mis negocios
+    </button>
+    <button onClick="{{ setPublicidad }}" style="display:flex; align-items:center; gap:10px; border:none; background:{{ publicidadBg }}; color:{{ publicidadColor }}; font-weight:700; font-size:14px; padding:11px 14px; border-radius:10px; cursor:pointer; text-align:left;">
+      <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><rect x="2" y="4" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.4"></rect><line x1="5" y1="8" x2="10" y2="8" stroke="currentColor" stroke-width="1.4"></line><line x1="5" y1="11" x2="8" y2="11" stroke="currentColor" stroke-width="1.4"></line></svg>
+      Publicidad
+    </button>
+    <button onClick="{{ setCuenta }}" style="display:flex; align-items:center; gap:10px; border:none; background:{{ cuentaBg }}; color:{{ cuentaColor }}; font-weight:700; font-size:14px; padding:11px 14px; border-radius:10px; cursor:pointer; text-align:left;">
+      <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3" stroke="currentColor" stroke-width="1.4"></circle><path d="M3 16c0-3 3-5 6-5s6 2 6 5" stroke="currentColor" stroke-width="1.4" fill="none"></path></svg>
+      Mi cuenta
+    </button>
+    <div style="flex:1;"></div>
+    <a href="Visit San Carlos Login.dc.html" style="display:flex; align-items:center; gap:10px; font-weight:600; font-size:13px; color:#5C7679; padding:11px 14px;">
+      <svg width="14" height="14" viewBox="0 0 18 18" fill="none"><path d="M7 3H3v12h4" stroke="#5C7679" stroke-width="1.4" fill="none"></path><path d="M11 6l4 3-4 3M15 9H7" stroke="#5C7679" stroke-width="1.4" fill="none" stroke-linecap="round"></path></svg>
+      Cerrar sesión
+    </a>
+  </aside>
+
+  <!-- CONTENIDO -->
+  <main style="padding:32px 40px; display:flex; flex-direction:column; gap:28px;">
+
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+      <div>
+        <h1 style="margin:0; font-size:24px; font-weight:800; color:#143840;">Hola, {{ userName }} 👋</h1>
+        <p style="margin:4px 0 0; font-size:13px; color:#5C7679;">Administras {{ businessCount }} negocios en Visit San Carlos.</p>
+      </div>
+      <a href="Visit San Carlos Directorio.dc.html" style="background:#ffffff; border:2px solid #009BA4; color:#009BA4; font-weight:700; font-size:13px; padding:10px 18px; border-radius:10px;">Ver directorio público</a>
+    </div>
+
+    <!-- RESUMEN -->
+    <sc-if value="{{ isResumen }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; flex-direction:column; gap:28px;">
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:18px;">
+          <div style="background:#ffffff; border-radius:16px; padding:20px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:12px; font-weight:700; color:#5C7679;">Estado del perfil</span>
+            <span style="font-size:15px; font-weight:800; color:#009BA4;">Activo</span>
+          </div>
+          <div style="background:#ffffff; border-radius:16px; padding:20px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:12px; font-weight:700; color:#5C7679;">Vistas este mes</span>
+            <span style="font-size:22px; font-weight:800; color:#143840;">210</span>
+          </div>
+          <div style="background:#ffffff; border-radius:16px; padding:20px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:12px; font-weight:700; color:#5C7679;">Calificación</span>
+            <span style="font-size:22px; font-weight:800; color:#EB600A;">★ 4.7</span>
+          </div>
+          <div style="background:#ffffff; border-radius:16px; padding:20px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:12px; font-weight:700; color:#5C7679;">Publicidad activa</span>
+            <span style="font-size:22px; font-weight:800; color:#143840;">2</span>
+          </div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:18px; padding:24px; box-shadow:0 8px 20px rgba(0,60,66,0.06);">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+            <h2 style="margin:0; font-size:16px; font-weight:800; color:#143840;">Mis establecimientos</h2>
+            <button onClick="{{ setNegocios }}" style="border:none; background:none; color:#009BA4; font-weight:700; font-size:13px; cursor:pointer;">Ver todos →</button>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <sc-for list="{{ businesses }}" as="biz" hint-placeholder-count="2">
+              <div style="display:flex; align-items:center; gap:14px; padding:12px; border:1px solid #EEF3F3; border-radius:12px;">
+                <div style="width:48px; height:48px; border-radius:10px; overflow:hidden; flex-shrink:0;"><image-slot id="{{ biz.id }}" shape="rect" placeholder="Logo"></image-slot></div>
+                <div style="flex:1;">
+                  <span style="font-size:14px; font-weight:700; color:#143840; display:block;">{{ biz.name }}</span>
+                  <span style="font-size:12px; color:#5C7679;">{{ biz.category }}</span>
+                </div>
+                <span style="font-size:12px; font-weight:700; color:{{ biz.statusColor }}; background:{{ biz.statusBg }}; padding:5px 12px; border-radius:999px;">{{ biz.status }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:18px; padding:24px; box-shadow:0 8px 20px rgba(0,60,66,0.06);">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;">
+            <h2 style="margin:0; font-size:16px; font-weight:800; color:#143840;">Publicidad contratada</h2>
+            <button onClick="{{ setPublicidad }}" style="border:none; background:none; color:#009BA4; font-weight:700; font-size:13px; cursor:pointer;">Ver todas →</button>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <sc-for list="{{ ads }}" as="ad" hint-placeholder-count="3">
+              <div style="display:flex; align-items:center; gap:14px; padding:12px; border:1px solid #EEF3F3; border-radius:12px;">
+                <div style="flex:1;">
+                  <span style="font-size:14px; font-weight:700; color:#143840; display:block;">{{ ad.name }}</span>
+                  <span style="font-size:12px; color:#5C7679;">{{ ad.businessName }} · vigencia {{ ad.period }}</span>
+                </div>
+                <span style="font-size:12px; font-weight:700; color:{{ ad.statusColor }}; background:{{ ad.statusBg }}; padding:5px 12px; border-radius:999px;">{{ ad.status }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- MIS NEGOCIOS -->
+    <sc-if value="{{ isNegocios }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2 style="margin:0; font-size:18px; font-weight:800; color:#143840;">Mis establecimientos</h2>
+          <button onClick="{{ addBusiness }}" style="border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:13px; padding:10px 18px; border-radius:10px; cursor:pointer;">+ Agregar negocio</button>
+        </div>
+        <sc-for list="{{ businesses }}" as="biz" hint-placeholder-count="2">
+          <div style="background:#ffffff; border-radius:18px; padding:20px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; align-items:center; gap:18px;">
+            <div style="width:72px; height:72px; border-radius:14px; overflow:hidden; flex-shrink:0;"><image-slot id="{{ biz.id }}" shape="rect" placeholder="Logo"></image-slot></div>
+            <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+              <span style="font-size:16px; font-weight:700; color:#143840;">{{ biz.name }}</span>
+              <span style="font-size:13px; color:#5C7679;">{{ biz.category }} · {{ biz.location }}</span>
+              <span style="font-size:13px; color:#5C7679;">{{ biz.hours }}</span>
+            </div>
+            <span style="font-size:12px; font-weight:700; color:{{ biz.statusColor }}; background:{{ biz.statusBg }}; padding:5px 12px; border-radius:999px; flex-shrink:0;">{{ biz.status }}</span>
+            <button onClick="{{ biz.onEdit }}" style="border:2px solid #009BA4; background:#ffffff; color:#009BA4; font-weight:700; font-size:13px; padding:10px 18px; border-radius:10px; cursor:pointer; flex-shrink:0;">Editar</button>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <!-- PUBLICIDAD -->
+    <sc-if value="{{ isPublicidad }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; flex-direction:column; gap:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <h2 style="margin:0; font-size:18px; font-weight:800; color:#143840;">Gestión de publicidad</h2>
+          <button onClick="{{ openAdModal }}" style="border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:13px; padding:10px 18px; border-radius:10px; cursor:pointer;">+ Contratar espacio</button>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px;">
+          <div style="background:#ffffff; border-radius:16px; padding:20px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:12px; font-weight:700; color:#5C7679;">Espacios activos</span>
+            <span style="font-size:22px; font-weight:800; color:#009BA4;">{{ adStats.activeCount }}</span>
+          </div>
+          <div style="background:#ffffff; border-radius:16px; padding:20px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:12px; font-weight:700; color:#5C7679;">Gasto mensual estimado</span>
+            <span style="font-size:22px; font-weight:800; color:#143840;">{{ adStats.monthlySpendFmt }}</span>
+          </div>
+          <div style="background:#ffffff; border-radius:16px; padding:20px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; flex-direction:column; gap:6px;">
+            <span style="font-size:12px; font-weight:700; color:#5C7679;">Próximo vencimiento</span>
+            <span style="font-size:22px; font-weight:800; color:#EB600A;">{{ adStats.nextExpiry }}</span>
+          </div>
+        </div>
+
+        <div style="background:#ffffff; border-radius:18px; overflow:hidden; box-shadow:0 8px 20px rgba(0,60,66,0.06);">
+          <div style="display:grid; grid-template-columns:1.8fr 1.3fr 1.3fr 0.9fr 1fr 1.4fr; padding:14px 20px; background:#F4FAFB; font-size:12px; font-weight:700; color:#5C7679;">
+            <span>Espacio</span><span>Negocio</span><span>Vigencia</span><span>Precio</span><span>Estado</span><span></span>
+          </div>
+          <sc-for list="{{ ads }}" as="ad" hint-placeholder-count="3">
+            <div style="display:grid; grid-template-columns:1.8fr 1.3fr 1.3fr 0.9fr 1fr 1.4fr; align-items:center; padding:14px 20px; border-top:1px solid #EEF3F3; gap:6px;">
+              <div>
+                <span style="font-size:14px; font-weight:700; color:#143840; display:block;">{{ ad.name }}</span>
+                <span style="font-size:11.5px; color:#5C7679;">{{ ad.billingLabel }}</span>
+              </div>
+              <span style="font-size:13px; color:#5C7679;">{{ ad.businessName }}</span>
+              <span style="font-size:13px; color:#5C7679;">{{ ad.period }}</span>
+              <span style="font-size:13px; font-weight:700; color:#143840;">{{ ad.priceFmt }}</span>
+              <span style="font-size:12px; font-weight:700; color:{{ ad.statusColor }}; background:{{ ad.statusBg }}; padding:5px 12px; border-radius:999px; width:fit-content;">{{ ad.status }}</span>
+              <div style="display:flex; gap:8px; justify-content:flex-end;">
+                <button onClick="{{ ad.onAction }}" style="border:2px solid #009BA4; background:#ffffff; color:#009BA4; font-weight:700; font-size:12px; padding:8px 14px; border-radius:8px; cursor:pointer; width:fit-content;">{{ ad.actionLabel }}</button>
+                <button onClick="{{ ad.onCancel }}" style="border:none; background:none; color:#B94A2E; font-weight:700; font-size:12px; cursor:pointer;">Cancelar</button>
+              </div>
+            </div>
+          </sc-for>
+          <sc-if value="{{ noAds }}">
+            <div style="padding:32px 20px; text-align:center; font-size:13px; color:#7FA7AA;">Aún no has contratado ningún espacio publicitario.</div>
+          </sc-if>
+        </div>
+
+        <p style="margin:0; font-size:12.5px; color:#7FA7AA;">Los contratos trimestrales incluyen sesión de fotografía (2h) + vuelo de dron. Consulta el <a href="Visit San Carlos Publicidad.dc.html">tarifario completo</a>.</p>
+      </div>
+    </sc-if>
+
+    <!-- MI CUENTA -->
+    <sc-if value="{{ isCuenta }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:480px; background:#ffffff; border-radius:18px; padding:28px; box-shadow:0 8px 20px rgba(0,60,66,0.06); display:flex; flex-direction:column; gap:16px;">
+        <h2 style="margin:0; font-size:18px; font-weight:800; color:#143840;">Mi cuenta</h2>
+        <p style="margin:0; font-size:13px; color:#5C7679;">Este es tu nombre personal — puedes administrar varios negocios distintos con la misma cuenta.</p>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Nombre completo</label>
+          <input value="{{ userNameInput }}" onChange="{{ onUserNameChange }}" type="text" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Correo electrónico</label>
+          <input type="email" defaultValue="andrea@correo.com" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Teléfono</label>
+          <input type="tel" defaultValue="622 100 2233" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <button onClick="{{ saveUserName }}" style="border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; padding:12px 22px; border-radius:10px; cursor:pointer; align-self:flex-start;">Guardar cambios</button>
+      </div>
+    </sc-if>
+
+  </main>
+
+  <!-- MODAL EDITAR NEGOCIO -->
+  <sc-if value="{{ showEdit }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeEdit }}" style="position:fixed; inset:0; background:rgba(20,56,64,0.55); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px;">
+      <div onClick="{{ stop }}" style="background:#ffffff; border-radius:20px; padding:32px; max-width:480px; width:100%; max-height:88vh; overflow-y:auto; display:flex; flex-direction:column; gap:14px; box-shadow:0 24px 50px rgba(0,0,0,0.25);">
+        <h3 style="margin:0; font-size:20px; font-weight:800; color:#143840;">Editar {{ editing.name }}</h3>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Nombre</label>
+          <input defaultValue="{{ editing.name }}" type="text" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Categoría</label>
+          <select defaultValue="{{ editing.category }}" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px; background:#ffffff;">
+            <option>Hoteles</option><option>Restaurantes</option><option>Doctores</option><option>Negocios</option><option>Clasificados</option>
+          </select>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Ubicación</label>
+          <input defaultValue="{{ editing.location }}" type="text" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Horario</label>
+          <input defaultValue="{{ editing.hours }}" type="text" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Teléfono</label>
+          <input defaultValue="{{ editing.phone }}" type="tel" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px;">
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Descripción</label>
+          <textarea defaultValue="{{ editing.description }}" rows="3" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px; resize:vertical;"></textarea>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Rango de precios</label>
+          <select defaultValue="{{ editing.priceRange }}" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px; background:#ffffff;">
+            <option value="$">$</option><option value="$$">$$</option><option value="$$$">$$$</option>
+          </select>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Características</label>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <sc-for list="{{ featureOptions }}" as="f" hint-placeholder-count="10">
+              <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:#3B5C61; cursor:pointer;">
+                <input type="checkbox" checked="{{ f.checked }}" onChange="{{ f.onToggle }}">
+                {{ f.name }}
+              </label>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Logo</label>
+          <div style="width:80px; height:80px; border-radius:14px; overflow:hidden;"><image-slot id="{{ editing.id }}-logo" shape="rect" placeholder="Logo"></image-slot></div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Foto principal</label>
+          <div style="height:120px; border-radius:12px; overflow:hidden;"><image-slot id="{{ editing.id }}-edit" shape="rect" placeholder="Foto del negocio"></image-slot></div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Galería (hasta 10 fotos)</label>
+          <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:8px;">
+            <sc-for list="{{ galleryIds }}" as="gid" hint-placeholder-count="10">
+              <div style="height:56px; border-radius:8px; overflow:hidden;"><image-slot id="{{ gid }}" shape="rect" placeholder="+"></image-slot></div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px; border-top:1px solid #EEF3F3; padding-top:14px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Visibilidad</label>
+          <div style="display:flex; gap:16px;">
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:#3B5C61; cursor:pointer;">
+              <input type="radio" name="visibility" defaultChecked="{{ editing.visibility_publicado }}">
+              Publicado
+            </label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:#3B5C61; cursor:pointer;">
+              <input type="radio" name="visibility" defaultChecked="{{ editing.visibility_invisible }}">
+              Invisible
+            </label>
+          </div>
+          <sc-if value="{{ editing.pendingApproval }}">
+            <p style="margin:0; font-size:12px; color:#EB600A; background:#FDEEE4; padding:8px 12px; border-radius:8px;">Este negocio está pendiente de aprobación por el equipo de Visit San Carlos. Una vez aprobado podrás publicarlo.</p>
+          </sc-if>
+        </div>
+
+        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:6px;">
+          <button onClick="{{ closeEdit }}" style="border:2px solid #009BA4; background:#ffffff; color:#009BA4; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">Cancelar</button>
+          <button onClick="{{ closeEdit }}" style="border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- MODAL CONTRATAR PUBLICIDAD -->
+  <sc-if value="{{ showAdModal }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeAdModal }}" style="position:fixed; inset:0; background:rgba(20,56,64,0.55); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px;">
+      <div onClick="{{ stop }}" style="background:#ffffff; border-radius:20px; padding:32px; max-width:520px; width:100%; max-height:88vh; overflow-y:auto; display:flex; flex-direction:column; gap:16px; box-shadow:0 24px 50px rgba(0,0,0,0.25);">
+        <h3 style="margin:0; font-size:20px; font-weight:800; color:#143840;">Contratar espacio publicitario</h3>
+
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Negocio a promocionar</label>
+          <select value="{{ modalBusinessId }}" onChange="{{ onBusinessSelect }}" style="border:1px solid #E2ECED; outline:none; border-radius:10px; padding:11px 14px; font-size:14px; background:#ffffff;">
+            <sc-for list="{{ businesses }}" as="biz" hint-placeholder-count="2">
+              <option value="{{ biz.id }}">{{ biz.name }}</option>
+            </sc-for>
+          </select>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Facturación</label>
+          <div style="display:flex; gap:16px;">
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:#3B5C61; cursor:pointer;">
+              <input type="radio" name="billing" checked="{{ isMensual }}" onChange="{{ setMensual }}">
+              Mensual
+            </label>
+            <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:#3B5C61; cursor:pointer;">
+              <input type="radio" name="billing" checked="{{ isTrimestral }}" onChange="{{ setTrimestral }}">
+              Trimestral <span style="color:#009BA4;">(mejor precio + sesión de fotos)</span>
+            </label>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <label style="font-size:13px; font-weight:700; color:#143840;">Espacio publicitario</label>
+          <sc-for list="{{ catalogGroups }}" as="grp" hint-placeholder-count="3">
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <span style="font-size:11.5px; font-weight:700; color:#009BA4; letter-spacing:0.03em; text-transform:uppercase;">{{ grp.category }}</span>
+              <sc-for list="{{ grp.items }}" as="pkg" hint-placeholder-count="4">
+                <label style="display:flex; align-items:center; gap:10px; border:1px solid {{ pkg.borderColor }}; background:{{ pkg.bg }}; border-radius:10px; padding:12px 14px; cursor:pointer;">
+                  <input type="radio" name="pkg" checked="{{ pkg.selected }}" onChange="{{ pkg.onSelect }}">
+                  <span style="flex:1; font-size:14px; font-weight:600; color:#143840;">{{ pkg.name }}</span>
+                  <span style="font-size:13px; font-weight:700; color:#143840;">{{ pkg.priceFmt }}</span>
+                </label>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; background:#F4FAFB; border-radius:12px; padding:14px 18px;">
+          <span style="font-size:13px; font-weight:700; color:#143840;">Total a contratar</span>
+          <span style="font-size:20px; font-weight:800; color:#EB600A;">{{ modalTotalFmt }}</span>
+        </div>
+
+        <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:6px;">
+          <button onClick="{{ closeAdModal }}" style="border:2px solid #009BA4; background:#ffffff; color:#009BA4; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">Cancelar</button>
+          <button onClick="{{ confirmAdModal }}" style="border:none; background:#EB600A; color:#ffffff; font-weight:700; font-size:14px; padding:11px 22px; border-radius:10px; cursor:pointer;">Continuar al pago</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    tab: 'resumen',
+    editingId: null,
+    showAdModal: false,
+    modalBusinessId: 'db-1',
+    modalBilling: 'mensual',
+    modalPackageId: 'A',
+    userName: 'Andrea',
+    userNameInput: 'Andrea',
+    businesses: [
+      { id: 'db-1', name: 'Hotel Playa Bonita', category: 'Hoteles', location: 'San Carlos, Sonora', hours: 'Lun–Dom 8:00–22:00', phone: '622 114 5316', status: 'Activo', statusColor: '#009BA4', statusBg: '#E5F6F7', description: 'Hotel frente al mar con alberca y restaurante propio.', priceRange: '$$', visibility: 'Publicado', pendingApproval: false, features: ['WiFi gratis', 'Estacionamiento', 'Alberca', 'Aire acondicionado'] },
+      { id: 'db-2', name: 'Buceo Sonora Adventures', category: 'Negocios', location: 'San Carlos, Sonora', hours: 'Lun–Sáb 7:00–17:00', phone: '622 155 6677', status: 'En revisión', statusColor: '#EB600A', statusBg: '#FDEEE4', description: 'Tours de buceo y snorkel en la bahía de San Carlos.', priceRange: '$$', visibility: 'Invisible', pendingApproval: true, features: ['Reservaciones', 'Equipo incluido'] },
+    ],
+    modalFeatures: {},
+    ads: [
+      { id: 'ad-1', name: 'Vistas Doradas — Carrusel Home', businessId: 'db-1', billing: 'mensual', price: 1500, period: '1 sep – 30 sep 2026', expires: '2026-09-30', status: 'Activo', statusColor: '#009BA4', statusBg: '#E5F6F7' },
+      { id: 'ad-2', name: 'Directorio Premium — Carrusel Directorio', businessId: 'db-2', billing: 'mensual', price: 1900, period: '1 jul – 1 ago 2026', expires: '2026-08-01', status: 'Vencido', statusColor: '#B94A2E', statusBg: '#FBEAE6' },
+      { id: 'ad-3', name: 'Eventos Destacados — Carrusel Eventos', businessId: 'db-1', billing: 'trimestral', price: 4320, period: '15 sep – 15 dic 2026', expires: '2026-12-15', status: 'Activo', statusColor: '#009BA4', statusBg: '#E5F6F7' },
+    ],
+  };
+
+  adCatalog = [
+    { id: 'A', category: 'Sitio web', name: 'Vistas Doradas — Carrusel Home', mensual: 1500, trimestral: 4050 },
+    { id: 'B', category: 'Sitio web', name: 'Sueño con vista al mar — Carrusel Hospedaje', mensual: 1200, trimestral: 3240 },
+    { id: 'C', category: 'Sitio web', name: 'Sabor local — Sección Restaurantes', mensual: 1000, trimestral: 2700 },
+    { id: 'D', category: 'Sitio web', name: 'Escápate a San Carlos — Anuncio lateral', mensual: 800, trimestral: 2160 },
+    { id: 'E', category: 'Sitio web', name: 'Estrella del mes — Banner exclusivo', mensual: 2500, trimestral: 6750 },
+    { id: 'F', category: 'Sitio web', name: 'Directorio Premium — Carrusel Directorio', mensual: 1900, trimestral: 5130 },
+    { id: 'G', category: 'Sitio web', name: 'Eventos Destacados — Carrusel Eventos', mensual: 1600, trimestral: 4320 },
+    { id: 'S1', category: 'Redes sociales', name: 'Presencia Digital', mensual: 1400, trimestral: 3780 },
+    { id: 'S2', category: 'Redes sociales', name: 'Promoción Premium', mensual: 2600, trimestral: 7020 },
+    { id: 'C1', category: 'Combinado', name: 'Presencia Estratégica', mensual: 3500, trimestral: 9450 },
+    { id: 'C2', category: 'Combinado', name: 'Visibilidad Plus', mensual: 5000, trimestral: 13500 },
+    { id: 'C3', category: 'Combinado', name: 'Impacto Total', mensual: 6500, trimestral: 17550 },
+    { id: 'C4', category: 'Combinado', name: 'Socio Elite Visit San Carlos', mensual: 8500, trimestral: 22950 },
+  ];
+
+  setTab(t) { this.setState({ tab: t }); }
+  onUserNameChange(e) { this.setState({ userNameInput: e.target.value }); }
+  saveUserName() { this.setState(s => ({ userName: s.userNameInput })); }
+  toggleModalFeature(name) { this.setState(s => ({ modalFeatures: { ...s.modalFeatures, [name]: !s.modalFeatures[name] } })); }
+  onBusinessSelect(e) { this.setState({ modalBusinessId: e.target.value }); }
+  setMensual() { this.setState({ modalBilling: 'mensual' }); }
+  setTrimestral() { this.setState({ modalBilling: 'trimestral' }); }
+  selectPackage(id) { this.setState({ modalPackageId: id }); }
+  confirmAdModal() {
+    const { modalPackageId, modalBusinessId, modalBilling, businesses } = this.state;
+    const pkg = this.adCatalog.find(p => p.id === modalPackageId);
+    const biz = businesses.find(b => b.id === modalBusinessId);
+    if (!pkg || !biz) return;
+    const months = modalBilling === 'trimestral' ? 3 : 1;
+    const start = new Date();
+    const end = new Date(start);
+    end.setMonth(end.getMonth() + months);
+    const fmtDate = d => d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+    const newAd = {
+      id: 'ad-' + Date.now(), name: pkg.name, businessId: biz.id, billing: modalBilling,
+      price: modalBilling === 'trimestral' ? pkg.trimestral : pkg.mensual,
+      period: `${fmtDate(start)} – ${fmtDate(end)}`, expires: end.toISOString().slice(0, 10),
+      status: 'Pendiente de pago', statusColor: '#EB600A', statusBg: '#FDEEE4',
+    };
+    this.setState(s => ({ ads: [...s.ads, newAd], showAdModal: false }));
+  }
+  adAction(id) {
+    this.setState(s => ({
+      ads: s.ads.map(ad => {
+        if (ad.id !== id) return ad;
+        if (ad.status === 'Activo') return { ...ad, status: 'Pausado', statusColor: '#5C7679', statusBg: '#EEF3F3' };
+        if (ad.status === 'Pausado') return { ...ad, status: 'Activo', statusColor: '#009BA4', statusBg: '#E5F6F7' };
+        return { ...ad, status: 'Activo', statusColor: '#009BA4', statusBg: '#E5F6F7' };
+      })
+    }));
+  }
+  cancelAd(id) { this.setState(s => ({ ads: s.ads.filter(ad => ad.id !== id) })); }
+
+  openEdit(id) {
+    const biz = this.state.businesses.find(b => b.id === id);
+    const seeded = {};
+    (biz && biz.features ? biz.features : []).forEach(f => { seeded[f] = true; });
+    this.setState({ editingId: id, modalFeatures: seeded });
+  }
+
+  addBusiness() {
+    const id = 'db-' + Date.now();
+    const newBiz = { id, name: 'Nuevo negocio', category: 'Negocios', location: '', hours: '', phone: '', status: 'Pendiente de aprobación', statusColor: '#EB600A', statusBg: '#FDEEE4', description: '', priceRange: '$', visibility: 'Invisible', pendingApproval: true, features: [] };
+    this.setState(s => ({ businesses: [...s.businesses, newBiz], editingId: id, modalFeatures: {}, tab: 'negocios' }));
+  }
+  closeEdit() { this.setState({ editingId: null }); }
+  openAdModal() { this.setState({ showAdModal: true }); }
+  closeAdModal() { this.setState({ showAdModal: false }); }
+  stop(e) { e.stopPropagation(); }
+
+  renderVals() {
+    const { tab, editingId, showAdModal, userName, userNameInput, modalFeatures, modalBusinessId, modalBilling, modalPackageId } = this.state;
+    const businesses = this.state.businesses.map(b => ({ ...b, onEdit: () => this.openEdit(b.id) }));
+    let editing = businesses.find(b => b.id === editingId) || null;
+    const fmtMoney = n => '$' + n.toLocaleString('es-MX');
+
+    const bizName = id => (businesses.find(b => b.id === id) || {}).name || '\u2014';
+    const actionLabelFor = status => status === 'Activo' ? 'Pausar' : status === 'Pausado' ? 'Reactivar' : status === 'Vencido' ? 'Renovar' : 'Pagar ahora';
+    const ads = this.state.ads.map(ad => ({
+      ...ad,
+      businessName: bizName(ad.businessId),
+      billingLabel: ad.billing === 'trimestral' ? 'Trimestral' : 'Mensual',
+      priceFmt: fmtMoney(ad.price) + ' MXN',
+      actionLabel: actionLabelFor(ad.status),
+      onAction: () => this.adAction(ad.id),
+      onCancel: () => this.cancelAd(ad.id),
+    }));
+    const activeAds = ads.filter(a => a.status === 'Activo');
+    const adStats = {
+      activeCount: activeAds.length,
+      monthlySpendFmt: fmtMoney(activeAds.reduce((sum, a) => sum + (a.billing === 'trimestral' ? Math.round(a.price / 3) : a.price), 0)) + ' MXN',
+      nextExpiry: activeAds.length ? activeAds.slice().sort((a, b) => a.expires.localeCompare(b.expires))[0].expires.split('-').reverse().join('/') : '\u2014',
+    };
+
+    const catalogByCategory = {};
+    this.adCatalog.forEach(p => {
+      if (!catalogByCategory[p.category]) catalogByCategory[p.category] = [];
+      catalogByCategory[p.category].push(p);
+    });
+    const catalogGroups = Object.keys(catalogByCategory).map(category => ({
+      category,
+      items: catalogByCategory[category].map(p => {
+        const selected = p.id === modalPackageId;
+        return {
+          ...p, selected,
+          priceFmt: fmtMoney(modalBilling === 'trimestral' ? p.trimestral : p.mensual) + ' MXN',
+          borderColor: selected ? '#EB600A' : '#E2ECED',
+          bg: selected ? '#FFF6F0' : '#ffffff',
+          onSelect: () => this.selectPackage(p.id),
+        };
+      }),
+    }));
+    const selectedPkg = this.adCatalog.find(p => p.id === modalPackageId) || this.adCatalog[0];
+    const modalTotalFmt = fmtMoney(modalBilling === 'trimestral' ? selectedPkg.trimestral : selectedPkg.mensual) + ' MXN / ' + (modalBilling === 'trimestral' ? 'trimestre' : 'mes');
+
+    if (editing) editing = { ...editing, visibility_publicado: editing.visibility === 'Publicado', visibility_invisible: editing.visibility !== 'Publicado' };
+    const ALL_FEATURES = ['WiFi gratis', 'Estacionamiento', 'Terraza', 'Acepta tarjetas', 'Pet friendly', 'Aire acondicionado', 'Reservaciones', 'Entrega a domicilio', 'Alberca', 'Equipo incluido'];
+    const featureOptions = ALL_FEATURES.map(name => ({
+      name,
+      checked: !!modalFeatures[name],
+      onToggle: () => this.toggleModalFeature(name),
+    }));
+    const galleryIds = editing ? Array.from({ length: 10 }, (_, i) => `${editing.id}-gallery-${i}`) : [];
+
+    return {
+      isResumen: tab === 'resumen', isNegocios: tab === 'negocios', isPublicidad: tab === 'publicidad', isCuenta: tab === 'cuenta',
+      setResumen: () => this.setTab('resumen'), setNegocios: () => this.setTab('negocios'), setPublicidad: () => this.setTab('publicidad'), setCuenta: () => this.setTab('cuenta'),
+      resumenBg: tab === 'resumen' ? '#E5F6F7' : 'transparent', resumenColor: tab === 'resumen' ? '#009BA4' : '#5C7679',
+      negociosBg: tab === 'negocios' ? '#E5F6F7' : 'transparent', negociosColor: tab === 'negocios' ? '#009BA4' : '#5C7679',
+      publicidadBg: tab === 'publicidad' ? '#E5F6F7' : 'transparent', publicidadColor: tab === 'publicidad' ? '#009BA4' : '#5C7679',
+      cuentaBg: tab === 'cuenta' ? '#E5F6F7' : 'transparent', cuentaColor: tab === 'cuenta' ? '#009BA4' : '#5C7679',
+      userName, userNameInput, onUserNameChange: (e) => this.onUserNameChange(e), saveUserName: () => this.saveUserName(),
+      businessCount: businesses.length,
+      businesses,
+      showEdit: !!editing, editing: editing || {},
+      featureOptions, galleryIds,
+      closeEdit: () => this.closeEdit(),
+      addBusiness: () => this.addBusiness(),
+      showAdModal, openAdModal: () => this.openAdModal(), closeAdModal: () => this.closeAdModal(),
+      ads, adStats, noAds: ads.length === 0,
+      catalogGroups, modalTotalFmt, modalBusinessId,
+      isMensual: modalBilling === 'mensual', isTrimestral: modalBilling === 'trimestral',
+      setMensual: () => this.setMensual(), setTrimestral: () => this.setTrimestral(),
+      onBusinessSelect: (e) => this.onBusinessSelect(e),
+      confirmAdModal: () => this.confirmAdModal(),
+      stop: (e) => this.stop(e),
+    };
+  }
+}
+
+</script>
+</body>
+</html>
