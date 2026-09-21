@@ -1,0 +1,52 @@
+:root {
+  --vsc-teal: #009ba4;
+  --vsc-teal-dark: #00767e;
+  --vsc-orange: #eb600a;
+  --vsc-sky: #6ac7e2;
+  --vsc-ink: #143840;
+  --vsc-ink-soft: #3b5c61;
+  --vsc-muted: #5c7679;
+  --vsc-faint: #7fa7aa;
+  --vsc-line: #eef3f3;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-poppins), "Poppins", sans-serif;
+  color: var(--vsc-ink);
+  background: #ffffff;
+}
+
+a {
+  color: var(--vsc-teal);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--vsc-orange);
+}
+
+input::placeholder {
+  color: var(--vsc-faint);
+}
+
+.vsc-scroll {
+  scrollbar-width: none;
+}
+
+.vsc-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+button {
+  font-family: inherit;
+}
