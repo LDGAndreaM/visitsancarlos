@@ -1,23 +1,40 @@
-export type DashboardBusiness = {
+import type { ClasificadoCategory } from "./clasificadosData";
+
+export type ListingBase = {
   id: string;
-  name: string;
-  category: string;
-  location: string;
-  hours: string;
-  phone: string;
   status: string;
   statusColor: string;
   statusBg: string;
+  location: string;
+  phone: string;
   description: string;
-  priceRange: string;
   visibility: "Publicado" | "Invisible";
   pendingApproval: boolean;
+};
+
+export type DirectorioListing = ListingBase & {
+  type: "directorio";
+  name: string;
+  category: string;
+  hours: string;
+  priceRange: string;
   features: string[];
 };
 
-export const INITIAL_BUSINESSES: DashboardBusiness[] = [
+export type ClasificadoListing = ListingBase & {
+  type: "clasificado";
+  title: string;
+  category: ClasificadoCategory;
+  price: number | "";
+  condition: "Nuevo" | "Usado";
+};
+
+export type DashboardListing = DirectorioListing | ClasificadoListing;
+
+export const INITIAL_LISTINGS: DashboardListing[] = [
   {
     id: "db-1",
+    type: "directorio",
     name: "Hotel Playa Bonita",
     category: "Hoteles",
     location: "San Carlos, Sonora",
@@ -34,6 +51,7 @@ export const INITIAL_BUSINESSES: DashboardBusiness[] = [
   },
   {
     id: "db-2",
+    type: "directorio",
     name: "Buceo Sonora Adventures",
     category: "Negocios",
     location: "San Carlos, Sonora",
@@ -47,6 +65,38 @@ export const INITIAL_BUSINESSES: DashboardBusiness[] = [
     visibility: "Invisible",
     pendingApproval: true,
     features: ["Reservaciones", "Equipo incluido"],
+  },
+  {
+    id: "cl-1",
+    type: "clasificado",
+    title: "Sedán compacto 2018, único dueño",
+    category: "Autos",
+    price: 145000,
+    condition: "Usado",
+    location: "San Carlos, Sonora",
+    phone: "622 114 2201",
+    status: "Activo",
+    statusColor: "#009BA4",
+    statusBg: "#E5F6F7",
+    description: "Único dueño, servicios de agencia al corriente.",
+    visibility: "Publicado",
+    pendingApproval: false,
+  },
+  {
+    id: "cl-2",
+    type: "clasificado",
+    title: "Kayak doble inflable, poco uso",
+    category: "Otros productos",
+    price: 4200,
+    condition: "Usado",
+    location: "San Carlos, Sonora",
+    phone: "622 118 4455",
+    status: "En revisión",
+    statusColor: "#EB600A",
+    statusBg: "#FDEEE4",
+    description: "Kayak doble, incluye remos y bomba de aire.",
+    visibility: "Invisible",
+    pendingApproval: true,
   },
 ];
 
@@ -106,8 +156,40 @@ export const ALL_FEATURES = [
   "Equipo incluido",
 ];
 
-export const BUSINESS_CATEGORIES = ["Hoteles", "Restaurantes", "Doctores", "Negocios", "Clasificados"];
+export const DIRECTORIO_CATEGORIES = ["Hoteles", "Restaurantes", "Doctores", "Negocios"];
 
 export function fmtMoney(n: number): string {
   return "$" + n.toLocaleString("es-MX");
+}
+
+export type ListingView = DashboardListing & {
+  displayName: string;
+  subtitle: string;
+  extraLine: string;
+  typeLabel: string;
+  typeColor: string;
+  typeBg: string;
+};
+
+export function toListingView(l: DashboardListing): ListingView {
+  if (l.type === "directorio") {
+    return {
+      ...l,
+      displayName: l.name,
+      subtitle: `${l.category} · ${l.location}`,
+      extraLine: l.hours,
+      typeLabel: "Directorio",
+      typeColor: "#009BA4",
+      typeBg: "#E5F6F7",
+    };
+  }
+  return {
+    ...l,
+    displayName: l.title,
+    subtitle: `${l.category} · ${fmtMoney(Number(l.price) || 0)}`,
+    extraLine: `${l.condition} · ${l.location}`,
+    typeLabel: "Clasificados",
+    typeColor: "#EB600A",
+    typeBg: "#FDEEE4",
+  };
 }

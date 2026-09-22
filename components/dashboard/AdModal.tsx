@@ -1,16 +1,17 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { AD_CATALOG, fmtMoney, type DashboardBusiness } from "@/lib/dashboardData";
+import { AD_CATALOG, fmtMoney } from "@/lib/dashboardData";
+import type { ListingRow } from "./DashboardApp";
 
 type AdModalProps = {
-  businesses: DashboardBusiness[];
+  listings: ListingRow[];
   onClose: () => void;
   onConfirm: (params: { businessId: string; billing: "mensual" | "trimestral"; packageId: string }) => void;
 };
 
-export default function AdModal({ businesses, onClose, onConfirm }: AdModalProps) {
-  const [businessId, setBusinessId] = useState(businesses[0]?.id ?? "");
+export default function AdModal({ listings, onClose, onConfirm }: AdModalProps) {
+  const [businessId, setBusinessId] = useState(listings[0]?.id ?? "");
   const [billing, setBilling] = useState<"mensual" | "trimestral">("mensual");
   const [packageId, setPackageId] = useState(AD_CATALOG[0].id);
 
@@ -35,15 +36,15 @@ export default function AdModal({ businesses, onClose, onConfirm }: AdModalProps
         <h3 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#143840" }}>Contratar espacio publicitario</h3>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <label style={{ fontSize: 13, fontWeight: 700, color: "#143840" }}>Negocio a promocionar</label>
+          <label style={{ fontSize: 13, fontWeight: 700, color: "#143840" }}>Publicación a promocionar</label>
           <select
             value={businessId}
             onChange={(e) => setBusinessId(e.target.value)}
             style={{ border: "1px solid #E2ECED", outline: "none", borderRadius: 10, padding: "11px 14px", fontSize: 14, background: "#ffffff", fontFamily: "inherit" }}
           >
-            {businesses.map((biz) => (
-              <option key={biz.id} value={biz.id}>
-                {biz.name}
+            {listings.map((l) => (
+              <option key={l.id} value={l.id}>
+                {l.displayName}
               </option>
             ))}
           </select>

@@ -3,14 +3,29 @@
 import { useState } from "react";
 import Sidebar from "./Sidebar";
 import ResumenTab from "./ResumenTab";
-import NegociosTab from "./NegociosTab";
+import PublicacionesTab from "./PublicacionesTab";
 import PublicidadTab from "./PublicidadTab";
 import CuentaTab from "./CuentaTab";
-import EditBusinessModal from "./EditBusinessModal";
+import ChooseListingTypeModal from "./ChooseListingTypeModal";
+import EditDirectorioModal from "./EditDirectorioModal";
+import EditClasificadoModal from "./EditClasificadoModal";
 import AdModal from "./AdModal";
-import { AD_CATALOG, INITIAL_ADS, INITIAL_BUSINESSES, fmtMoney, type DashboardAd, type DashboardBusiness } from "@/lib/dashboardData";
+import {
+  AD_CATALOG,
+  INITIAL_ADS,
+  INITIAL_LISTINGS,
+  fmtMoney,
+  toListingView,
+  type DashboardAd,
+  type DashboardListing,
+  type DirectorioListing,
+  type ClasificadoListing,
+  type ListingView,
+} from "@/lib/dashboardData";
 
-export type DashboardTab = "resumen" | "negocios" | "publicidad" | "cuenta";
+export type DashboardTab = "resumen" | "publicaciones" | "publicidad" | "cuenta";
+
+export type ListingRow = ListingView & { onEdit: () => void };
 
 export type AdView = DashboardAd & {
   businessName: string;
@@ -32,16 +47,19 @@ function fmtDate(d: Date): string {
 
 export default function DashboardApp() {
   const [tab, setTab] = useState<DashboardTab>("resumen");
-  const [businesses, setBusinesses] = useState<DashboardBusiness[]>(INITIAL_BUSINESSES);
+  const [listings, setListings] = useState<DashboardListing[]>(INITIAL_LISTINGS);
   const [ads, setAds] = useState<DashboardAd[]>(INITIAL_ADS);
   const [userName, setUserName] = useState("Andrea");
   const [userNameInput, setUserNameInput] = useState("Andrea");
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [showTypePicker, setShowTypePicker] = useState(false);
   const [showAdModal, setShowAdModal] = useState(false);
+  const [listingFilter, setListingFilter] = useState<"todos" | "directorio" | "clasificado">("todos");
 
-  const editing = businesses.find((b) => b.id === editingId) ?? null;
+  const listingRows: ListingRow[] = listings.map((l) => ({ ...toListingView(l), onEdit: () => setEditingId(l.id) }));
+  const editing = listings.find((l) => l.id === editingId) ?? null;
 
-  const bizName = (id: string) => businesses.find((b) => b.id === id)?.name ?? "—";
+  const bizName = (id: string) => listingRows.find((l) => l.id === id)?.displayName ?? "—";
   const adViews: AdView[] = ads.map((ad) => ({
     ...ad,
     businessName: bizName(ad.businessId),
@@ -63,15 +81,16 @@ export default function DashboardApp() {
       : "—",
   };
 
-  const handleSaveBusiness = (updated: DashboardBusiness) => {
-    setBusinesses((prev) => prev.map((b) => (b.id === updated.id ? updated : b)));
+  const handleSaveListing = (updated: DashboardListing) => {
+    setListings((prev) => prev.map((l) => (l.id === updated.id ? updated : l)));
     setEditingId(null);
   };
 
-  const handleAddBusiness = () => {
+  const handleChooseDirectorio = () => {
     const id = "db-" + Date.now();
-    const newBiz: DashboardBusiness = {
+    const newBiz: DirectorioListing = {
       id,
+      type: "directorio",
       name: "Nuevo negocio",
       category: "Negocios",
       location: "",
@@ -86,9 +105,34 @@ export default function DashboardApp() {
       pendingApproval: true,
       features: [],
     };
-    setBusinesses((prev) => [...prev, newBiz]);
+    setListings((prev) => [...prev, newBiz]);
     setEditingId(id);
-    setTab("negocios");
+    setShowTypePicker(false);
+    setTab("publicaciones");
+  };
+
+  const handleChooseClasificado = () => {
+    const id = "cl-" + Date.now();
+    const newCl: ClasificadoListing = {
+      id,
+      type: "clasificado",
+      title: "Nuevo artículo",
+      category: "Autos",
+      price: "",
+      condition: "Usado",
+      location: "",
+      phone: "",
+      status: "Pendiente de aprobación",
+      statusColor: "#EB600A",
+      statusBg: "#FDEEE4",
+      description: "",
+      visibility: "Invisible",
+      pendingApproval: true,
+    };
+    setListings((prev) => [...prev, newCl]);
+    setEditingId(id);
+    setShowTypePicker(false);
+    setTab("publicaciones");
   };
 
   const handleAdAction = (id: string) => {
@@ -128,6 +172,8 @@ export default function DashboardApp() {
     setShowAdModal(false);
   };
 
+  const filteredListings = listingRows.filter((l) => listingFilter === "todos" || l.type === listingFilter);
+
   return (
     <div style={{ maxWidth: "100%", minHeight: "100vh", overflowX: "hidden", background: "#F7FBFC", display: "grid", gridTemplateColumns: "240px 1fr" }}>
       <Sidebar tab={tab} onTabChange={setTab} />
@@ -136,21 +182,37 @@ export default function DashboardApp() {
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
           <div>
             <h1 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: "#143840" }}>Hola, {userName} 👋</h1>
-            <p style={{ margin: "4px 0 0", fontSize: 13, color: "#5C7679" }}>Administras {businesses.length} negocios en Visit San Carlos.</p>
+            <p style={{ margin: "4px 0 0", fontSize: 13, color: "#5C7679" }}>Administras {listings.length} publicaciones en Visit San Carlos.</p>
           </div>
-          <a href="/directorio" style={{ background: "#ffffff", border: "2px solid #009BA4", color: "#009BA4", fontWeight: 700, fontSize: 13, padding: "10px 18px", borderRadius: 10 }}>
-            Ver directorio público
-          </a>
+          <div style={{ display: "flex", gap: 10 }}>
+            <a href="/directorio" style={{ background: "#ffffff", border: "2px solid #009BA4", color: "#009BA4", fontWeight: 700, fontSize: 13, padding: "10px 18px", borderRadius: 10 }}>
+              Ver directorio
+            </a>
+            <a href="/clasificados" style={{ background: "#ffffff", border: "2px solid #009BA4", color: "#009BA4", fontWeight: 700, fontSize: 13, padding: "10px 18px", borderRadius: 10 }}>
+              Ver clasificados
+            </a>
+          </div>
         </div>
 
-        {tab === "resumen" && <ResumenTab businesses={businesses} ads={adViews} onTabChange={setTab} />}
-        {tab === "negocios" && <NegociosTab businesses={businesses} onEdit={setEditingId} onAddBusiness={handleAddBusiness} />}
+        {tab === "resumen" && <ResumenTab listings={listingRows} ads={adViews} onTabChange={setTab} />}
+        {tab === "publicaciones" && (
+          <PublicacionesTab
+            listings={filteredListings}
+            filter={listingFilter}
+            onFilterChange={setListingFilter}
+            onAddListing={() => setShowTypePicker(true)}
+          />
+        )}
         {tab === "publicidad" && <PublicidadTab ads={adViews} adStats={adStats} onOpenAdModal={() => setShowAdModal(true)} onAdAction={handleAdAction} onCancelAd={handleCancelAd} />}
         {tab === "cuenta" && <CuentaTab userNameInput={userNameInput} onUserNameInputChange={setUserNameInput} onSave={() => setUserName(userNameInput)} />}
       </main>
 
-      {editing && <EditBusinessModal business={editing} onClose={() => setEditingId(null)} onSave={handleSaveBusiness} />}
-      {showAdModal && <AdModal businesses={businesses} onClose={() => setShowAdModal(false)} onConfirm={handleConfirmAdModal} />}
+      {showTypePicker && (
+        <ChooseListingTypeModal onClose={() => setShowTypePicker(false)} onChooseDirectorio={handleChooseDirectorio} onChooseClasificado={handleChooseClasificado} />
+      )}
+      {editing && editing.type === "directorio" && <EditDirectorioModal listing={editing} onClose={() => setEditingId(null)} onSave={handleSaveListing} />}
+      {editing && editing.type === "clasificado" && <EditClasificadoModal listing={editing} onClose={() => setEditingId(null)} onSave={handleSaveListing} />}
+      {showAdModal && <AdModal listings={listingRows} onClose={() => setShowAdModal(false)} onConfirm={handleConfirmAdModal} />}
     </div>
   );
 }

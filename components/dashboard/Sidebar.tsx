@@ -16,8 +16,8 @@ const NAV_ITEMS: { tab: DashboardTab; label: string; icon: React.ReactNode }[] =
     ),
   },
   {
-    tab: "negocios",
-    label: "Mis negocios",
+    tab: "publicaciones",
+    label: "Mis publicaciones",
     icon: (
       <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
         <rect x="2" y="10" width="14" height="4" stroke="currentColor" strokeWidth="1.4" />

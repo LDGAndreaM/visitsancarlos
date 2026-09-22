@@ -8,7 +8,7 @@ export default function CuentaTab({ userNameInput, onUserNameInputChange, onSave
   return (
     <div style={{ maxWidth: 480, background: "#ffffff", borderRadius: 18, padding: 28, boxShadow: "0 8px 20px rgba(0,60,66,0.06)", display: "flex", flexDirection: "column", gap: 16 }}>
       <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "#143840" }}>Mi cuenta</h2>
-      <p style={{ margin: 0, fontSize: 13, color: "#5C7679" }}>Este es tu nombre personal — puedes administrar varios negocios distintos con la misma cuenta.</p>
+      <p style={{ margin: 0, fontSize: 13, color: "#5C7679" }}>Este es tu nombre personal — puedes administrar varios negocios y anuncios distintos con la misma cuenta.</p>
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
         <label style={{ fontSize: 13, fontWeight: 700, color: "#143840" }}>Nombre completo</label>
         <input

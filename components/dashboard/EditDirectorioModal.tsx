@@ -2,29 +2,29 @@
 
 import { useState } from "react";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
-import { ALL_FEATURES, BUSINESS_CATEGORIES, type DashboardBusiness } from "@/lib/dashboardData";
+import { ALL_FEATURES, DIRECTORIO_CATEGORIES, type DirectorioListing } from "@/lib/dashboardData";
 
-type EditBusinessModalProps = {
-  business: DashboardBusiness;
+type EditDirectorioModalProps = {
+  listing: DirectorioListing;
   onClose: () => void;
-  onSave: (business: DashboardBusiness) => void;
+  onSave: (listing: DirectorioListing) => void;
 };
 
 const fieldStyle: React.CSSProperties = { display: "flex", flexDirection: "column", gap: 6 };
 const labelStyle: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: "#143840" };
 const inputStyle: React.CSSProperties = { border: "1px solid #E2ECED", outline: "none", borderRadius: 10, padding: "11px 14px", fontSize: 14, fontFamily: "inherit" };
 
-export default function EditBusinessModal({ business, onClose, onSave }: EditBusinessModalProps) {
+export default function EditDirectorioModal({ listing, onClose, onSave }: EditDirectorioModalProps) {
   const [form, setForm] = useState({
-    name: business.name,
-    category: business.category,
-    location: business.location,
-    hours: business.hours,
-    phone: business.phone,
-    description: business.description,
-    priceRange: business.priceRange,
-    visibility: business.visibility,
-    features: business.features,
+    name: listing.name,
+    category: listing.category,
+    location: listing.location,
+    hours: listing.hours,
+    phone: listing.phone,
+    description: listing.description,
+    priceRange: listing.priceRange,
+    visibility: listing.visibility,
+    features: listing.features,
   });
 
   const toggleFeature = (name: string) => {
@@ -32,7 +32,7 @@ export default function EditBusinessModal({ business, onClose, onSave }: EditBus
   };
 
   const handleSave = () => {
-    onSave({ ...business, ...form });
+    onSave({ ...listing, ...form });
   };
 
   return (
@@ -41,7 +41,7 @@ export default function EditBusinessModal({ business, onClose, onSave }: EditBus
         onClick={(e) => e.stopPropagation()}
         style={{ background: "#ffffff", borderRadius: 20, padding: 32, maxWidth: 480, width: "100%", maxHeight: "88vh", overflowY: "auto", display: "flex", flexDirection: "column", gap: 14, boxShadow: "0 24px 50px rgba(0,0,0,0.25)" }}
       >
-        <h3 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#143840" }}>Editar {business.name}</h3>
+        <h3 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#143840" }}>Establecimiento — {listing.name}</h3>
 
         <div style={fieldStyle}>
           <label style={labelStyle}>Nombre</label>
@@ -51,7 +51,7 @@ export default function EditBusinessModal({ business, onClose, onSave }: EditBus
         <div style={fieldStyle}>
           <label style={labelStyle}>Categoría</label>
           <select value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))} style={{ ...inputStyle, background: "#ffffff" }}>
-            {BUSINESS_CATEGORIES.map((c) => (
+            {DIRECTORIO_CATEGORIES.map((c) => (
               <option key={c}>{c}</option>
             ))}
           </select>
@@ -135,7 +135,7 @@ export default function EditBusinessModal({ business, onClose, onSave }: EditBus
               Invisible
             </label>
           </div>
-          {business.pendingApproval && (
+          {listing.pendingApproval && (
             <p style={{ margin: 0, fontSize: 12, color: "#EB600A", background: "#FDEEE4", padding: "8px 12px", borderRadius: 8 }}>
               Este negocio está pendiente de aprobación por el equipo de Visit San Carlos. Una vez aprobado podrás publicarlo.
             </p>

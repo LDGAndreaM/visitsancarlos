@@ -46,7 +46,7 @@ export default function PublicidadTab({ ads, adStats, onOpenAdModal, onAdAction,
       <div style={{ background: "#ffffff", borderRadius: 18, overflow: "hidden", boxShadow: "0 8px 20px rgba(0,60,66,0.06)" }}>
         <div style={{ display: "grid", gridTemplateColumns: gridCols, padding: "14px 20px", background: "#F4FAFB", fontSize: 12, fontWeight: 700, color: "#5C7679" }}>
           <span>Espacio</span>
-          <span>Negocio</span>
+          <span>Publicación</span>
           <span>Vigencia</span>
           <span>Precio</span>
           <span>Estado</span>
