@@ -45,11 +45,10 @@ export default function HotelsCarousel() {
               minWidth: 260,
               background: "#ffffff",
               borderRadius: 18,
-              overflow: "hidden",
               boxShadow: "0 10px 24px rgba(0,60,66,0.1)",
             }}
           >
-            <div style={{ height: 180 }}>
+            <div style={{ height: 180, borderRadius: "18px 18px 0 0", overflow: "hidden" }}>
               <ImagePlaceholder caption={h.placeholder} />
             </div>
             <div style={{ padding: 18, display: "flex", flexDirection: "column", gap: 8 }}>

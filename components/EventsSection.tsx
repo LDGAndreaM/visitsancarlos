@@ -13,8 +13,8 @@ export default function EventsSection() {
       </div>
       <div className="vsc-scroll" style={{ display: "flex", gap: 20, overflowX: "auto", scrollSnapType: "x mandatory" }}>
         {EVENTS.map((e) => (
-          <div key={e.id} style={{ scrollSnapAlign: "start", flex: "0 0 280px", background: "#ffffff", borderRadius: 18, overflow: "hidden", boxShadow: "0 10px 24px rgba(0,60,66,0.1)" }}>
-            <div style={{ height: 130 }}>
+          <div key={e.id} style={{ scrollSnapAlign: "start", flex: "0 0 280px", background: "#ffffff", borderRadius: 18, boxShadow: "0 10px 24px rgba(0,60,66,0.1)" }}>
+            <div style={{ height: 130, borderRadius: "18px 18px 0 0", overflow: "hidden" }}>
               <ImagePlaceholder caption={e.placeholder} />
             </div>
             <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 6 }}>

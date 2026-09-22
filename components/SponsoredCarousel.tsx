@@ -33,12 +33,11 @@ export default function SponsoredCarousel() {
               minWidth: 260,
               background: "#ffffff",
               borderRadius: 18,
-              overflow: "hidden",
               boxShadow: "0 10px 24px rgba(0,60,66,0.1)",
               border: "1px solid #EAF3F4",
             }}
           >
-            <div style={{ height: 150 }}>
+            <div style={{ height: 150, borderRadius: "18px 18px 0 0", overflow: "hidden" }}>
               <ImagePlaceholder caption={s.placeholder} />
             </div>
             <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 6 }}>
