@@ -50,7 +50,6 @@ export default function Footer({ marginTop = 70, padding = "64px 48px 28px", soc
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           <h3 style={{ margin: 0, fontSize: 19, fontWeight: 800, color: "#143840" }}>Contáctanos</h3>
           <div style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 14 }}>
-            <span style={{ width: 14, height: 18, borderRadius: "7px 7px 7px 0", background: "#EB600A", flexShrink: 0 }} />
             <span>Guaymas, Sonora</span>
           </div>
           <a href="mailto:visit.sancarlos.son@gmail.com" style={{ fontSize: 14, color: "#5C7679" }}>
