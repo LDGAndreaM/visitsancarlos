@@ -5,7 +5,28 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_LINKS } from "@/lib/nav";
 
-export default function Header() {
+type HeaderProps = {
+  ctaLabel?: string;
+  ctaHref?: string;
+  onCtaClick?: () => void;
+};
+
+const ctaStyle: React.CSSProperties = {
+  flexShrink: 0,
+  border: "none",
+  cursor: "pointer",
+  fontFamily: "inherit",
+  background: "#EB600A",
+  color: "#ffffff",
+  fontWeight: 700,
+  fontSize: 14,
+  letterSpacing: "0.02em",
+  padding: "12px 24px",
+  borderRadius: 999,
+  boxShadow: "0 6px 16px rgba(235,96,10,0.35)",
+};
+
+export default function Header({ ctaLabel = "AGREGAR NEGOCIO", ctaHref = "/login", onCtaClick }: HeaderProps) {
   const pathname = usePathname();
 
   return (
@@ -44,22 +65,15 @@ export default function Header() {
           </Link>
         ))}
       </nav>
-      <Link
-        href="/login"
-        style={{
-          flexShrink: 0,
-          background: "#EB600A",
-          color: "#ffffff",
-          fontWeight: 700,
-          fontSize: 14,
-          letterSpacing: "0.02em",
-          padding: "12px 24px",
-          borderRadius: 999,
-          boxShadow: "0 6px 16px rgba(235,96,10,0.35)",
-        }}
-      >
-        AGREGAR NEGOCIO
-      </Link>
+      {onCtaClick ? (
+        <button onClick={onCtaClick} style={ctaStyle}>
+          {ctaLabel}
+        </button>
+      ) : (
+        <Link href={ctaHref} style={ctaStyle}>
+          {ctaLabel}
+        </Link>
+      )}
     </header>
   );
 }
