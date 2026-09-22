@@ -1,21 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BANNER_PAIRS } from "@/lib/directorioData";
 
-export default function PromoBanner() {
+export type PromoPair = { bg: string; name: string; tag: string };
+
+export default function PromoBanner({ pairs }: { pairs: [PromoPair, PromoPair][] }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIndex((i) => (i + 1) % BANNER_PAIRS.length);
+      setIndex((i) => (i + 1) % pairs.length);
     }, 10000);
     return () => clearInterval(interval);
-  }, []);
+  }, [pairs.length]);
 
   return (
     <section style={{ position: "relative", height: 220, overflow: "hidden" }}>
-      {BANNER_PAIRS.map((pair, i) => (
+      {pairs.map((pair, i) => (
         <div
           key={i}
           style={{
@@ -44,7 +45,7 @@ export default function PromoBanner() {
         </div>
       ))}
       <div style={{ position: "absolute", bottom: 16, left: "50%", transform: "translateX(-50%)", display: "flex", gap: 8, zIndex: 5 }}>
-        {BANNER_PAIRS.map((_, i) => (
+        {pairs.map((_, i) => (
           <span key={i} style={{ width: 8, height: 8, borderRadius: "50%", background: i === index ? "#EB600A" : "#DCEEEF" }} />
         ))}
       </div>

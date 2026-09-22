@@ -1,3 +1,5 @@
+import type { PromoPair } from "@/components/PromoBanner";
+
 export type ClasificadoCategory = "Autos" | "Renta de casas" | "Venta de propiedades" | "Otros productos";
 
 export type Clasificado = {
@@ -56,3 +58,18 @@ export const SORT_LABELS: Record<SortKey, string> = {
 };
 
 export const SORT_KEYS = Object.keys(SORT_LABELS) as SortKey[];
+
+export const PROMO_PAIRS: [PromoPair, PromoPair][] = [
+  [
+    { bg: "linear-gradient(120deg,#009BA4,#00767E)", name: "Camioneta pickup 2021, 4x4", tag: "4x4 con factura original" },
+    { bg: "linear-gradient(120deg,#EB600A,#C94C05)", name: "Casa de playa 4 recámaras en venta", tag: "A pie de playa" },
+  ],
+  [
+    { bg: "linear-gradient(120deg,#6AC7E2,#3FA8C4)", name: "Casa 3 recámaras en renta, cerca de la marina", tag: "Disponible todo el año" },
+    { bg: "linear-gradient(120deg,#143840,#0B2B30)", name: "Terreno residencial 500m2 con vista a la bahía", tag: "Vista panorámica a la bahía" },
+  ],
+  [
+    { bg: "linear-gradient(120deg,#EB600A,#9C3D07)", name: "Sedán compacto 2018, único dueño", tag: "Único dueño, agencia al corriente" },
+    { bg: "linear-gradient(120deg,#009BA4,#3FA8C4)", name: "Equipo de buceo completo, talla M", tag: "Casi nuevo, listo para usar" },
+  ],
+];

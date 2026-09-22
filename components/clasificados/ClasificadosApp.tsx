@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import Header from "@/components/Header";
+import PromoBanner from "@/components/PromoBanner";
 import ClasificadosHero from "./ClasificadosHero";
 import QuickCategoryPills from "./QuickCategoryPills";
 import ClasificadosFilterBar, { type ViewMode } from "./ClasificadosFilterBar";
@@ -10,7 +11,7 @@ import ResultsList from "./ResultsList";
 import ResultsMap from "./ResultsMap";
 import AddClasificadoBanner from "./AddClasificadoBanner";
 import AddClasificadoModal from "./AddClasificadoModal";
-import { ITEMS, type Clasificado, type ClasificadoCategory, type SortKey } from "@/lib/clasificadosData";
+import { ITEMS, PROMO_PAIRS, type Clasificado, type ClasificadoCategory, type SortKey } from "@/lib/clasificadosData";
 import { SORTERS, filterClasificados } from "@/lib/clasificadosUtils";
 
 const MONTHS = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
@@ -52,6 +53,7 @@ export default function ClasificadosApp() {
   return (
     <>
       <Header ctaLabel="AGREGAR ARTÍCULO" onCtaClick={() => setShowAddModal(true)} />
+      <PromoBanner pairs={PROMO_PAIRS} />
       <ClasificadosHero
         searchText={searchText}
         onSearchTextChange={setSearchText}

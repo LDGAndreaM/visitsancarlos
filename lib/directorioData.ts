@@ -1,3 +1,5 @@
+import type { PromoPair } from "@/components/PromoBanner";
+
 export type BusinessCategory = "HOTELES" | "RESTAURANTES" | "DOCTORES" | "NEGOCIOS" | "CLASIFICADOS";
 
 export type Business = {
@@ -30,9 +32,7 @@ export const BUSINESSES: Business[] = [
   { id: "dir-10", name: "Buceo Sonora Adventures", category: "NEGOCIOS", location: "San Carlos, Sonora", price: "$$", rating: 4.7, reviewCount: 22, added: "2026-09-15", addedLabel: "15 septiembre, 2026", popularity: 150, views: 150, phone: "622 155 6677", badge: "Nuevo", placeholder: "Foto: Buceo Sonora Adventures" },
 ];
 
-export type BannerBusiness = { bg: string; name: string; tag: string };
-
-export const BANNER_PAIRS: [BannerBusiness, BannerBusiness][] = [
+export const BANNER_PAIRS: [PromoPair, PromoPair][] = [
   [
     { bg: "linear-gradient(120deg,#009BA4,#00767E)", name: "Marina San Carlos Suites", tag: "Vistas a la bahía · Reserva hoy" },
     { bg: "linear-gradient(120deg,#EB600A,#C94C05)", name: "El Pargo Rojo", tag: "Mariscos frente al mar" },
