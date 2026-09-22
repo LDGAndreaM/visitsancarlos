@@ -1,0 +1,113 @@
+export type DashboardBusiness = {
+  id: string;
+  name: string;
+  category: string;
+  location: string;
+  hours: string;
+  phone: string;
+  status: string;
+  statusColor: string;
+  statusBg: string;
+  description: string;
+  priceRange: string;
+  visibility: "Publicado" | "Invisible";
+  pendingApproval: boolean;
+  features: string[];
+};
+
+export const INITIAL_BUSINESSES: DashboardBusiness[] = [
+  {
+    id: "db-1",
+    name: "Hotel Playa Bonita",
+    category: "Hoteles",
+    location: "San Carlos, Sonora",
+    hours: "Lun–Dom 8:00–22:00",
+    phone: "622 114 5316",
+    status: "Activo",
+    statusColor: "#009BA4",
+    statusBg: "#E5F6F7",
+    description: "Hotel frente al mar con alberca y restaurante propio.",
+    priceRange: "$$",
+    visibility: "Publicado",
+    pendingApproval: false,
+    features: ["WiFi gratis", "Estacionamiento", "Alberca", "Aire acondicionado"],
+  },
+  {
+    id: "db-2",
+    name: "Buceo Sonora Adventures",
+    category: "Negocios",
+    location: "San Carlos, Sonora",
+    hours: "Lun–Sáb 7:00–17:00",
+    phone: "622 155 6677",
+    status: "En revisión",
+    statusColor: "#EB600A",
+    statusBg: "#FDEEE4",
+    description: "Tours de buceo y snorkel en la bahía de San Carlos.",
+    priceRange: "$$",
+    visibility: "Invisible",
+    pendingApproval: true,
+    features: ["Reservaciones", "Equipo incluido"],
+  },
+];
+
+export type DashboardAd = {
+  id: string;
+  name: string;
+  businessId: string;
+  billing: "mensual" | "trimestral";
+  price: number;
+  period: string;
+  expires: string;
+  status: string;
+  statusColor: string;
+  statusBg: string;
+};
+
+export const INITIAL_ADS: DashboardAd[] = [
+  { id: "ad-1", name: "Vistas Doradas — Carrusel Home", businessId: "db-1", billing: "mensual", price: 1500, period: "1 sep – 30 sep 2026", expires: "2026-09-30", status: "Activo", statusColor: "#009BA4", statusBg: "#E5F6F7" },
+  { id: "ad-2", name: "Directorio Premium — Carrusel Directorio", businessId: "db-2", billing: "mensual", price: 1900, period: "1 jul – 1 ago 2026", expires: "2026-08-01", status: "Vencido", statusColor: "#B94A2E", statusBg: "#FBEAE6" },
+  { id: "ad-3", name: "Eventos Destacados — Carrusel Eventos", businessId: "db-1", billing: "trimestral", price: 4320, period: "15 sep – 15 dic 2026", expires: "2026-12-15", status: "Activo", statusColor: "#009BA4", statusBg: "#E5F6F7" },
+];
+
+export type AdCatalogItem = {
+  id: string;
+  category: string;
+  name: string;
+  mensual: number;
+  trimestral: number;
+};
+
+export const AD_CATALOG: AdCatalogItem[] = [
+  { id: "A", category: "Sitio web", name: "Vistas Doradas — Carrusel Home", mensual: 1500, trimestral: 4050 },
+  { id: "B", category: "Sitio web", name: "Sueño con vista al mar — Carrusel Hospedaje", mensual: 1200, trimestral: 3240 },
+  { id: "C", category: "Sitio web", name: "Sabor local — Sección Restaurantes", mensual: 1000, trimestral: 2700 },
+  { id: "D", category: "Sitio web", name: "Escápate a San Carlos — Anuncio lateral", mensual: 800, trimestral: 2160 },
+  { id: "E", category: "Sitio web", name: "Estrella del mes — Banner exclusivo", mensual: 2500, trimestral: 6750 },
+  { id: "F", category: "Sitio web", name: "Directorio Premium — Carrusel Directorio", mensual: 1900, trimestral: 5130 },
+  { id: "G", category: "Sitio web", name: "Eventos Destacados — Carrusel Eventos", mensual: 1600, trimestral: 4320 },
+  { id: "S1", category: "Redes sociales", name: "Presencia Digital", mensual: 1400, trimestral: 3780 },
+  { id: "S2", category: "Redes sociales", name: "Promoción Premium", mensual: 2600, trimestral: 7020 },
+  { id: "C1", category: "Combinado", name: "Presencia Estratégica", mensual: 3500, trimestral: 9450 },
+  { id: "C2", category: "Combinado", name: "Visibilidad Plus", mensual: 5000, trimestral: 13500 },
+  { id: "C3", category: "Combinado", name: "Impacto Total", mensual: 6500, trimestral: 17550 },
+  { id: "C4", category: "Combinado", name: "Socio Elite Visit San Carlos", mensual: 8500, trimestral: 22950 },
+];
+
+export const ALL_FEATURES = [
+  "WiFi gratis",
+  "Estacionamiento",
+  "Terraza",
+  "Acepta tarjetas",
+  "Pet friendly",
+  "Aire acondicionado",
+  "Reservaciones",
+  "Entrega a domicilio",
+  "Alberca",
+  "Equipo incluido",
+];
+
+export const BUSINESS_CATEGORIES = ["Hoteles", "Restaurantes", "Doctores", "Negocios", "Clasificados"];
+
+export function fmtMoney(n: number): string {
+  return "$" + n.toLocaleString("es-MX");
+}

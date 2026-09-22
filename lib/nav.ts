@@ -9,8 +9,9 @@ export const NAV_LINKS = [
 
 export const FOOTER_LINKS = {
   interes: [
-    { label: "Tabla de mareas", href: "/#mareas" },
+    { label: "Tabla de mareas", href: "https://tablademareas.com/mx/sonora/guaymas" },
     { label: "Agregar mi negocio", href: "/login" },
+    { label: "Iniciar sesión", href: "/login" },
     { label: "Publicidad", href: "/publicidad" },
     { label: "Galería", href: "/galeria" },
     { label: "Blog", href: "/blog" },

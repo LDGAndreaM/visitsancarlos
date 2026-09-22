@@ -86,17 +86,24 @@ export default function Footer({ marginTop = 70, padding = "64px 48px 28px", soc
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <h3 style={{ margin: "0 0 4px", fontSize: 19, fontWeight: 800, color: "#143840" }}>Sitios de interés</h3>
-          {FOOTER_LINKS.interes.map((l) => (
-            <Link key={l.label} href={l.href} style={{ fontSize: 14, color: l.href === activeHref ? "#009BA4" : "#5C7679" }}>
-              {l.label}
-            </Link>
-          ))}
+          {FOOTER_LINKS.interes.map((l) => {
+            const linkStyle = { fontSize: 14, color: l.href === activeHref ? "#009BA4" : "#5C7679" };
+            return l.href.startsWith("http") ? (
+              <a key={l.label} href={l.href} target="_blank" rel="noreferrer" style={linkStyle}>
+                {l.label}
+              </a>
+            ) : (
+              <Link key={l.label} href={l.href} style={linkStyle}>
+                {l.label}
+              </Link>
+            );
+          })}
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <h3 style={{ margin: "0 0 4px", fontSize: 19, fontWeight: 800, color: "#143840" }}>Más información</h3>
           {FOOTER_LINKS.info.map((l) => (
-            <Link key={l.label} href={l.href} style={{ fontSize: 14, color: "#5C7679" }}>
+            <Link key={l.label} href={l.href} style={{ fontSize: 14, color: l.href === activeHref ? "#009BA4" : "#5C7679" }}>
               {l.label}
             </Link>
           ))}

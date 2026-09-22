@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Script from "next/script";
 import ImagePlaceholder from "./ImagePlaceholder";
 import { FB_POSTS } from "@/lib/homeData";
 
@@ -17,23 +17,18 @@ export default function WeatherFacebook() {
         }}
       >
         <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>Clima y mareas</h3>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "rgba(255,255,255,0.12)", borderRadius: 14, padding: "16px 20px" }}>
-          <div>
-            <span style={{ fontSize: 14, fontWeight: 700, display: "block" }}>San Carlos</span>
-            <span style={{ fontSize: 12, color: "#DFF6F8" }}>Soleado</span>
-          </div>
-          <span style={{ fontSize: 30, fontWeight: 800 }}>32°C</span>
+        <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
+        <div style={{ background: "rgba(255,255,255,0.12)", borderRadius: 14, padding: 12, minHeight: 140 }}>
+          <div className="elfsight-app-b5c53759-b649-4399-a5ab-97a110adedfa" data-elfsight-app-lazy />
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "rgba(255,255,255,0.12)", borderRadius: 14, padding: "16px 20px" }}>
-          <div>
-            <span style={{ fontSize: 14, fontWeight: 700, display: "block" }}>Guaymas</span>
-            <span style={{ fontSize: 12, color: "#DFF6F8" }}>Parcialmente nublado</span>
-          </div>
-          <span style={{ fontSize: 30, fontWeight: 800 }}>31°C</span>
-        </div>
-        <Link href="/mareas" style={{ fontSize: 13, fontWeight: 700, color: "#ffffff", alignSelf: "flex-start" }}>
+        <a
+          href="https://tablademareas.com/mx/sonora/guaymas"
+          target="_blank"
+          rel="noreferrer"
+          style={{ fontSize: 13, fontWeight: 700, color: "#ffffff", alignSelf: "flex-start" }}
+        >
           Ver tabla de mareas completa →
-        </Link>
+        </a>
       </div>
       <div style={{ background: "#ffffff", borderRadius: 20, padding: 24, boxShadow: "0 10px 24px rgba(0,60,66,0.1)", display: "flex", flexDirection: "column", gap: 14 }}>
         <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "#143840" }}>Desde nuestro Facebook</h3>
