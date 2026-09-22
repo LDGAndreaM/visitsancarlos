@@ -7,25 +7,23 @@ export default function WeatherFacebook() {
     <section style={{ padding: "56px 48px 20px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28 }}>
       <div
         style={{
-          background: "linear-gradient(135deg,#009BA4,#00767E)",
-          borderRadius: 20,
-          padding: 28,
-          color: "#ffffff",
           display: "flex",
           flexDirection: "column",
+          alignItems: "center",
           gap: 18,
+          padding: 28,
         }}
       >
-        <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800 }}>Clima y mareas</h3>
+        <h3 style={{ margin: 0, alignSelf: "flex-start", fontSize: 18, fontWeight: 800, color: "#009BA4" }}>Clima y mareas</h3>
         <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
-        <div style={{ background: "rgba(255,255,255,0.12)", borderRadius: 14, padding: 12, minHeight: 140 }}>
+        <div style={{ width: "100%", maxWidth: 340, margin: "0 auto" }}>
           <div className="elfsight-app-b5c53759-b649-4399-a5ab-97a110adedfa" data-elfsight-app-lazy />
         </div>
         <a
           href="https://tablademareas.com/mx/sonora/guaymas"
           target="_blank"
           rel="noreferrer"
-          style={{ fontSize: 13, fontWeight: 700, color: "#ffffff", alignSelf: "flex-start" }}
+          style={{ fontSize: 13, fontWeight: 700, color: "#009BA4", alignSelf: "flex-start" }}
         >
           Ver tabla de mareas completa →
         </a>
