@@ -1,14 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { BLOG_FILTERS } from "@/lib/blogData";
 
-export default function BlogFilters() {
-  const [active, setActive] = useState(BLOG_FILTERS[0]);
+type FilterPillsProps = {
+  filters: string[];
+};
+
+export default function FilterPills({ filters }: FilterPillsProps) {
+  const [active, setActive] = useState(filters[0]);
 
   return (
     <section style={{ padding: "10px 48px 40px", display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-      {BLOG_FILTERS.map((filter) => {
+      {filters.map((filter) => {
         const isActive = filter === active;
         return (
           <button

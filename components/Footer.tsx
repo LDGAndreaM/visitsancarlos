@@ -2,7 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { FOOTER_LINKS } from "@/lib/nav";
 
-const SOCIALS = [
+export type Social = { label: string; name: string; fontSize?: number };
+
+const DEFAULT_SOCIALS: Social[] = [
   { label: "f", name: "Facebook" },
   { label: "ig", name: "Instagram" },
   { label: "x", name: "Twitter" },
@@ -12,9 +14,11 @@ const SOCIALS = [
 type FooterProps = {
   marginTop?: number;
   padding?: string;
+  socials?: Social[];
+  activeHref?: string;
 };
 
-export default function Footer({ marginTop = 70, padding = "64px 48px 28px" }: FooterProps) {
+export default function Footer({ marginTop = 70, padding = "64px 48px 28px", socials = DEFAULT_SOCIALS, activeHref }: FooterProps) {
   return (
     <footer
       id="contacto"
@@ -56,7 +60,7 @@ export default function Footer({ marginTop = 70, padding = "64px 48px 28px" }: F
             +52 622 114 5316
           </a>
           <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
-            {SOCIALS.map((s) => (
+            {socials.map((s) => (
               <a
                 key={s.name}
                 href="#"
@@ -69,7 +73,7 @@ export default function Footer({ marginTop = 70, padding = "64px 48px 28px" }: F
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: 12,
+                  fontSize: s.fontSize ?? 12,
                   fontWeight: 700,
                   color: "#ffffff",
                 }}
@@ -83,7 +87,7 @@ export default function Footer({ marginTop = 70, padding = "64px 48px 28px" }: F
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <h3 style={{ margin: "0 0 4px", fontSize: 19, fontWeight: 800, color: "#143840" }}>Sitios de interés</h3>
           {FOOTER_LINKS.interes.map((l) => (
-            <Link key={l.label} href={l.href} style={{ fontSize: 14, color: "#5C7679" }}>
+            <Link key={l.label} href={l.href} style={{ fontSize: 14, color: l.href === activeHref ? "#009BA4" : "#5C7679" }}>
               {l.label}
             </Link>
           ))}

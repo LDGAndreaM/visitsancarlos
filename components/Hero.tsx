@@ -2,10 +2,9 @@
 
 import { useState } from "react";
 import ImagePlaceholder from "./ImagePlaceholder";
-import CategoryIcon, { CATEGORIES } from "./CategoryIcon";
+import CategoryDropdown from "./CategoryDropdown";
 
 export default function Hero() {
-  const [catOpen, setCatOpen] = useState(false);
   const [catSelected, setCatSelected] = useState("Categorías");
 
   return (
@@ -89,72 +88,7 @@ export default function Hero() {
             }}
           />
           <span style={{ width: 1, height: 22, background: "#E2ECED", flexShrink: 0, margin: "0 10px" }} />
-          <div style={{ position: "relative", flexShrink: 0 }}>
-            <button
-              onClick={() => setCatOpen((v) => !v)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                border: "none",
-                background: "transparent",
-                fontSize: 13,
-                fontWeight: 600,
-                color: "#3B5C61",
-                padding: "10px 6px",
-                cursor: "pointer",
-              }}
-            >
-              <span>{catSelected}</span>
-              <span style={{ width: 0, height: 0, borderLeft: "4px solid transparent", borderRight: "4px solid transparent", borderTop: "5px solid #9DB6B8" }} />
-            </button>
-            {catOpen && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: 44,
-                  right: -10,
-                  width: 210,
-                  background: "#ffffff",
-                  borderRadius: 14,
-                  boxShadow: "0 16px 32px rgba(0,60,66,0.18)",
-                  border: "1px solid #EAF0F0",
-                  padding: 8,
-                  zIndex: 20,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 1,
-                }}
-              >
-                {CATEGORIES.map((c) => (
-                  <button
-                    key={c.key}
-                    onClick={() => {
-                      setCatSelected(c.label);
-                      setCatOpen(false);
-                    }}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 10,
-                      background: "transparent",
-                      border: "none",
-                      padding: "9px 10px",
-                      borderRadius: 8,
-                      cursor: "pointer",
-                      textAlign: "left",
-                      fontSize: 13,
-                      color: "#284246",
-                      width: "100%",
-                    }}
-                  >
-                    <CategoryIcon category={c.key} />
-                    <span>{c.label}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          <CategoryDropdown selected={catSelected} onSelect={setCatSelected} />
           <button
             style={{
               border: "none",
