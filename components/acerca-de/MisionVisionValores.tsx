@@ -48,7 +48,7 @@ export default function MisionVisionValores() {
                 style={{
                   width: 48,
                   height: 48,
-                  backgroundColor: "#B8860B",
+                  backgroundColor: "#D4A017",
                   WebkitMaskImage: `url(${v.icon})`,
                   maskImage: `url(${v.icon})`,
                   WebkitMaskSize: "contain",
