@@ -3,12 +3,18 @@
 import { useState } from "react";
 import Link from "next/link";
 
-export default function TopActions({ businessName }: { businessName: string }) {
+type TopActionsProps = {
+  shareTitle: string;
+  backHref: string;
+  backLabel?: string;
+};
+
+export default function TopActions({ shareTitle, backHref, backLabel = "← Volver" }: TopActionsProps) {
   const [isFav, setIsFav] = useState(false);
 
   const handleShare = () => {
     if (typeof navigator !== "undefined" && navigator.share) {
-      navigator.share({ title: businessName, url: window.location.href });
+      navigator.share({ title: shareTitle, url: window.location.href });
     } else if (typeof navigator !== "undefined" && navigator.clipboard) {
       navigator.clipboard.writeText(window.location.href);
     }
@@ -16,8 +22,8 @@ export default function TopActions({ businessName }: { businessName: string }) {
 
   return (
     <section style={{ padding: "20px 48px 0", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap", maxWidth: 1180, margin: "0 auto" }}>
-      <Link href="/directorio" style={{ display: "flex", alignItems: "center", gap: 6, background: "#F4FAFB", color: "#009BA4", fontWeight: 700, fontSize: 13, padding: "9px 16px", borderRadius: 8 }}>
-        ← Volver
+      <Link href={backHref} style={{ display: "flex", alignItems: "center", gap: 6, background: "#F4FAFB", color: "#009BA4", fontWeight: 700, fontSize: 13, padding: "9px 16px", borderRadius: 8 }}>
+        {backLabel}
       </Link>
       <div style={{ display: "flex", gap: 10 }}>
         <button

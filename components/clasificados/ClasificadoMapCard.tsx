@@ -1,10 +1,14 @@
+import Link from "next/link";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
 import type { Clasificado } from "@/lib/clasificadosData";
 import { priceLabel } from "@/lib/clasificadosUtils";
 
 export default function ClasificadoMapCard({ item }: { item: Clasificado }) {
   return (
-    <div style={{ display: "flex", gap: 12, background: "#ffffff", borderRadius: 14, padding: 12, boxShadow: "0 6px 16px rgba(0,60,66,0.08)", alignItems: "center" }}>
+    <Link
+      href={`/clasificados/${item.id}`}
+      style={{ display: "flex", gap: 12, background: "#ffffff", borderRadius: 14, padding: 12, boxShadow: "0 6px 16px rgba(0,60,66,0.08)", alignItems: "center", color: "inherit" }}
+    >
       <div style={{ width: 56, height: 56, borderRadius: 10, overflow: "hidden", flexShrink: 0 }}>
         <ImagePlaceholder caption={item.placeholder} />
       </div>
@@ -13,6 +17,6 @@ export default function ClasificadoMapCard({ item }: { item: Clasificado }) {
         <span style={{ fontSize: 12, color: "#3B5C61" }}>{item.location}</span>
       </div>
       <span style={{ fontSize: 13, fontWeight: 800, color: "#EB600A", flexShrink: 0 }}>{priceLabel(item)}</span>
-    </div>
+    </Link>
   );
 }

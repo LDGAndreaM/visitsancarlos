@@ -1,10 +1,14 @@
+import Link from "next/link";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
 import type { Clasificado } from "@/lib/clasificadosData";
 import { priceLabel } from "@/lib/clasificadosUtils";
 
 export default function ClasificadoListCard({ item }: { item: Clasificado }) {
   return (
-    <div style={{ display: "flex", gap: 16, background: "#ffffff", borderRadius: 16, padding: 14, boxShadow: "0 8px 20px rgba(0,60,66,0.08)", alignItems: "center" }}>
+    <Link
+      href={`/clasificados/${item.id}`}
+      style={{ display: "flex", gap: 16, background: "#ffffff", borderRadius: 16, padding: 14, boxShadow: "0 8px 20px rgba(0,60,66,0.08)", alignItems: "center", color: "inherit" }}
+    >
       <div style={{ width: 110, height: 80, borderRadius: 12, overflow: "hidden", flexShrink: 0 }}>
         <ImagePlaceholder caption={item.placeholder} />
       </div>
@@ -19,6 +23,6 @@ export default function ClasificadoListCard({ item }: { item: Clasificado }) {
         <span style={{ fontSize: 15, fontWeight: 800, color: "#EB600A" }}>{priceLabel(item)}</span>
         <span style={{ fontSize: 12, color: "#7FA7AA" }}>{item.addedLabel}</span>
       </div>
-    </div>
+    </Link>
   );
 }

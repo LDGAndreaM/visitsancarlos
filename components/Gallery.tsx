@@ -11,7 +11,7 @@ export default function Gallery({ images }: GalleryProps) {
   const [active, setActive] = useState(0);
 
   return (
-    <section style={{ padding: "24px 48px 0", maxWidth: 1180, margin: "0 auto" }}>
+    <div>
       <div style={{ height: 420, borderRadius: 20, overflow: "hidden", boxShadow: "0 16px 36px rgba(0,60,66,0.1)" }}>
         <ImagePlaceholder caption={images[active].placeholder} />
       </div>
@@ -35,6 +35,6 @@ export default function Gallery({ images }: GalleryProps) {
           </button>
         ))}
       </div>
-    </section>
+    </div>
   );
 }

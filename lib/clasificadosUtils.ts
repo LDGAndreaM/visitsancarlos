@@ -39,3 +39,9 @@ export function priceLabel(item: Clasificado): string {
 export function categoryColor(category: ClasificadoCategory): string {
   return CATEGORY_COLORS[category];
 }
+
+export function relatedItems(items: Clasificado[], current: Clasificado, limit = 3): Clasificado[] {
+  const sameCategory = items.filter((it) => it.id !== current.id && it.category === current.category);
+  const rest = items.filter((it) => it.id !== current.id && it.category !== current.category);
+  return [...sameCategory, ...rest].slice(0, limit);
+}
