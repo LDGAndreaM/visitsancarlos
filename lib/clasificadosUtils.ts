@@ -32,8 +32,9 @@ export function filterClasificados(items: Clasificado[], filters: ClasificadosFi
 }
 
 export function priceLabel(item: Clasificado): string {
+  if (item.category === "Servicio comunitario" && !item.price) return "Gratis";
   const currency = "$" + item.price.toLocaleString("es-MX");
-  return item.category === "Renta de casas" ? `${currency}/mes` : currency;
+  return item.category === "Renta de casas" || item.category === "Empleos" ? `${currency}/mes` : currency;
 }
 
 export function categoryColor(category: ClasificadoCategory): string {

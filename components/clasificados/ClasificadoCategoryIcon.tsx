@@ -28,6 +28,32 @@ export default function ClasificadoCategoryIcon({ category }: { category: Clasif
           <path d="M6 4v-2h6v2" stroke="currentColor" strokeWidth="1.4" fill="none" />
         </svg>
       );
+    case "Empleos":
+      return (
+        <svg {...common}>
+          <rect x="2" y="6" width="14" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
+          <path d="M6.5 6V4.5a1.5 1.5 0 0 1 1.5-1.5h2a1.5 1.5 0 0 1 1.5 1.5V6" stroke="currentColor" strokeWidth="1.4" fill="none" />
+          <path d="M2 10.5h14" stroke="currentColor" strokeWidth="1.4" />
+        </svg>
+      );
+    case "Ropa y accesorios":
+      return (
+        <svg {...common}>
+          <path d="M6.5 2.5L9 4.5l2.5-2 3 2.5-2 2.5v9H5.5v-9l-2-2.5 3-2.5z" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinejoin="round" />
+        </svg>
+      );
+    case "Servicio comunitario":
+      return (
+        <svg {...common}>
+          <path
+            d="M9 15.5s-6-3.7-6-8.2C3 4.8 4.8 3 7 3c1.2 0 2.3.6 3 1.5C10.7 3.6 11.8 3 13 3c2.2 0 4 1.8 4 4.3 0 4.5-6 8.2-6 8.2z"
+            stroke="currentColor"
+            strokeWidth="1.4"
+            fill="none"
+            strokeLinejoin="round"
+          />
+        </svg>
+      );
     case "Otros productos":
       return (
         <svg {...common}>

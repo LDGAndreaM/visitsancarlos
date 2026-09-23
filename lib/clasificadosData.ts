@@ -1,6 +1,6 @@
 import type { PromoPair } from "@/components/PromoBanner";
 
-export type ClasificadoCategory = "Autos" | "Renta de casas" | "Venta de propiedades" | "Otros productos";
+export type ClasificadoCategory = "Autos" | "Renta de casas" | "Venta de propiedades" | "Empleos" | "Ropa y accesorios" | "Servicio comunitario" | "Otros productos";
 
 export type Clasificado = {
   id: string;
@@ -16,12 +16,23 @@ export type Clasificado = {
   placeholder: string;
 };
 
-export const CLASIFICADOS_CATEGORIES: ClasificadoCategory[] = ["Autos", "Renta de casas", "Venta de propiedades", "Otros productos"];
+export const CLASIFICADOS_CATEGORIES: ClasificadoCategory[] = [
+  "Autos",
+  "Renta de casas",
+  "Venta de propiedades",
+  "Empleos",
+  "Ropa y accesorios",
+  "Servicio comunitario",
+  "Otros productos",
+];
 
 export const CATEGORY_COLORS: Record<ClasificadoCategory, string> = {
   Autos: "#009BA4",
   "Renta de casas": "#6AC7E2",
   "Venta de propiedades": "#143840",
+  Empleos: "#7A5AF8",
+  "Ropa y accesorios": "#E23E7E",
+  "Servicio comunitario": "#2E9E5B",
   "Otros productos": "#EB600A",
 };
 
@@ -34,6 +45,12 @@ export const ITEMS: Clasificado[] = [
   { id: "cls-6", title: "Casa de playa 4 recámaras en venta", category: "Venta de propiedades", price: 3200000, location: "San Carlos, Sonora", condition: "Usado", phone: "622 130 9911", added: "2026-06-30", addedLabel: "30 junio, 2026", views: 260, placeholder: "Foto: Casa de playa en venta" },
   { id: "cls-7", title: "Kayak doble inflable, poco uso", category: "Otros productos", price: 4200, location: "San Carlos, Sonora", condition: "Usado", phone: "622 118 4455", added: "2026-09-18", addedLabel: "18 septiembre, 2026", views: 52, placeholder: "Foto: Kayak doble inflable" },
   { id: "cls-8", title: "Equipo de buceo completo, talla M", category: "Otros productos", price: 6800, location: "Guaymas, Sonora", condition: "Nuevo", phone: "622 126 3300", added: "2026-08-02", addedLabel: "2 agosto, 2026", views: 64, placeholder: "Foto: Equipo de buceo completo" },
+  { id: "cls-9", title: "Se busca mesero(a) con inglés, temporada alta", category: "Empleos", price: 9500, location: "San Carlos, Sonora", condition: "Nuevo", phone: "622 140 2210", added: "2026-09-19", addedLabel: "19 septiembre, 2026", views: 118, placeholder: "Foto: Restaurante / logo del negocio" },
+  { id: "cls-10", title: "Recepcionista para hotel, turno matutino", category: "Empleos", price: 11000, location: "Guaymas, Sonora", condition: "Nuevo", phone: "622 132 7788", added: "2026-09-08", addedLabel: "8 septiembre, 2026", views: 92, placeholder: "Foto: Hotel / logo del negocio" },
+  { id: "cls-11", title: "Lote de trajes de baño y pareos, varias tallas", category: "Ropa y accesorios", price: 1200, location: "San Carlos, Sonora", condition: "Nuevo", phone: "622 117 6543", added: "2026-09-16", addedLabel: "16 septiembre, 2026", views: 47, placeholder: "Foto: Trajes de baño y pareos" },
+  { id: "cls-12", title: "Chamarra de mezclilla vintage, talla M", category: "Ropa y accesorios", price: 650, location: "Guaymas, Sonora", condition: "Usado", phone: "622 109 3321", added: "2026-08-27", addedLabel: "27 agosto, 2026", views: 31, placeholder: "Foto: Chamarra de mezclilla" },
+  { id: "cls-13", title: "Voluntarios para limpieza de playa Los Algodones", category: "Servicio comunitario", price: 0, location: "San Carlos, Sonora", condition: "Nuevo", phone: "622 150 4400", added: "2026-09-20", addedLabel: "20 septiembre, 2026", views: 156, placeholder: "Foto: Limpieza de playa" },
+  { id: "cls-14", title: "Colecta de víveres para albergue de mascotas", category: "Servicio comunitario", price: 0, location: "Guaymas, Sonora", condition: "Nuevo", phone: "622 128 9090", added: "2026-09-12", addedLabel: "12 septiembre, 2026", views: 83, placeholder: "Foto: Albergue de mascotas" },
 ];
 
 export const PRICE_OPTIONS = [

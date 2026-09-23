@@ -15,7 +15,7 @@ export default function ClasificadosHero({ searchText, onSearchTextChange, searc
     <section style={{ padding: "44px 48px 20px", textAlign: "center", display: "flex", flexDirection: "column", gap: 16, alignItems: "center" }}>
       <h1 style={{ margin: 0, fontSize: 34, fontWeight: 800, color: "#143840" }}>Clasificados</h1>
       <p style={{ margin: 0, fontSize: 15, color: "#3B5C61", maxWidth: 580 }}>
-        Autos, casas en renta, propiedades en venta y todo tipo de artículos publicados por la comunidad de San Carlos y Guaymas.
+        Autos, propiedades, empleos, ropa, servicio comunitario y todo tipo de artículos publicados por la comunidad de San Carlos y Guaymas.
       </p>
       <div
         style={{
