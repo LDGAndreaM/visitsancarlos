@@ -5,7 +5,7 @@ import { useState } from "react";
 type AddAdminModalProps = {
   existingEmails: string[];
   onClose: () => void;
-  onSave: (values: { name: string; email: string }) => void;
+  onSave: (values: { email: string }) => void;
 };
 
 const fieldStyle: React.CSSProperties = { display: "flex", flexDirection: "column", gap: 6 };
@@ -13,13 +13,12 @@ const labelStyle: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: 
 const inputStyle: React.CSSProperties = { border: "1px solid #E2ECED", outline: "none", borderRadius: 10, padding: "11px 14px", fontSize: 14, fontFamily: "inherit" };
 
 export default function AddAdminModal({ existingEmails, onClose, onSave }: AddAdminModalProps) {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
 
   const handleSave = () => {
-    if (!name.trim() || !email.trim()) {
-      setError("Completa el nombre y el correo.");
+    if (!email.trim()) {
+      setError("Ingresa un correo.");
       return;
     }
     if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
@@ -30,7 +29,7 @@ export default function AddAdminModal({ existingEmails, onClose, onSave }: AddAd
       setError("Ya existe un administrador con ese correo.");
       return;
     }
-    onSave({ name: name.trim(), email: email.trim() });
+    onSave({ email: email.trim() });
   };
 
   return (
@@ -39,15 +38,11 @@ export default function AddAdminModal({ existingEmails, onClose, onSave }: AddAd
         onClick={(e) => e.stopPropagation()}
         style={{ background: "#ffffff", borderRadius: 20, padding: 32, maxWidth: 420, width: "100%", display: "flex", flexDirection: "column", gap: 14, boxShadow: "0 24px 50px rgba(0,0,0,0.25)" }}
       >
-        <h3 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#143840" }}>Agregar administrador</h3>
+        <h3 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#143840" }}>Invitar administrador</h3>
         <p style={{ margin: 0, fontSize: 13, color: "#5C7679" }}>
-          Podrá atender el chat de soporte, publicar en el blog, aprobar publicaciones de usuarios y ver métricas. No podrá agregar ni eliminar otros administradores.
+          Cuando esa persona inicie sesión con Google o Facebook usando este correo, tendrá acceso limitado: chat de soporte, blog, aprobación de publicaciones y métricas. No podrá agregar ni eliminar
+          administradores.
         </p>
-
-        <div style={fieldStyle}>
-          <label style={labelStyle}>Nombre</label>
-          <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Nombre completo" style={inputStyle} />
-        </div>
 
         <div style={fieldStyle}>
           <label style={labelStyle}>Correo electrónico</label>
@@ -61,7 +56,7 @@ export default function AddAdminModal({ existingEmails, onClose, onSave }: AddAd
             Cancelar
           </button>
           <button onClick={handleSave} style={{ border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: "11px 22px", borderRadius: 10, cursor: "pointer" }}>
-            Agregar
+            Invitar
           </button>
         </div>
       </div>

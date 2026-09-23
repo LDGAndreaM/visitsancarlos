@@ -1,6 +1,6 @@
 import type { AdminAccount } from "@/lib/adminAuth";
 
-const gridCols = "1.6fr 1.8fr 1fr 1fr 1fr";
+const gridCols = "1.6fr 1.8fr 1fr 1fr 1fr 1fr";
 
 type AdministradoresTabProps = {
   accounts: AdminAccount[];
@@ -16,12 +16,12 @@ export default function AdministradoresTab({ accounts, currentAccount, onOpenAdd
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
         <p style={{ margin: 0, fontSize: 13, color: "#5C7679", maxWidth: 560 }}>
-          Solo la cuenta principal (visit.sancarlos.son@gmail.com) puede agregar o eliminar administradores. Los administradores limitados pueden atender el chat de soporte, publicar en el blog,
-          aprobar publicaciones de usuarios y ver métricas.
+          Solo la cuenta principal (visit.sancarlos.son@gmail.com) puede invitar o eliminar administradores. Los administradores limitados pueden atender el chat de soporte, publicar en el blog,
+          aprobar publicaciones de usuarios y ver métricas. Una invitación se activa cuando esa persona inicia sesión con Google o Facebook.
         </p>
         {isSuper && (
           <button onClick={onOpenAdd} style={{ border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 13, padding: "10px 18px", borderRadius: 10, cursor: "pointer", flexShrink: 0 }}>
-            + Agregar administrador
+            + Invitar administrador
           </button>
         )}
       </div>
@@ -31,6 +31,7 @@ export default function AdministradoresTab({ accounts, currentAccount, onOpenAdd
           <span>Nombre</span>
           <span>Correo</span>
           <span>Rol</span>
+          <span>Estado</span>
           <span>Agregado</span>
           <span />
         </div>
@@ -57,6 +58,7 @@ export default function AdministradoresTab({ accounts, currentAccount, onOpenAdd
               >
                 {a.role === "super" ? "Principal" : "Limitado"}
               </span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: a.pending ? "#B94A2E" : "#2E9E5B" }}>{a.pending ? "Invitado" : "Activo"}</span>
               <span style={{ fontSize: 13, color: "#5C7679" }}>{a.addedAt}</span>
               {canRemove ? (
                 <button

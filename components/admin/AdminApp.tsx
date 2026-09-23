@@ -30,9 +30,8 @@ import {
   type AdminEvent,
   type Chat,
 } from "@/lib/adminData";
-import { findAdminAccount, tabsForRole, type AdminAccount, type AdminTab } from "@/lib/adminAuth";
-import { loadAdminAccounts, saveAdminAccounts } from "@/lib/adminAccountsStore";
-import { clearAdminSession, getAdminSessionEmail } from "@/lib/adminSession";
+import { tabsForRole, type AdminAccount, type AdminTab } from "@/lib/adminAuth";
+import { fetchAdminAccounts, getCurrentAdminAccount, inviteAdmin, revokeAdmin, signOutAdmin } from "@/lib/supabase/adminAccounts";
 
 const TITLES: Record<AdminTab, [string, string]> = {
   resumen: ["Panel administrativo", "Resumen general de Visit San Carlos"],
@@ -71,50 +70,34 @@ export default function AdminApp() {
   const [editingEventId, setEditingEventId] = useState<string | null>(null);
 
   useEffect(() => {
-    const email = getAdminSessionEmail();
-    const loadedAccounts = loadAdminAccounts();
-    setAccounts(loadedAccounts);
-    if (!email) {
-      router.replace("/login");
-      return;
-    }
-    const account = findAdminAccount(loadedAccounts, email);
-    if (!account) {
-      clearAdminSession();
-      router.replace("/login");
-      return;
-    }
-    setCurrentAccount(account);
-    setAuthChecked(true);
+    (async () => {
+      const account = await getCurrentAdminAccount();
+      if (!account) {
+        router.replace("/login");
+        return;
+      }
+      setCurrentAccount(account);
+      setAccounts(await fetchAdminAccounts());
+      setAuthChecked(true);
+    })();
   }, [router]);
 
-  const handleLogout = () => {
-    clearAdminSession();
+  const handleLogout = async () => {
+    await signOutAdmin();
     router.push("/login");
   };
 
-  const addAdmin = (values: { name: string; email: string }) => {
-    const newAccount: AdminAccount = {
-      id: "adm-" + Date.now(),
-      name: values.name,
-      email: values.email,
-      role: "limitado",
-      addedAt: new Date().toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric" }),
-    };
-    setAccounts((prev) => {
-      const next = [...prev, newAccount];
-      saveAdminAccounts(next);
-      return next;
-    });
+  const addAdmin = async (values: { email: string }) => {
+    const { error } = await inviteAdmin(values.email);
+    if (!error) setAccounts(await fetchAdminAccounts());
     setShowAddAdmin(false);
   };
 
-  const removeAdmin = (id: string) => {
-    setAccounts((prev) => {
-      const next = prev.filter((a) => a.id !== id);
-      saveAdminAccounts(next);
-      return next;
-    });
+  const removeAdmin = async (id: string) => {
+    const account = accounts.find((a) => a.id === id);
+    if (!account) return;
+    await revokeAdmin(account);
+    setAccounts(await fetchAdminAccounts());
   };
 
   const pendingBusinesses = businesses.filter((b) => b.status === "Pendiente");

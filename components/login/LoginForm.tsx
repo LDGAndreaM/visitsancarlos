@@ -2,31 +2,28 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { loadAdminAccounts } from "@/lib/adminAccountsStore";
-import { findAdminAccount } from "@/lib/adminAuth";
-import { setAdminSessionEmail } from "@/lib/adminSession";
+import { createClient } from "@/lib/supabase/client";
 
 type Role = "negocio" | "admin";
 
 export default function LoginForm() {
-  const router = useRouter();
   const [role, setRole] = useState<Role>("negocio");
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState("");
-  const [adminError, setAdminError] = useState("");
+  const [oauthError, setOauthError] = useState("");
 
   const isAdmin = role === "admin";
 
-  const handleAdminSubmit = () => {
-    const account = findAdminAccount(loadAdminAccounts(), email);
-    if (!account) {
-      setAdminError("No encontramos una cuenta de administrador con ese correo.");
-      return;
-    }
-    setAdminSessionEmail(account.email);
-    router.push("/admin");
+  const handleOAuth = async (provider: "google" | "facebook") => {
+    setOauthError("");
+    const supabase = createClient();
+    const next = isAdmin ? "/admin" : "/dashboard";
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: { redirectTo: `${window.location.origin}/auth/callback?next=${next}` },
+    });
+    if (error) setOauthError("No se pudo iniciar sesión. Intenta de nuevo.");
   };
+
   const heading = isAdmin ? "Acceso administrativo" : isLogin ? "Accede a tu cuenta de negocio" : "Registra tu negocio gratis";
   const subheading = isAdmin
     ? "Panel de control de Visit San Carlos."
@@ -87,59 +84,54 @@ export default function LoginForm() {
           <p style={{ margin: 0, fontSize: 13, color: "#3B5C61" }}>{subheading}</p>
         </div>
 
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <button
+            onClick={() => handleOAuth("facebook")}
+            style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, border: "1px solid #E2ECED", background: "#ffffff", borderRadius: 10, padding: 12, fontSize: 14, fontWeight: 600, color: "#143840", cursor: "pointer" }}
+          >
+            <span style={{ width: 20, height: 20, borderRadius: "50%", background: "#1877F2", color: "#ffffff", fontSize: 12, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>f</span>
+            Continuar con Facebook
+          </button>
+          <button
+            onClick={() => handleOAuth("google")}
+            style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, border: "1px solid #E2ECED", background: "#ffffff", borderRadius: 10, padding: 12, fontSize: 14, fontWeight: 600, color: "#143840", cursor: "pointer" }}
+          >
+            <span style={{ width: 20, height: 20, borderRadius: "50%", background: "#F4FAFB", color: "#EB600A", fontSize: 12, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>G</span>
+            Continuar con Google
+          </button>
+        </div>
+
+        {oauthError && <p style={{ margin: 0, fontSize: 12, color: "#E23E7E", fontWeight: 600 }}>{oauthError}</p>}
+
+        {isAdmin && (
+          <p style={{ margin: 0, fontSize: 12, color: "#9DB6B8" }}>
+            Solo correos autorizados como administrador podrán entrar al panel.
+          </p>
+        )}
+
         {!isAdmin && (
           <>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <button style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, border: "1px solid #E2ECED", background: "#ffffff", borderRadius: 10, padding: 12, fontSize: 14, fontWeight: 600, color: "#143840", cursor: "pointer" }}>
-                <span style={{ width: 20, height: 20, borderRadius: "50%", background: "#1877F2", color: "#ffffff", fontSize: 12, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>f</span>
-                Continuar con Facebook
-              </button>
-              <button style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, border: "1px solid #E2ECED", background: "#ffffff", borderRadius: 10, padding: 12, fontSize: 14, fontWeight: 600, color: "#143840", cursor: "pointer" }}>
-                <span style={{ width: 20, height: 20, borderRadius: "50%", background: "#F4FAFB", color: "#EB600A", fontSize: 12, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>G</span>
-                Continuar con Google
-              </button>
-            </div>
-
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <span style={{ flex: 1, height: 1, background: "#E2ECED" }} />
               <span style={{ fontSize: 12, color: "#9DB6B8" }}>o con tu correo</span>
               <span style={{ flex: 1, height: 1, background: "#E2ECED" }} />
             </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {!isLogin && <input type="text" placeholder="Nombre del negocio" style={inputStyle} />}
+              <input type="email" placeholder="Correo electrónico" style={inputStyle} />
+              <input type="password" placeholder="Contraseña" style={inputStyle} />
+              {isLogin && (
+                <a href="#" style={{ fontSize: 12, fontWeight: 600, alignSelf: "flex-end" }}>
+                  ¿Olvidaste tu contraseña?
+                </a>
+              )}
+              <Link href={ctaHref} style={{ display: "block", textAlign: "center", border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: 13, borderRadius: 10, cursor: "pointer" }}>
+                {ctaLabel}
+              </Link>
+            </div>
           </>
         )}
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {!isAdmin && !isLogin && <input type="text" placeholder="Nombre del negocio" style={inputStyle} />}
-          <input
-            type="email"
-            placeholder="Correo electrónico"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setAdminError("");
-            }}
-            style={inputStyle}
-          />
-          <input type="password" placeholder="Contraseña" style={inputStyle} />
-          {(isAdmin || isLogin) && (
-            <a href="#" style={{ fontSize: 12, fontWeight: 600, alignSelf: "flex-end" }}>
-              ¿Olvidaste tu contraseña?
-            </a>
-          )}
-          {adminError && <p style={{ margin: 0, fontSize: 12, color: "#E23E7E", fontWeight: 600 }}>{adminError}</p>}
-          {isAdmin ? (
-            <button
-              onClick={handleAdminSubmit}
-              style={{ display: "block", width: "100%", textAlign: "center", border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: 13, borderRadius: 10, cursor: "pointer" }}
-            >
-              {ctaLabel}
-            </button>
-          ) : (
-            <Link href={ctaHref} style={{ display: "block", textAlign: "center", border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: 13, borderRadius: 10, cursor: "pointer" }}>
-              {ctaLabel}
-            </Link>
-          )}
-        </div>
 
         {!isAdmin && (
           <p style={{ margin: 0, textAlign: "center", fontSize: 13, color: "#5C7679" }}>
