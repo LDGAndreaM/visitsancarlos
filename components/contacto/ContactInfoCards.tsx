@@ -1,3 +1,6 @@
+import SocialIcon from "@/components/SocialIcon";
+import { SOCIAL_LINKS } from "@/lib/nav";
+
 const cardStyle: React.CSSProperties = {
   background: "#ffffff",
   borderRadius: 18,
@@ -40,14 +43,20 @@ export default function ContactInfoCards() {
         <div style={cardStyle}>
           <span style={{ fontSize: 13, color: "#3B5C61" }}>Síguenos</span>
           <div style={{ display: "flex", gap: 10 }}>
-            <a href="#" aria-label="Facebook" style={{ width: 24, height: 23, borderRadius: "50%", background: "#009BA4", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#ffffff" }}>
-              f
+            <a
+              href={SOCIAL_LINKS.facebook.href}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Facebook"
+              style={{ width: 24, height: 23, borderRadius: "50%", background: "#009BA4", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffffff" }}
+            >
+              <SocialIcon network="facebook" size={12} />
             </a>
-            <a href="#" aria-label="Instagram" style={{ width: 24, height: 23, borderRadius: "50%", background: "#EB600A", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, color: "#ffffff" }}>
-              ig
+            <a href={SOCIAL_LINKS.instagram.href} aria-label="Instagram" style={{ width: 24, height: 23, borderRadius: "50%", background: "#EB600A", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffffff" }}>
+              <SocialIcon network="instagram" size={12} />
             </a>
-            <a href="#" aria-label="TikTok" style={{ width: 24, height: 23, borderRadius: "50%", background: "#143840", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700, color: "#ffffff" }}>
-              tt
+            <a href={SOCIAL_LINKS.tiktok.href} aria-label="TikTok" style={{ width: 24, height: 23, borderRadius: "50%", background: "#143840", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffffff" }}>
+              <SocialIcon network="tiktok" size={11} />
             </a>
           </div>
           <span style={{ fontSize: 14, fontWeight: 700, color: "#143840" }}>@visit.sancarlos.son</span>

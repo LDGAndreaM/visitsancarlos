@@ -10,17 +10,12 @@ import QuarterlyBenefit from "@/components/publicidad/QuarterlyBenefit";
 import CommercialMessage from "@/components/publicidad/CommercialMessage";
 import PublicidadNote from "@/components/publicidad/PublicidadNote";
 import PromoCta from "@/components/publicidad/PromoCta";
+import { SOCIAL_SET_MAIN } from "@/lib/nav";
 
 export const metadata: Metadata = {
   title: "Publicidad | Visit San Carlos",
   description: "Espacios publicitarios y paquetes para que tu negocio gane visibilidad en Visit San Carlos.",
 };
-
-const PUBLICIDAD_SOCIALS = [
-  { label: "f", name: "Facebook" },
-  { label: "ig", name: "Instagram" },
-  { label: "tt", name: "TikTok", fontSize: 11 },
-];
 
 export default function Publicidad() {
   return (
@@ -35,7 +30,7 @@ export default function Publicidad() {
       <CommercialMessage />
       <PublicidadNote />
       <PromoCta />
-      <Footer marginTop={0} padding="0 48px 28px" socials={PUBLICIDAD_SOCIALS} activeHref="/publicidad" />
+      <Footer marginTop={0} padding="0 48px 28px" socials={SOCIAL_SET_MAIN} activeHref="/publicidad" />
     </div>
   );
 }

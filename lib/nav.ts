@@ -1,3 +1,15 @@
+export type SocialNetwork = "facebook" | "instagram" | "tiktok" | "twitter" | "linkedin";
+
+export const SOCIAL_LINKS: Record<SocialNetwork, { label: string; href: string }> = {
+  facebook: { label: "Facebook", href: "https://www.facebook.com/visit.sancarlos.son" },
+  instagram: { label: "Instagram", href: "#" },
+  tiktok: { label: "TikTok", href: "#" },
+  twitter: { label: "Twitter", href: "#" },
+  linkedin: { label: "LinkedIn", href: "#" },
+};
+
+export const SOCIAL_SET_MAIN: SocialNetwork[] = ["facebook", "instagram", "tiktok"];
+
 export const NAV_LINKS = [
   { label: "Inicio", href: "/" },
   { label: "Acerca de", href: "/acerca-de" },

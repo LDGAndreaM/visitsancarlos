@@ -11,12 +11,7 @@ import LocationSection from "@/components/LocationSection";
 import ReviewsSection from "@/components/establecimiento/ReviewsSection";
 import { BUSINESSES } from "@/lib/directorioData";
 import { getEstablishmentDetail } from "@/lib/establishmentDetails";
-
-const DIRECTORIO_SOCIALS = [
-  { label: "f", name: "Facebook" },
-  { label: "ig", name: "Instagram" },
-  { label: "tt", name: "TikTok", fontSize: 11 },
-];
+import { SOCIAL_SET_MAIN } from "@/lib/nav";
 
 type PageProps = { params: Promise<{ id: string }> };
 
@@ -52,7 +47,7 @@ export default async function Establecimiento({ params }: PageProps) {
       <FeaturesSection features={detail.features} />
       <LocationSection location={business.location} />
       <ReviewsSection initialReviews={detail.reviews} />
-      <Footer marginTop={0} padding="0 48px 28px" socials={DIRECTORIO_SOCIALS} />
+      <Footer marginTop={0} padding="0 48px 28px" socials={SOCIAL_SET_MAIN} />
     </div>
   );
 }

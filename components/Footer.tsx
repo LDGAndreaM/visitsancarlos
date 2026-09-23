@@ -1,20 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FOOTER_LINKS } from "@/lib/nav";
+import SocialIcon from "./SocialIcon";
+import { FOOTER_LINKS, SOCIAL_LINKS, type SocialNetwork } from "@/lib/nav";
 
-export type Social = { label: string; name: string; fontSize?: number };
-
-const DEFAULT_SOCIALS: Social[] = [
-  { label: "f", name: "Facebook" },
-  { label: "ig", name: "Instagram" },
-  { label: "x", name: "Twitter" },
-  { label: "in", name: "LinkedIn" },
-];
+const DEFAULT_SOCIALS: SocialNetwork[] = ["facebook", "instagram", "twitter", "linkedin"];
 
 type FooterProps = {
   marginTop?: number;
   padding?: string;
-  socials?: Social[];
+  socials?: SocialNetwork[];
   activeHref?: string;
 };
 
@@ -59,27 +53,31 @@ export default function Footer({ marginTop = 70, padding = "64px 48px 28px", soc
             +52 622 114 5316
           </a>
           <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
-            {socials.map((s) => (
-              <a
-                key={s.name}
-                href="#"
-                aria-label={s.name}
-                style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: "50%",
-                  background: "#009BA4",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: s.fontSize ?? 12,
-                  fontWeight: 700,
-                  color: "#ffffff",
-                }}
-              >
-                {s.label}
-              </a>
-            ))}
+            {socials.map((network) => {
+              const { label, href } = SOCIAL_LINKS[network];
+              const isExternal = href.startsWith("http");
+              return (
+                <a
+                  key={network}
+                  href={href}
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noreferrer" : undefined}
+                  aria-label={label}
+                  style={{
+                    width: 30,
+                    height: 30,
+                    borderRadius: "50%",
+                    background: "#009BA4",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#ffffff",
+                  }}
+                >
+                  <SocialIcon network={network} />
+                </a>
+              );
+            })}
           </div>
         </div>
 

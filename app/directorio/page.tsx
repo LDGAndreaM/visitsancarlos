@@ -4,17 +4,12 @@ import Footer from "@/components/Footer";
 import PromoBanner from "@/components/PromoBanner";
 import DirectorioApp from "@/components/directorio/DirectorioApp";
 import { BANNER_PAIRS } from "@/lib/directorioData";
+import { SOCIAL_SET_MAIN } from "@/lib/nav";
 
 export const metadata: Metadata = {
   title: "Directorio | Visit San Carlos",
   description: "Hoteles, restaurantes, servicios y comercios de San Carlos y Guaymas.",
 };
-
-const DIRECTORIO_SOCIALS = [
-  { label: "f", name: "Facebook" },
-  { label: "ig", name: "Instagram" },
-  { label: "tt", name: "TikTok", fontSize: 11 },
-];
 
 export default function Directorio() {
   return (
@@ -22,7 +17,7 @@ export default function Directorio() {
       <Header />
       <PromoBanner pairs={BANNER_PAIRS} />
       <DirectorioApp />
-      <Footer marginTop={0} padding="0 48px 28px" socials={DIRECTORIO_SOCIALS} />
+      <Footer marginTop={0} padding="0 48px 28px" socials={SOCIAL_SET_MAIN} />
     </div>
   );
 }

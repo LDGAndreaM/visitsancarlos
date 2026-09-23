@@ -5,17 +5,12 @@ import LegalHero from "@/components/legal/LegalHero";
 import LegalContent from "@/components/legal/LegalContent";
 import LegalSection from "@/components/legal/LegalSection";
 import { TERMINOS_INTRO, TERMINOS_SECTIONS, TERMINOS_UPDATED } from "@/lib/terminosData";
+import { SOCIAL_SET_MAIN } from "@/lib/nav";
 
 export const metadata: Metadata = {
   title: "Términos y condiciones | Visit San Carlos",
   description: "Términos y condiciones de uso de Visit San Carlos.",
 };
-
-const TERMINOS_SOCIALS = [
-  { label: "f", name: "Facebook" },
-  { label: "ig", name: "Instagram" },
-  { label: "tt", name: "TikTok", fontSize: 11 },
-];
 
 export default function TerminosYCondiciones() {
   return (
@@ -33,7 +28,7 @@ export default function TerminosYCondiciones() {
           <a href="mailto:visit.sancarlos.son@gmail.com">visit.sancarlos.son@gmail.com</a> o al teléfono <a href="tel:+526221145316">+52 622 114 5316</a>.
         </LegalSection>
       </LegalContent>
-      <Footer marginTop={0} padding="0 48px 28px" socials={TERMINOS_SOCIALS} activeHref="/terminos-y-condiciones" />
+      <Footer marginTop={0} padding="0 48px 28px" socials={SOCIAL_SET_MAIN} activeHref="/terminos-y-condiciones" />
     </div>
   );
 }

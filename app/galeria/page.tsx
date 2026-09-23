@@ -6,17 +6,12 @@ import FilterPills from "@/components/FilterPills";
 import GalleryHero from "@/components/gallery/GalleryHero";
 import GalleryGrid from "@/components/gallery/GalleryGrid";
 import { GALLERY_FILTERS } from "@/lib/galleryData";
+import { SOCIAL_SET_MAIN } from "@/lib/nav";
 
 export const metadata: Metadata = {
   title: "Galería | Visit San Carlos",
   description: "Un vistazo visual a las playas, la gastronomía, los eventos y la comunidad de San Carlos y Guaymas.",
 };
-
-const GALERIA_SOCIALS = [
-  { label: "f", name: "Facebook" },
-  { label: "ig", name: "Instagram" },
-  { label: "tt", name: "TikTok", fontSize: 11 },
-];
 
 export default function Galeria() {
   return (
@@ -26,7 +21,7 @@ export default function Galeria() {
       <FilterPills filters={GALLERY_FILTERS} />
       <GalleryGrid />
       <NewsletterCta margin="0 48px 56px" />
-      <Footer marginTop={0} padding="0 48px 28px" socials={GALERIA_SOCIALS} activeHref="/galeria" />
+      <Footer marginTop={0} padding="0 48px 28px" socials={SOCIAL_SET_MAIN} activeHref="/galeria" />
     </div>
   );
 }

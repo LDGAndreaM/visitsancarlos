@@ -12,12 +12,7 @@ import RelatedClasificados from "@/components/clasificados/RelatedClasificados";
 import { ITEMS } from "@/lib/clasificadosData";
 import { relatedItems } from "@/lib/clasificadosUtils";
 import { getClasificadoDetail } from "@/lib/clasificadoDetails";
-
-const CLASIFICADOS_SOCIALS = [
-  { label: "f", name: "Facebook" },
-  { label: "ig", name: "Instagram" },
-  { label: "tt", name: "TikTok", fontSize: 11 },
-];
+import { SOCIAL_SET_MAIN } from "@/lib/nav";
 
 type PageProps = { params: Promise<{ id: string }> };
 
@@ -51,7 +46,7 @@ export default async function ClasificadoDetail({ params }: PageProps) {
       <SpecsSection specs={detail.specs} />
       <LocationSection location={item.location} title="Zona del artículo" showDirections={false} />
       <RelatedClasificados items={relatedItems(ITEMS, item)} />
-      <Footer marginTop={0} padding="0 48px 28px" socials={CLASIFICADOS_SOCIALS} />
+      <Footer marginTop={0} padding="0 48px 28px" socials={SOCIAL_SET_MAIN} />
     </div>
   );
 }

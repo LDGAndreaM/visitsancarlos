@@ -5,17 +5,12 @@ import LegalHero from "@/components/legal/LegalHero";
 import LegalContent from "@/components/legal/LegalContent";
 import LegalSection from "@/components/legal/LegalSection";
 import { POLITICAS_CAMBIOS, POLITICAS_INTRO, POLITICAS_SECTIONS, POLITICAS_UPDATED } from "@/lib/politicasData";
+import { SOCIAL_SET_MAIN } from "@/lib/nav";
 
 export const metadata: Metadata = {
   title: "Políticas de privacidad | Visit San Carlos",
   description: "Políticas de privacidad de Visit San Carlos.",
 };
-
-const POLITICAS_SOCIALS = [
-  { label: "f", name: "Facebook" },
-  { label: "ig", name: "Instagram" },
-  { label: "tt", name: "TikTok", fontSize: 11 },
-];
 
 export default function PoliticasDePrivacidad() {
   return (
@@ -38,7 +33,7 @@ export default function PoliticasDePrivacidad() {
           <a href="mailto:visit.sancarlos.son@gmail.com">visit.sancarlos.son@gmail.com</a> o al teléfono <a href="tel:+526221145316">+52 622 114 5316</a>.
         </LegalSection>
       </LegalContent>
-      <Footer marginTop={0} padding="0 48px 28px" socials={POLITICAS_SOCIALS} activeHref="/politicas-de-privacidad" />
+      <Footer marginTop={0} padding="0 48px 28px" socials={SOCIAL_SET_MAIN} activeHref="/politicas-de-privacidad" />
     </div>
   );
 }

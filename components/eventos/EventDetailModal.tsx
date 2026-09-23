@@ -1,4 +1,5 @@
 import ImagePlaceholder from "@/components/ImagePlaceholder";
+import SocialIcon from "@/components/SocialIcon";
 import type { EventItem } from "@/lib/eventsData";
 import { downloadIcs, fmtDateLabel } from "@/lib/eventsUtils";
 
@@ -70,13 +71,13 @@ export default function EventDetailModal({ event, onClose }: EventDetailModalPro
               </a>
             )}
             {event.facebook && (
-              <a href={event.facebook} aria-label="Facebook" style={{ width: 36, height: 36, borderRadius: "50%", background: "#009BA4", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffffff", fontWeight: 700, fontSize: 12 }}>
-                f
+              <a href={event.facebook} target="_blank" rel="noreferrer" aria-label="Facebook" style={{ width: 36, height: 36, borderRadius: "50%", background: "#009BA4", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffffff" }}>
+                <SocialIcon network="facebook" size={16} />
               </a>
             )}
             {event.instagram && (
-              <a href={event.instagram} aria-label="Instagram" style={{ width: 36, height: 36, borderRadius: "50%", background: "#EB600A", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffffff", fontWeight: 700, fontSize: 12 }}>
-                ig
+              <a href={event.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" style={{ width: 36, height: 36, borderRadius: "50%", background: "#EB600A", display: "flex", alignItems: "center", justifyContent: "center", color: "#ffffff" }}>
+                <SocialIcon network="instagram" size={16} />
               </a>
             )}
             {event.website && (
