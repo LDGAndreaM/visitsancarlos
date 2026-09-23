@@ -2,14 +2,31 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { loadAdminAccounts } from "@/lib/adminAccountsStore";
+import { findAdminAccount } from "@/lib/adminAuth";
+import { setAdminSessionEmail } from "@/lib/adminSession";
 
 type Role = "negocio" | "admin";
 
 export default function LoginForm() {
+  const router = useRouter();
   const [role, setRole] = useState<Role>("negocio");
   const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState("");
+  const [adminError, setAdminError] = useState("");
 
   const isAdmin = role === "admin";
+
+  const handleAdminSubmit = () => {
+    const account = findAdminAccount(loadAdminAccounts(), email);
+    if (!account) {
+      setAdminError("No encontramos una cuenta de administrador con ese correo.");
+      return;
+    }
+    setAdminSessionEmail(account.email);
+    router.push("/admin");
+  };
   const heading = isAdmin ? "Acceso administrativo" : isLogin ? "Accede a tu cuenta de negocio" : "Registra tu negocio gratis";
   const subheading = isAdmin
     ? "Panel de control de Visit San Carlos."
@@ -93,16 +110,35 @@ export default function LoginForm() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {!isAdmin && !isLogin && <input type="text" placeholder="Nombre del negocio" style={inputStyle} />}
-          <input type="email" placeholder="Correo electrónico" style={inputStyle} />
+          <input
+            type="email"
+            placeholder="Correo electrónico"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setAdminError("");
+            }}
+            style={inputStyle}
+          />
           <input type="password" placeholder="Contraseña" style={inputStyle} />
           {(isAdmin || isLogin) && (
             <a href="#" style={{ fontSize: 12, fontWeight: 600, alignSelf: "flex-end" }}>
               ¿Olvidaste tu contraseña?
             </a>
           )}
-          <Link href={ctaHref} style={{ display: "block", textAlign: "center", border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: 13, borderRadius: 10, cursor: "pointer" }}>
-            {ctaLabel}
-          </Link>
+          {adminError && <p style={{ margin: 0, fontSize: 12, color: "#E23E7E", fontWeight: 600 }}>{adminError}</p>}
+          {isAdmin ? (
+            <button
+              onClick={handleAdminSubmit}
+              style={{ display: "block", width: "100%", textAlign: "center", border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: 13, borderRadius: 10, cursor: "pointer" }}
+            >
+              {ctaLabel}
+            </button>
+          ) : (
+            <Link href={ctaHref} style={{ display: "block", textAlign: "center", border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: 13, borderRadius: 10, cursor: "pointer" }}>
+              {ctaLabel}
+            </Link>
+          )}
         </div>
 
         {!isAdmin && (

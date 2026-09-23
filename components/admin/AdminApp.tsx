@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import AdminSidebar from "./AdminSidebar";
 import ResumenTab from "./ResumenTab";
 import UsuariosTab from "./UsuariosTab";
@@ -15,6 +16,8 @@ import NewEventModal from "./NewEventModal";
 import EditEventAdminModal from "./EditEventAdminModal";
 import PublicidadAdminTab from "./PublicidadAdminTab";
 import SoporteTab from "./SoporteTab";
+import AdministradoresTab from "./AdministradoresTab";
+import AddAdminModal from "./AddAdminModal";
 import {
   INITIAL_ADMIN_ADS,
   INITIAL_ADMIN_BUSINESSES,
@@ -27,11 +30,13 @@ import {
   type AdminEvent,
   type Chat,
 } from "@/lib/adminData";
-
-export type AdminTab = "resumen" | "usuarios" | "aprobaciones" | "directorio" | "blog" | "eventos" | "publicidad" | "soporte";
+import { findAdminAccount, tabsForRole, type AdminAccount, type AdminTab } from "@/lib/adminAuth";
+import { loadAdminAccounts, saveAdminAccounts } from "@/lib/adminAccountsStore";
+import { clearAdminSession, getAdminSessionEmail } from "@/lib/adminSession";
 
 const TITLES: Record<AdminTab, [string, string]> = {
   resumen: ["Panel administrativo", "Resumen general de Visit San Carlos"],
+  administradores: ["Administradores", "Cuentas con acceso al panel administrativo"],
   usuarios: ["Usuarios", "Cuentas registradas en la plataforma"],
   aprobaciones: ["Aprobaciones", "Negocios pendientes de revisión"],
   directorio: ["Directorio", "Todas las entradas publicadas en el sitio"],
@@ -42,6 +47,11 @@ const TITLES: Record<AdminTab, [string, string]> = {
 };
 
 export default function AdminApp() {
+  const router = useRouter();
+  const [authChecked, setAuthChecked] = useState(false);
+  const [currentAccount, setCurrentAccount] = useState<AdminAccount | null>(null);
+  const [accounts, setAccounts] = useState<AdminAccount[]>([]);
+
   const [tab, setTab] = useState<AdminTab>("resumen");
   const [users, setUsers] = useState(INITIAL_USERS);
   const [businesses, setBusinesses] = useState(INITIAL_ADMIN_BUSINESSES);
@@ -56,8 +66,56 @@ export default function AdminApp() {
   const [approvalDetailId, setApprovalDetailId] = useState<string | null>(null);
   const [showNewPost, setShowNewPost] = useState(false);
   const [showNewEvent, setShowNewEvent] = useState(false);
+  const [showAddAdmin, setShowAddAdmin] = useState(false);
   const [editingBusinessId, setEditingBusinessId] = useState<string | null>(null);
   const [editingEventId, setEditingEventId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const email = getAdminSessionEmail();
+    const loadedAccounts = loadAdminAccounts();
+    setAccounts(loadedAccounts);
+    if (!email) {
+      router.replace("/login");
+      return;
+    }
+    const account = findAdminAccount(loadedAccounts, email);
+    if (!account) {
+      clearAdminSession();
+      router.replace("/login");
+      return;
+    }
+    setCurrentAccount(account);
+    setAuthChecked(true);
+  }, [router]);
+
+  const handleLogout = () => {
+    clearAdminSession();
+    router.push("/login");
+  };
+
+  const addAdmin = (values: { name: string; email: string }) => {
+    const newAccount: AdminAccount = {
+      id: "adm-" + Date.now(),
+      name: values.name,
+      email: values.email,
+      role: "limitado",
+      addedAt: new Date().toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric" }),
+    };
+    setAccounts((prev) => {
+      const next = [...prev, newAccount];
+      saveAdminAccounts(next);
+      return next;
+    });
+    setShowAddAdmin(false);
+  };
+
+  const removeAdmin = (id: string) => {
+    setAccounts((prev) => {
+      const next = prev.filter((a) => a.id !== id);
+      saveAdminAccounts(next);
+      return next;
+    });
+  };
 
   const pendingBusinesses = businesses.filter((b) => b.status === "Pendiente");
   const unreadChats = chats.filter((c) => c.unread);
@@ -127,9 +185,27 @@ export default function AdminApp() {
     setChats((prev) => prev.map((c) => (c.id === activeChatId ? { ...c, messages: [...c.messages, { from: "admin" as const, text }] } : c)));
   };
 
+  if (!authChecked || !currentAccount) {
+    return (
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#F7FBFC" }}>
+        <span style={{ fontSize: 14, fontWeight: 600, color: "#5C7679" }}>Verificando acceso…</span>
+      </div>
+    );
+  }
+
+  const allowedTabs = tabsForRole(currentAccount.role);
+
   return (
     <div style={{ maxWidth: "100%", minHeight: "100vh", overflowX: "hidden", background: "#F7FBFC", display: "grid", gridTemplateColumns: "240px 1fr" }}>
-      <AdminSidebar tab={tab} onTabChange={setTab} pendingCount={pendingBusinesses.length} unreadCount={unreadChats.length} />
+      <AdminSidebar
+        tab={tab}
+        onTabChange={setTab}
+        allowedTabs={allowedTabs}
+        pendingCount={pendingBusinesses.length}
+        unreadCount={unreadChats.length}
+        account={currentAccount}
+        onLogout={handleLogout}
+      />
 
       <main style={{ padding: "32px 40px", display: "flex", flexDirection: "column", gap: 24 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
@@ -144,6 +220,9 @@ export default function AdminApp() {
 
         {tab === "resumen" && (
           <ResumenTab stats={stats} pendingBusinesses={pendingBusinesses} unreadChats={unreadChats} onApprove={approveBusiness} onTabChange={setTab} onOpenChat={openChatFromResumen} />
+        )}
+        {tab === "administradores" && (
+          <AdministradoresTab accounts={accounts} currentAccount={currentAccount} onOpenAdd={() => setShowAddAdmin(true)} onRemove={removeAdmin} />
         )}
         {tab === "usuarios" && <UsuariosTab users={users} onToggleSuspend={toggleSuspendUser} />}
         {tab === "aprobaciones" && <AprobacionesTab pendingBusinesses={pendingBusinesses} onApprove={approveBusiness} onReject={rejectBusiness} onDetail={openApprovalDetail} />}
@@ -171,6 +250,7 @@ export default function AdminApp() {
       {approvalDetail && <ApprovalDetailModal business={approvalDetail} onClose={closeApprovalDetail} onApprove={approveFromDetail} onReject={rejectFromDetail} />}
       {showNewPost && <NewPostModal onClose={() => setShowNewPost(false)} onSave={saveNewPost} />}
       {showNewEvent && <NewEventModal onClose={() => setShowNewEvent(false)} onSave={saveNewEvent} />}
+      {showAddAdmin && <AddAdminModal existingEmails={accounts.map((a) => a.email)} onClose={() => setShowAddAdmin(false)} onSave={addAdmin} />}
       {editingBusiness && <EditBusinessAdminModal business={editingBusiness} onClose={() => setEditingBusinessId(null)} onSave={saveBusinessEdit} />}
       {editingEvent && <EditEventAdminModal event={editingEvent} onClose={() => setEditingEventId(null)} onSave={saveEventEdit} />}
     </div>

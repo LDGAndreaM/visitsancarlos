@@ -1,6 +1,6 @@
 import ImagePlaceholder from "@/components/ImagePlaceholder";
 import type { AdminBusiness, Chat } from "@/lib/adminData";
-import type { AdminTab } from "./AdminApp";
+import type { AdminTab } from "@/lib/adminAuth";
 
 const statCardStyle: React.CSSProperties = { background: "#ffffff", borderRadius: 16, padding: 20, boxShadow: "0 8px 20px rgba(0,60,66,0.06)", display: "flex", flexDirection: "column", gap: 6 };
 const cardStyle: React.CSSProperties = { background: "#ffffff", borderRadius: 18, padding: 24, boxShadow: "0 8px 20px rgba(0,60,66,0.06)" };
