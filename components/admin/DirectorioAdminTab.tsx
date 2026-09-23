@@ -8,32 +8,38 @@ type DirectorioAdminTabProps = {
   onSearchChange: (v: string) => void;
   category: string;
   onCategoryChange: (v: string) => void;
+  onOpenAdd: () => void;
   onToggleFeatured: (id: string) => void;
   onEdit: (id: string) => void;
   onArchive: (id: string) => void;
   onRemove: (id: string) => void;
 };
 
-export default function DirectorioAdminTab({ businesses, search, onSearchChange, category, onCategoryChange, onToggleFeatured, onEdit, onArchive, onRemove }: DirectorioAdminTabProps) {
+export default function DirectorioAdminTab({ businesses, search, onSearchChange, category, onCategoryChange, onOpenAdd, onToggleFeatured, onEdit, onArchive, onRemove }: DirectorioAdminTabProps) {
   const filtered = businesses.filter((b) => (category === "Todas" || b.category === category) && b.name.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-        <input
-          value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-          type="text"
-          placeholder="Buscar negocio..."
-          style={{ flex: 1, minWidth: 200, border: "1px solid #E2ECED", outline: "none", borderRadius: 10, padding: "11px 14px", fontSize: 13, fontFamily: "inherit" }}
-        />
-        <select value={category} onChange={(e) => onCategoryChange(e.target.value)} style={{ border: "1px solid #E2ECED", outline: "none", borderRadius: 10, padding: "11px 14px", fontSize: 13, background: "#ffffff", fontFamily: "inherit" }}>
-          {ADMIN_BUSINESS_CATEGORIES.map((c) => (
-            <option key={c} value={c}>
-              {c === "Todas" ? "Todas las categorías" : c}
-            </option>
-          ))}
-        </select>
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", gap: 12, flexWrap: "wrap", flex: 1 }}>
+          <input
+            value={search}
+            onChange={(e) => onSearchChange(e.target.value)}
+            type="text"
+            placeholder="Buscar negocio..."
+            style={{ flex: 1, minWidth: 200, border: "1px solid #E2ECED", outline: "none", borderRadius: 10, padding: "11px 14px", fontSize: 13, fontFamily: "inherit" }}
+          />
+          <select value={category} onChange={(e) => onCategoryChange(e.target.value)} style={{ border: "1px solid #E2ECED", outline: "none", borderRadius: 10, padding: "11px 14px", fontSize: 13, background: "#ffffff", fontFamily: "inherit" }}>
+            {ADMIN_BUSINESS_CATEGORIES.map((c) => (
+              <option key={c} value={c}>
+                {c === "Todas" ? "Todas las categorías" : c}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button onClick={onOpenAdd} style={{ border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 13, padding: "10px 18px", borderRadius: 10, cursor: "pointer", flexShrink: 0 }}>
+          + Agregar negocio
+        </button>
       </div>
       <div style={{ background: "#ffffff", borderRadius: 18, overflow: "hidden", boxShadow: "0 8px 20px rgba(0,60,66,0.06)" }}>
         <div style={{ display: "grid", gridTemplateColumns: gridCols, padding: "14px 20px", background: "#F4FAFB", fontSize: 12, fontWeight: 700, color: "#5C7679" }}>

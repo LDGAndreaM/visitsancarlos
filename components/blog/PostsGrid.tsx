@@ -1,12 +1,20 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
-import { BLOG_POSTS } from "@/lib/blogData";
+import { fetchPublishedPosts, type PublicBlogPost } from "@/lib/supabase/blogPosts";
 
 export default function PostsGrid() {
+  const [posts, setPosts] = useState<PublicBlogPost[]>([]);
+  useEffect(() => {
+    fetchPublishedPosts().then((all) => setPosts(all.slice(1)));
+  }, []);
+
   return (
     <section style={{ padding: "0 48px 60px" }}>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 28, maxWidth: 1180, margin: "0 auto" }}>
-        {BLOG_POSTS.map((p) => (
+        {posts.map((p) => (
           <Link
             key={p.id}
             href={`/blog/${p.id}`}

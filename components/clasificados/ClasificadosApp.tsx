@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import PromoBanner from "@/components/PromoBanner";
 import ClasificadosHero from "./ClasificadosHero";
@@ -11,13 +12,22 @@ import ResultsList from "./ResultsList";
 import ResultsMap from "./ResultsMap";
 import AddClasificadoBanner from "./AddClasificadoBanner";
 import AddClasificadoModal from "./AddClasificadoModal";
-import { ITEMS, PROMO_PAIRS, type Clasificado, type ClasificadoCategory, type SortKey } from "@/lib/clasificadosData";
+import { PROMO_PAIRS, type Clasificado, type ClasificadoCategory, type SortKey } from "@/lib/clasificadosData";
 import { SORTERS, filterClasificados } from "@/lib/clasificadosUtils";
-
-const MONTHS = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+import { fetchApprovedClasificados, createClasificado } from "@/lib/supabase/classifieds";
+import { getCurrentUser, type CurrentUser } from "@/lib/supabase/session";
 
 export default function ClasificadosApp() {
-  const [items, setItems] = useState<Clasificado[]>(ITEMS);
+  const router = useRouter();
+  const [items, setItems] = useState<Clasificado[]>([]);
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
+  const [submitMessage, setSubmitMessage] = useState("");
+
+  useEffect(() => {
+    fetchApprovedClasificados().then(setItems);
+    getCurrentUser().then(setCurrentUser);
+  }, []);
+
   const [searchText, setSearchText] = useState("");
   const [searchLocation, setSearchLocation] = useState("");
   const [filterCategory, setFilterCategory] = useState<ClasificadoCategory | null>(null);
@@ -26,7 +36,6 @@ export default function ClasificadosApp() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [sortBy, setSortBy] = useState<SortKey>("latest");
   const [showAddModal, setShowAddModal] = useState(false);
-  const nextId = useRef(ITEMS.length + 1);
 
   const toggleQuickCategory = (category: ClasificadoCategory) => {
     setFilterCategory((prev) => (prev === category ? null : category));
@@ -37,22 +46,23 @@ export default function ClasificadosApp() {
     return [...filtered].sort(SORTERS[sortBy]);
   }, [items, filterCategory, filterPrice, filterCondition, searchText, searchLocation, sortBy]);
 
-  const handleAddItem = (values: Omit<Clasificado, "id" | "added" | "addedLabel" | "views">) => {
-    const today = new Date();
-    const newItem: Clasificado = {
-      ...values,
-      id: `cls-${nextId.current++}`,
-      added: today.toISOString().slice(0, 10),
-      addedLabel: `${today.getDate()} ${MONTHS[today.getMonth()]}, ${today.getFullYear()}`,
-      views: 0,
-    };
-    setItems((prev) => [newItem, ...prev]);
+  const handleAddItem = async (values: Omit<Clasificado, "id" | "added" | "addedLabel" | "views">) => {
     setShowAddModal(false);
+    if (!currentUser) {
+      router.push("/login");
+      return;
+    }
+    await createClasificado(currentUser.id, values);
+    setSubmitMessage("¡Listo! Tu artículo fue enviado y se publicará en cuanto el equipo lo apruebe.");
+    setTimeout(() => setSubmitMessage(""), 6000);
   };
 
   return (
     <>
       <Header ctaLabel="AGREGAR ARTÍCULO" onCtaClick={() => setShowAddModal(true)} />
+      {submitMessage && (
+        <div style={{ margin: "16px 48px 0", background: "#E5F6F7", color: "#009BA4", fontWeight: 600, fontSize: 13, padding: "12px 18px", borderRadius: 12, textAlign: "center" }}>{submitMessage}</div>
+      )}
       <PromoBanner pairs={PROMO_PAIRS} />
       <ClasificadosHero
         searchText={searchText}

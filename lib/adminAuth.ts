@@ -11,9 +11,9 @@ export type AdminAccount = {
 
 export const SUPER_ADMIN_EMAIL = "visit.sancarlos.son@gmail.com";
 
-export type AdminTab = "resumen" | "administradores" | "usuarios" | "aprobaciones" | "directorio" | "blog" | "eventos" | "publicidad" | "soporte";
+export type AdminTab = "resumen" | "administradores" | "usuarios" | "aprobaciones" | "directorio" | "clasificados" | "blog" | "eventos" | "galeria" | "publicidad" | "soporte";
 
-const ALL_TABS: AdminTab[] = ["resumen", "administradores", "usuarios", "aprobaciones", "directorio", "blog", "eventos", "publicidad", "soporte"];
+const ALL_TABS: AdminTab[] = ["resumen", "administradores", "usuarios", "aprobaciones", "directorio", "clasificados", "blog", "eventos", "galeria", "publicidad", "soporte"];
 
 const LIMITED_TABS: AdminTab[] = ["resumen", "aprobaciones", "blog", "soporte"];
 

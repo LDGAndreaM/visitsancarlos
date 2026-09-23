@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import type { AdminEvent, AdminEventStatus } from "@/lib/adminData";
+import { EVENT_CATEGORIES } from "@/lib/eventsData";
 
-const STATUS_OPTIONS: AdminEventStatus[] = ["Publicado", "Borrador", "Archivado"];
+const STATUS_OPTIONS: AdminEventStatus[] = ["Publicado", "Pendiente", "Rechazado", "Archivado"];
 
 type EditEventAdminModalProps = {
   event: AdminEvent;
@@ -32,10 +33,17 @@ export default function EditEventAdminModal({ event, onClose, onSave }: EditEven
         <div style={fieldStyle}>
           <label style={labelStyle}>Fecha</label>
           <input value={form.date} onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))} type="text" style={inputStyle} />
+          <span style={{ fontSize: 11, color: "#9DB6B8" }}>Para cambiar la fecha real, usa "Editar" desde el Dashboard del negocio dueño del evento.</span>
         </div>
         <div style={fieldStyle}>
           <label style={labelStyle}>Categoría</label>
-          <input value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))} type="text" style={inputStyle} />
+          <select value={form.category} onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))} style={{ ...inputStyle, background: "#ffffff" }}>
+            {EVENT_CATEGORIES.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
         </div>
         <div style={fieldStyle}>
           <label style={labelStyle}>Estado</label>

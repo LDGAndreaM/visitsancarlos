@@ -51,9 +51,10 @@ const NAV_ITEMS: { tab: DashboardTab; label: string; icon: React.ReactNode }[] =
 type SidebarProps = {
   tab: DashboardTab;
   onTabChange: (tab: DashboardTab) => void;
+  onLogout: () => void;
 };
 
-export default function Sidebar({ tab, onTabChange }: SidebarProps) {
+export default function Sidebar({ tab, onTabChange, onLogout }: SidebarProps) {
   return (
     <aside style={{ background: "#ffffff", borderRight: "1px solid #EEF3F3", padding: "24px 18px", display: "flex", flexDirection: "column", gap: 6 }}>
       <Link href="/" style={{ marginBottom: 20, padding: "0 6px" }}>
@@ -86,13 +87,16 @@ export default function Sidebar({ tab, onTabChange }: SidebarProps) {
         );
       })}
       <div style={{ flex: 1 }} />
-      <Link href="/login" style={{ display: "flex", alignItems: "center", gap: 10, fontWeight: 600, fontSize: 13, color: "#5C7679", padding: "11px 14px" }}>
+      <button
+        onClick={onLogout}
+        style={{ display: "flex", alignItems: "center", gap: 10, border: "none", background: "none", fontWeight: 600, fontSize: 13, color: "#5C7679", padding: "11px 14px", cursor: "pointer", textAlign: "left" }}
+      >
         <svg width="14" height="14" viewBox="0 0 18 18" fill="none">
           <path d="M7 3H3v12h4" stroke="#5C7679" strokeWidth="1.4" fill="none" />
           <path d="M11 6l4 3-4 3M15 9H7" stroke="#5C7679" strokeWidth="1.4" fill="none" strokeLinecap="round" />
         </svg>
         Cerrar sesión
-      </Link>
+      </button>
     </aside>
   );
 }

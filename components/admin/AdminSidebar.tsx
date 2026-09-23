@@ -8,13 +8,15 @@ const NAV_LABELS: Record<AdminTab, string> = {
   usuarios: "Usuarios",
   aprobaciones: "Aprobaciones",
   directorio: "Directorio",
+  clasificados: "Clasificados",
   blog: "Blog",
   eventos: "Eventos",
+  galeria: "Galería",
   publicidad: "Publicidad",
   soporte: "Soporte",
 };
 
-const NAV_ORDER: AdminTab[] = ["resumen", "administradores", "usuarios", "aprobaciones", "directorio", "blog", "eventos", "publicidad", "soporte"];
+const NAV_ORDER: AdminTab[] = ["resumen", "administradores", "usuarios", "aprobaciones", "directorio", "clasificados", "blog", "eventos", "galeria", "publicidad", "soporte"];
 
 type AdminSidebarProps = {
   tab: AdminTab;

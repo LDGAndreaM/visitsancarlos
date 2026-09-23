@@ -1,16 +1,22 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import DirectorioHero from "./DirectorioHero";
 import FilterBar, { type ViewMode } from "./FilterBar";
 import ResultsGrid from "./ResultsGrid";
 import ResultsList from "./ResultsList";
 import ResultsMap from "./ResultsMap";
 import AddBusinessBanner from "./AddBusinessBanner";
-import { BUSINESSES, PAGE_SIZE, type SortKey } from "@/lib/directorioData";
+import { PAGE_SIZE, type Business, type SortKey } from "@/lib/directorioData";
 import { SORTERS, filterBusinesses } from "@/lib/directorioUtils";
+import { fetchApprovedBusinesses } from "@/lib/supabase/businesses";
 
 export default function DirectorioApp() {
+  const [businesses, setBusinesses] = useState<Business[]>([]);
+  useEffect(() => {
+    fetchApprovedBusinesses().then(setBusinesses);
+  }, []);
+
   const [searchText, setSearchText] = useState("");
   const [searchLocation, setSearchLocation] = useState("");
   const [filterPrice, setFilterPrice] = useState("Todos");
@@ -25,9 +31,9 @@ export default function DirectorioApp() {
   };
 
   const sortedList = useMemo(() => {
-    const filtered = filterBusinesses(BUSINESSES, { price: filterPrice, rating: filterRating, searchText, searchLocation });
+    const filtered = filterBusinesses(businesses, { price: filterPrice, rating: filterRating, searchText, searchLocation });
     return [...filtered].sort(SORTERS[sortBy]);
-  }, [filterPrice, filterRating, searchText, searchLocation, sortBy]);
+  }, [businesses, filterPrice, filterRating, searchText, searchLocation, sortBy]);
 
   const totalPages = Math.max(1, Math.ceil(sortedList.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);

@@ -1,19 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CalendarControls from "./CalendarControls";
 import MonthView from "./MonthView";
 import WeekView from "./WeekView";
 import WeekEventsList from "./WeekEventsList";
 import EventDetailModal from "./EventDetailModal";
-import { INITIAL_EVENTS, MONTH_NAMES, type EventItem } from "@/lib/eventsData";
+import { MONTH_NAMES, type EventItem } from "@/lib/eventsData";
 import { monthMatrix, weekDaysOf, weekEventsList } from "@/lib/eventsUtils";
 import type { MonthCell } from "@/lib/eventsUtils";
+import { fetchApprovedEvents } from "@/lib/supabase/events";
 
 export default function EventsCalendar() {
   const [view, setView] = useState<"month" | "week">("month");
   const [current, setCurrent] = useState(() => new Date(2026, 8, 19));
-  const events = INITIAL_EVENTS;
+  const [events, setEvents] = useState<EventItem[]>([]);
+  useEffect(() => {
+    fetchApprovedEvents().then(setEvents);
+  }, []);
   const [detail, setDetail] = useState<EventItem | null>(null);
 
   const year = current.getFullYear();

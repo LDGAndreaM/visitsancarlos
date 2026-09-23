@@ -1,15 +1,24 @@
-import ImagePlaceholder from "@/components/ImagePlaceholder";
-import { GALLERY_PHOTOS } from "@/lib/galleryData";
+"use client";
+
+import { useEffect, useState } from "react";
+import { fetchApprovedPhotos, type GalleryPhotoView } from "@/lib/supabase/gallery";
 
 export default function GalleryGrid() {
+  const [photos, setPhotos] = useState<GalleryPhotoView[]>([]);
+  useEffect(() => {
+    fetchApprovedPhotos().then(setPhotos);
+  }, []);
+
   return (
     <section style={{ padding: "0 48px 60px" }}>
       <div style={{ maxWidth: 1180, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4,1fr)", gridAutoRows: 160, gap: 16 }}>
-        {GALLERY_PHOTOS.map((photo) => (
+        {photos.map((photo) => (
           <div key={photo.id} style={{ gridRow: photo.tall ? "span 2" : undefined, borderRadius: 16, overflow: "hidden" }}>
-            <ImagePlaceholder caption={photo.placeholder} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={photo.url} alt={photo.caption} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
           </div>
         ))}
+        {photos.length === 0 && <p style={{ margin: 0, fontSize: 13, color: "#7FA7AA", gridColumn: "1 / -1", textAlign: "center" }}>Aún no hay fotos en la galería.</p>}
       </div>
       <div style={{ textAlign: "center", marginTop: 36 }}>
         <button
