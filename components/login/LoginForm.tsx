@@ -1,24 +1,37 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 type Role = "negocio" | "admin";
 
 export default function LoginForm() {
+  const router = useRouter();
   const [role, setRole] = useState<Role>("negocio");
   const [isLogin, setIsLogin] = useState(true);
   const [oauthError, setOauthError] = useState("");
 
+  const [businessName, setBusinessName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [emailNotice, setEmailNotice] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
   const isAdmin = role === "admin";
+
+  const isConfigured = () => {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      setOauthError("El inicio de sesión aún no está configurado. Vuelve a intentarlo más tarde.");
+      return false;
+    }
+    return true;
+  };
 
   const handleOAuth = async (provider: "google" | "facebook") => {
     setOauthError("");
-    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-      setOauthError("El inicio de sesión aún no está configurado. Vuelve a intentarlo más tarde.");
-      return;
-    }
+    if (!isConfigured()) return;
     const supabase = createClient();
     const next = isAdmin ? "/admin" : "/dashboard";
     const { error } = await supabase.auth.signInWithOAuth({
@@ -28,6 +41,56 @@ export default function LoginForm() {
     if (error) setOauthError("No se pudo iniciar sesión. Intenta de nuevo.");
   };
 
+  const handleEmailAuth = async () => {
+    setEmailError("");
+    setEmailNotice("");
+    if (!email.trim() || !password) {
+      setEmailError("Completa tu correo y contraseña.");
+      return;
+    }
+    if (!isLogin && !businessName.trim()) {
+      setEmailError("Ingresa el nombre de tu negocio.");
+      return;
+    }
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      setEmailError("El inicio de sesión aún no está configurado. Vuelve a intentarlo más tarde.");
+      return;
+    }
+
+    setSubmitting(true);
+    const supabase = createClient();
+
+    if (isLogin) {
+      const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+      setSubmitting(false);
+      if (error) {
+        setEmailError("Correo o contraseña incorrectos.");
+        return;
+      }
+      router.push("/dashboard");
+      return;
+    }
+
+    const { data, error } = await supabase.auth.signUp({
+      email: email.trim(),
+      password,
+      options: {
+        data: { full_name: businessName.trim() },
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+      },
+    });
+    setSubmitting(false);
+    if (error) {
+      setEmailError(error.message.includes("already registered") ? "Ya existe una cuenta con ese correo." : "No se pudo crear la cuenta. Intenta de nuevo.");
+      return;
+    }
+    if (data.session) {
+      router.push("/dashboard");
+      return;
+    }
+    setEmailNotice("¡Listo! Revisa tu correo y confirma tu cuenta para poder iniciar sesión.");
+  };
+
   const heading = isAdmin ? "Acceso administrativo" : isLogin ? "Accede a tu cuenta de negocio" : "Registra tu negocio gratis";
   const subheading = isAdmin
     ? "Panel de control de Visit San Carlos."
@@ -35,7 +98,6 @@ export default function LoginForm() {
       ? "Gestiona tu perfil y tu publicidad en Visit San Carlos."
       : "Crea tu cuenta para publicar tu negocio en el directorio.";
   const ctaLabel = isAdmin ? "Entrar al panel" : isLogin ? "Iniciar sesión" : "Crear cuenta";
-  const ctaHref = isAdmin ? "/admin" : "/dashboard";
   const switchPrompt = isLogin ? "¿No tienes cuenta?" : "¿Ya tienes cuenta?";
   const switchLabel = isLogin ? "Regístrate" : "Inicia sesión";
 
@@ -122,17 +184,23 @@ export default function LoginForm() {
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {!isLogin && <input type="text" placeholder="Nombre del negocio" style={inputStyle} />}
-              <input type="email" placeholder="Correo electrónico" style={inputStyle} />
-              <input type="password" placeholder="Contraseña" style={inputStyle} />
+              {!isLogin && <input value={businessName} onChange={(e) => setBusinessName(e.target.value)} type="text" placeholder="Nombre del negocio" style={inputStyle} />}
+              <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="Correo electrónico" style={inputStyle} />
+              <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Contraseña" style={inputStyle} />
               {isLogin && (
                 <a href="#" style={{ fontSize: 12, fontWeight: 600, alignSelf: "flex-end" }}>
                   ¿Olvidaste tu contraseña?
                 </a>
               )}
-              <Link href={ctaHref} style={{ display: "block", textAlign: "center", border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: 13, borderRadius: 10, cursor: "pointer" }}>
-                {ctaLabel}
-              </Link>
+              {emailError && <p style={{ margin: 0, fontSize: 12, color: "#E23E7E", fontWeight: 600 }}>{emailError}</p>}
+              {emailNotice && <p style={{ margin: 0, fontSize: 12, color: "#009BA4", fontWeight: 600 }}>{emailNotice}</p>}
+              <button
+                onClick={handleEmailAuth}
+                disabled={submitting}
+                style={{ display: "block", width: "100%", textAlign: "center", border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: 13, borderRadius: 10, cursor: submitting ? "default" : "pointer", opacity: submitting ? 0.6 : 1 }}
+              >
+                {submitting ? "Procesando…" : ctaLabel}
+              </button>
             </div>
           </>
         )}
