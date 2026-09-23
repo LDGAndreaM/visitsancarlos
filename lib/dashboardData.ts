@@ -1,5 +1,12 @@
 import type { ClasificadoCategory } from "./clasificadosData";
 
+const MONTHS_ABBR = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+
+function fmtEventDate(dateStr: string): string {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return `${d} ${MONTHS_ABBR[m - 1]} ${y}`;
+}
+
 export type ListingBase = {
   id: string;
   status: string;
@@ -29,7 +36,23 @@ export type ClasificadoListing = ListingBase & {
   condition: "Nuevo" | "Usado";
 };
 
-export type DashboardListing = DirectorioListing | ClasificadoListing;
+export type EventListing = ListingBase & {
+  type: "evento";
+  name: string;
+  date: string;
+  endDate: string;
+  time: string;
+  endTime: string;
+  category: string;
+  cost: string;
+  organizers: string;
+  email: string;
+  facebook: string;
+  instagram: string;
+  website: string;
+};
+
+export type DashboardListing = DirectorioListing | ClasificadoListing | EventListing;
 
 export const INITIAL_LISTINGS: DashboardListing[] = [
   {
@@ -95,6 +118,54 @@ export const INITIAL_LISTINGS: DashboardListing[] = [
     statusColor: "#EB600A",
     statusBg: "#FDEEE4",
     description: "Kayak doble, incluye remos y bomba de aire.",
+    visibility: "Invisible",
+    pendingApproval: true,
+  },
+  {
+    id: "ev-1",
+    type: "evento",
+    name: "Torneo de Pesca",
+    category: "DEPORTIVO",
+    date: "2026-09-22",
+    endDate: "2026-09-22",
+    time: "07:00",
+    endTime: "13:00",
+    location: "Marina San Carlos, San Carlos, Sonora",
+    phone: "622 114 5316",
+    status: "Activo",
+    statusColor: "#009BA4",
+    statusBg: "#E5F6F7",
+    description: "Competencia anual de pesca deportiva abierta a locales y visitantes.",
+    cost: "$500 MXN por equipo",
+    organizers: "Club de Pesca San Carlos",
+    email: "eventos@visitsancarlos.com",
+    facebook: "https://facebook.com",
+    instagram: "",
+    website: "",
+    visibility: "Publicado",
+    pendingApproval: false,
+  },
+  {
+    id: "ev-2",
+    type: "evento",
+    name: "Noche de Música en Vivo",
+    category: "ENTRETENIMIENTO",
+    date: "2026-09-25",
+    endDate: "2026-09-25",
+    time: "19:30",
+    endTime: "23:00",
+    location: "Plaza San Carlos, San Carlos, Sonora",
+    phone: "622 114 5316",
+    status: "En revisión",
+    statusColor: "#EB600A",
+    statusBg: "#FDEEE4",
+    description: "Bandas locales en vivo con food trucks y ambiente familiar.",
+    cost: "Gratis",
+    organizers: "Visit San Carlos",
+    email: "visit.sancarlos.son@gmail.com",
+    facebook: "https://facebook.com",
+    instagram: "https://instagram.com",
+    website: "",
     visibility: "Invisible",
     pendingApproval: true,
   },
@@ -183,13 +254,24 @@ export function toListingView(l: DashboardListing): ListingView {
       typeBg: "#E5F6F7",
     };
   }
+  if (l.type === "clasificado") {
+    return {
+      ...l,
+      displayName: l.title,
+      subtitle: `${l.category} · ${fmtMoney(Number(l.price) || 0)}`,
+      extraLine: `${l.condition} · ${l.location}`,
+      typeLabel: "Clasificados",
+      typeColor: "#EB600A",
+      typeBg: "#FDEEE4",
+    };
+  }
   return {
     ...l,
-    displayName: l.title,
-    subtitle: `${l.category} · ${fmtMoney(Number(l.price) || 0)}`,
-    extraLine: `${l.condition} · ${l.location}`,
-    typeLabel: "Clasificados",
-    typeColor: "#EB600A",
-    typeBg: "#FDEEE4",
+    displayName: l.name,
+    subtitle: `${l.category} · ${fmtEventDate(l.date)}`,
+    extraLine: l.location,
+    typeLabel: "Eventos",
+    typeColor: "#3FA8C4",
+    typeBg: "#EAF8FA",
   };
 }

@@ -9,6 +9,7 @@ import CuentaTab from "./CuentaTab";
 import ChooseListingTypeModal from "./ChooseListingTypeModal";
 import EditDirectorioModal from "./EditDirectorioModal";
 import EditClasificadoModal from "./EditClasificadoModal";
+import EditEventoModal from "./EditEventoModal";
 import AdModal from "./AdModal";
 import {
   AD_CATALOG,
@@ -20,10 +21,13 @@ import {
   type DashboardListing,
   type DirectorioListing,
   type ClasificadoListing,
+  type EventListing,
   type ListingView,
 } from "@/lib/dashboardData";
+import { EVENT_CATEGORIES } from "@/lib/eventsData";
 
 export type DashboardTab = "resumen" | "publicaciones" | "publicidad" | "cuenta";
+export type ListingFilter = "todos" | "directorio" | "clasificado" | "evento";
 
 export type ListingRow = ListingView & { onEdit: () => void };
 
@@ -54,7 +58,7 @@ export default function DashboardApp() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showTypePicker, setShowTypePicker] = useState(false);
   const [showAdModal, setShowAdModal] = useState(false);
-  const [listingFilter, setListingFilter] = useState<"todos" | "directorio" | "clasificado">("todos");
+  const [listingFilter, setListingFilter] = useState<ListingFilter>("todos");
 
   const listingRows: ListingRow[] = listings.map((l) => ({ ...toListingView(l), onEdit: () => setEditingId(l.id) }));
   const editing = listings.find((l) => l.id === editingId) ?? null;
@@ -135,6 +139,39 @@ export default function DashboardApp() {
     setTab("publicaciones");
   };
 
+  const handleChooseEvento = () => {
+    const id = "ev-" + Date.now();
+    const today = new Date().toISOString().slice(0, 10);
+    const newEvt: EventListing = {
+      id,
+      type: "evento",
+      name: "Nuevo evento",
+      category: EVENT_CATEGORIES[0].toUpperCase(),
+      date: today,
+      endDate: today,
+      time: "00:00",
+      endTime: "",
+      location: "",
+      phone: "",
+      status: "Pendiente de aprobación",
+      statusColor: "#EB600A",
+      statusBg: "#FDEEE4",
+      description: "",
+      cost: "",
+      organizers: "",
+      email: "",
+      facebook: "",
+      instagram: "",
+      website: "",
+      visibility: "Invisible",
+      pendingApproval: true,
+    };
+    setListings((prev) => [...prev, newEvt]);
+    setEditingId(id);
+    setShowTypePicker(false);
+    setTab("publicaciones");
+  };
+
   const handleAdAction = (id: string) => {
     setAds((prev) =>
       prev.map((ad) => {
@@ -191,6 +228,9 @@ export default function DashboardApp() {
             <a href="/clasificados" style={{ background: "#ffffff", border: "2px solid #009BA4", color: "#009BA4", fontWeight: 700, fontSize: 13, padding: "10px 18px", borderRadius: 10 }}>
               Ver clasificados
             </a>
+            <a href="/eventos" style={{ background: "#ffffff", border: "2px solid #009BA4", color: "#009BA4", fontWeight: 700, fontSize: 13, padding: "10px 18px", borderRadius: 10 }}>
+              Ver eventos
+            </a>
           </div>
         </div>
 
@@ -208,10 +248,16 @@ export default function DashboardApp() {
       </main>
 
       {showTypePicker && (
-        <ChooseListingTypeModal onClose={() => setShowTypePicker(false)} onChooseDirectorio={handleChooseDirectorio} onChooseClasificado={handleChooseClasificado} />
+        <ChooseListingTypeModal
+          onClose={() => setShowTypePicker(false)}
+          onChooseDirectorio={handleChooseDirectorio}
+          onChooseClasificado={handleChooseClasificado}
+          onChooseEvento={handleChooseEvento}
+        />
       )}
       {editing && editing.type === "directorio" && <EditDirectorioModal listing={editing} onClose={() => setEditingId(null)} onSave={handleSaveListing} />}
       {editing && editing.type === "clasificado" && <EditClasificadoModal listing={editing} onClose={() => setEditingId(null)} onSave={handleSaveListing} />}
+      {editing && editing.type === "evento" && <EditEventoModal listing={editing} onClose={() => setEditingId(null)} onSave={handleSaveListing} />}
       {showAdModal && <AdModal listings={listingRows} onClose={() => setShowAdModal(false)} onConfirm={handleConfirmAdModal} />}
     </div>
   );

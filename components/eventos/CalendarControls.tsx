@@ -1,13 +1,14 @@
+import Link from "next/link";
+
 type CalendarControlsProps = {
   view: "month" | "week";
   monthLabel: string;
   onPrev: () => void;
   onNext: () => void;
   onSetView: (view: "month" | "week") => void;
-  onOpenAdd: () => void;
 };
 
-export default function CalendarControls({ view, monthLabel, onPrev, onNext, onSetView, onOpenAdd }: CalendarControlsProps) {
+export default function CalendarControls({ view, monthLabel, onPrev, onNext, onSetView }: CalendarControlsProps) {
   const isMonth = view === "month";
 
   return (
@@ -61,12 +62,12 @@ export default function CalendarControls({ view, monthLabel, onPrev, onNext, onS
               Semana
             </button>
           </div>
-          <button
-            onClick={onOpenAdd}
-            style={{ border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: "11px 22px", borderRadius: 10, cursor: "pointer" }}
+          <Link
+            href="/login"
+            style={{ border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: "11px 22px", borderRadius: 10 }}
           >
             + Agregar evento
-          </button>
+          </Link>
         </div>
       </div>
     </section>

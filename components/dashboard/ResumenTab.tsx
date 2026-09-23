@@ -13,10 +13,11 @@ type ResumenTabProps = {
 export default function ResumenTab({ listings, ads, onTabChange }: ResumenTabProps) {
   const directorioCount = listings.filter((l) => l.type === "directorio").length;
   const clasificadoCount = listings.filter((l) => l.type === "clasificado").length;
+  const eventoCount = listings.filter((l) => l.type === "evento").length;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 18 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 18 }}>
         <div style={statCardStyle}>
           <span style={{ fontSize: 12, fontWeight: 700, color: "#5C7679" }}>Negocios en directorio</span>
           <span style={{ fontSize: 22, fontWeight: 800, color: "#009BA4" }}>{directorioCount}</span>
@@ -24,6 +25,10 @@ export default function ResumenTab({ listings, ads, onTabChange }: ResumenTabPro
         <div style={statCardStyle}>
           <span style={{ fontSize: 12, fontWeight: 700, color: "#5C7679" }}>Anuncios en clasificados</span>
           <span style={{ fontSize: 22, fontWeight: 800, color: "#143840" }}>{clasificadoCount}</span>
+        </div>
+        <div style={statCardStyle}>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "#5C7679" }}>Eventos publicados</span>
+          <span style={{ fontSize: 22, fontWeight: 800, color: "#3FA8C4" }}>{eventoCount}</span>
         </div>
         <div style={statCardStyle}>
           <span style={{ fontSize: 12, fontWeight: 700, color: "#5C7679" }}>Calificación</span>

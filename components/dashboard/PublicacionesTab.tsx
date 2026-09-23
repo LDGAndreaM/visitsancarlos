@@ -1,7 +1,5 @@
 import ImagePlaceholder from "@/components/ImagePlaceholder";
-import type { ListingRow } from "./DashboardApp";
-
-type ListingFilter = "todos" | "directorio" | "clasificado";
+import type { ListingFilter, ListingRow } from "./DashboardApp";
 
 type PublicacionesTabProps = {
   listings: ListingRow[];
@@ -14,6 +12,7 @@ const FILTERS: { key: ListingFilter; label: string }[] = [
   { key: "todos", label: "Todas" },
   { key: "directorio", label: "Directorio" },
   { key: "clasificado", label: "Clasificados" },
+  { key: "evento", label: "Eventos" },
 ];
 
 export default function PublicacionesTab({ listings, filter, onFilterChange, onAddListing }: PublicacionesTabProps) {
