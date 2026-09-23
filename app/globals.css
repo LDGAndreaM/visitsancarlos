@@ -50,3 +50,24 @@ input::placeholder {
 button {
   font-family: inherit;
 }
+
+@keyframes vscTypingDot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+.vsc-typing-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--vsc-teal);
+  animation: vscTypingDot 1s infinite;
+}
