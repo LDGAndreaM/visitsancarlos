@@ -15,6 +15,10 @@ export default function LoginForm() {
 
   const handleOAuth = async (provider: "google" | "facebook") => {
     setOauthError("");
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      setOauthError("El inicio de sesión aún no está configurado. Vuelve a intentarlo más tarde.");
+      return;
+    }
     const supabase = createClient();
     const next = isAdmin ? "/admin" : "/dashboard";
     const { error } = await supabase.auth.signInWithOAuth({
