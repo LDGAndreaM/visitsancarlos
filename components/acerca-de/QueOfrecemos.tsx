@@ -1,13 +1,18 @@
+import Image from "next/image";
 import Link from "next/link";
-import ImagePlaceholder from "@/components/ImagePlaceholder";
 import { OFRECEMOS_ITEMS } from "@/lib/acercaDeData";
 
 export default function QueOfrecemos() {
   return (
     <section style={{ background: "#6AC7E2", padding: "64px 48px" }}>
-      <div style={{ maxWidth: 1080, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1.1fr", gap: 48, alignItems: "center" }}>
-        <div style={{ height: 320, borderRadius: 22, overflow: "hidden", boxShadow: "0 16px 36px rgba(0,60,66,0.15)" }}>
-          <ImagePlaceholder caption="Foto: letrero de San Carlos" />
+      <div className="vsc-split-grid" style={{ maxWidth: 1080, margin: "0 auto", alignItems: "center" }}>
+        <div style={{ position: "relative", height: 320, borderRadius: 22, overflow: "hidden", boxShadow: "0 16px 36px rgba(0,60,66,0.15)" }}>
+          <Image
+            src="/uploads/acerca-de-ofrecemos.jpg"
+            alt="Vista aérea de la marina y el pueblo de San Carlos"
+            fill
+            style={{ objectFit: "cover" }}
+          />
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           <h2 style={{ margin: 0, fontSize: 26, fontWeight: 800, color: "#ffffff" }}>¿Qué ofrecemos?</h2>
