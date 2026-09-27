@@ -155,14 +155,22 @@ export default function LoginForm() {
             onClick={() => handleOAuth("facebook")}
             style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, border: "1px solid #E2ECED", background: "#ffffff", borderRadius: 10, padding: 12, fontSize: 14, fontWeight: 600, color: "#143840", cursor: "pointer" }}
           >
-            <span style={{ width: 20, height: 20, borderRadius: "50%", background: "#1877F2", color: "#ffffff", fontSize: 12, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>f</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" style={{ flexShrink: 0 }}>
+              <circle cx="10" cy="10" r="10" fill="#1877F2" />
+              <path d="M13.2 10.3h-2v6.2H8.7v-6.2H7.3V8.4h1.4V7.2c0-1.6.7-2.6 2.6-2.6h1.6v1.9h-1c-.7 0-.8.3-.8.8v1.1h1.8l-.2 1.9z" fill="#ffffff" />
+            </svg>
             Continuar con Facebook
           </button>
           <button
             onClick={() => handleOAuth("google")}
             style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10, border: "1px solid #E2ECED", background: "#ffffff", borderRadius: 10, padding: 12, fontSize: 14, fontWeight: 600, color: "#143840", cursor: "pointer" }}
           >
-            <span style={{ width: 20, height: 20, borderRadius: "50%", background: "#F4FAFB", color: "#EB600A", fontSize: 12, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>G</span>
+            <svg width="20" height="20" viewBox="0 0 48 48" style={{ flexShrink: 0 }}>
+              <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l6-6C33.8 5.5 29.2 3.5 24 3.5 12.7 3.5 3.5 12.7 3.5 24S12.7 44.5 24 44.5 44.5 35.3 44.5 24c0-1.2-.1-2.4-.3-3.5z" />
+              <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.8 1.1 8 3l6-6C33.8 5.5 29.2 3.5 24 3.5 16.2 3.5 9.4 7.8 6.3 14.7z" />
+              <path fill="#4CAF50" d="M24 44.5c5.1 0 9.7-1.9 13.1-5.1l-6.1-5.1c-1.9 1.4-4.4 2.2-7 2.2-5.2 0-9.6-3.3-11.3-8l-6.4 5C9.4 40.2 16.2 44.5 24 44.5z" />
+              <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.1-4.1 5.4l6.1 5.1C40.9 35.9 44.5 30.4 44.5 24c0-1.2-.1-2.4-.3-3.5z" />
+            </svg>
             Continuar con Google
           </button>
         </div>
