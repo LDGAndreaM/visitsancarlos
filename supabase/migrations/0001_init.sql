@@ -1,5 +1,6 @@
 -- Visit San Carlos: esquema inicial
 -- Ejecutar en Supabase (SQL Editor) o vía `supabase db push`.
+-- Este archivo se puede correr varias veces sin error (crea/reemplaza todo de forma segura).
 
 -- ============ PERFILES ============
 -- Un perfil por usuario autenticado (se crea automáticamente al registrarse).
@@ -14,9 +15,11 @@ create table if not exists public.profiles (
 
 alter table public.profiles enable row level security;
 
+drop policy if exists "profiles: cualquiera autenticado puede leer" on public.profiles;
 create policy "profiles: cualquiera autenticado puede leer" on public.profiles
   for select to authenticated using (true);
 
+drop policy if exists "profiles: cada quien edita su propio perfil" on public.profiles;
 create policy "profiles: cada quien edita su propio perfil" on public.profiles
   for update to authenticated using (auth.uid() = id);
 
@@ -29,6 +32,7 @@ returns boolean language sql stable as $$
   );
 $$;
 
+drop policy if exists "profiles: solo super admin cambia admin_role" on public.profiles;
 create policy "profiles: solo super admin cambia admin_role" on public.profiles
   for update to authenticated
   using (public.is_super_admin(auth.uid()))
@@ -55,6 +59,7 @@ create table if not exists public.admin_invites (
 
 alter table public.admin_invites enable row level security;
 
+drop policy if exists "admin_invites: solo super admin lee/escribe" on public.admin_invites;
 create policy "admin_invites: solo super admin lee/escribe" on public.admin_invites
   for all to authenticated
   using (public.is_super_admin(auth.uid()))
@@ -123,15 +128,19 @@ create table if not exists public.businesses (
 
 alter table public.businesses enable row level security;
 
+drop policy if exists "businesses: lectura pública de aprobados" on public.businesses;
 create policy "businesses: lectura pública de aprobados" on public.businesses
   for select using (status = 'aprobado' or owner_id = auth.uid() or public.is_admin(auth.uid()));
 
+drop policy if exists "businesses: dueño crea su propio negocio" on public.businesses;
 create policy "businesses: dueño crea su propio negocio" on public.businesses
   for insert to authenticated with check (owner_id = auth.uid());
 
+drop policy if exists "businesses: dueño edita el suyo, admin edita cualquiera" on public.businesses;
 create policy "businesses: dueño edita el suyo, admin edita cualquiera" on public.businesses
   for update to authenticated using (owner_id = auth.uid() or public.is_admin(auth.uid()));
 
+drop policy if exists "businesses: dueño o admin elimina" on public.businesses;
 create policy "businesses: dueño o admin elimina" on public.businesses
   for delete to authenticated using (owner_id = auth.uid() or public.is_admin(auth.uid()));
 
@@ -154,15 +163,19 @@ create table if not exists public.classifieds (
 
 alter table public.classifieds enable row level security;
 
+drop policy if exists "classifieds: lectura pública de aprobados" on public.classifieds;
 create policy "classifieds: lectura pública de aprobados" on public.classifieds
   for select using (status = 'aprobado' or owner_id = auth.uid() or public.is_admin(auth.uid()));
 
+drop policy if exists "classifieds: dueño crea el suyo" on public.classifieds;
 create policy "classifieds: dueño crea el suyo" on public.classifieds
   for insert to authenticated with check (owner_id = auth.uid());
 
+drop policy if exists "classifieds: dueño edita el suyo, admin edita cualquiera" on public.classifieds;
 create policy "classifieds: dueño edita el suyo, admin edita cualquiera" on public.classifieds
   for update to authenticated using (owner_id = auth.uid() or public.is_admin(auth.uid()));
 
+drop policy if exists "classifieds: dueño o admin elimina" on public.classifieds;
 create policy "classifieds: dueño o admin elimina" on public.classifieds
   for delete to authenticated using (owner_id = auth.uid() or public.is_admin(auth.uid()));
 
@@ -193,15 +206,19 @@ create table if not exists public.events (
 
 alter table public.events enable row level security;
 
+drop policy if exists "events: lectura pública de aprobados" on public.events;
 create policy "events: lectura pública de aprobados" on public.events
   for select using (status = 'aprobado' or owner_id = auth.uid() or public.is_admin(auth.uid()));
 
+drop policy if exists "events: dueño crea el suyo" on public.events;
 create policy "events: dueño crea el suyo" on public.events
   for insert to authenticated with check (owner_id = auth.uid());
 
+drop policy if exists "events: dueño edita el suyo, admin edita cualquiera" on public.events;
 create policy "events: dueño edita el suyo, admin edita cualquiera" on public.events
   for update to authenticated using (owner_id = auth.uid() or public.is_admin(auth.uid()));
 
+drop policy if exists "events: dueño o admin elimina" on public.events;
 create policy "events: dueño o admin elimina" on public.events
   for delete to authenticated using (owner_id = auth.uid() or public.is_admin(auth.uid()));
 
@@ -220,9 +237,11 @@ create table if not exists public.blog_posts (
 
 alter table public.blog_posts enable row level security;
 
+drop policy if exists "blog: lectura pública de publicados" on public.blog_posts;
 create policy "blog: lectura pública de publicados" on public.blog_posts
   for select using (published = true or public.is_admin(auth.uid()));
 
+drop policy if exists "blog: solo administradores publican" on public.blog_posts;
 create policy "blog: solo administradores publican" on public.blog_posts
   for all to authenticated using (public.is_admin(auth.uid())) with check (public.is_admin(auth.uid()));
 
@@ -240,9 +259,11 @@ create table if not exists public.gallery_photos (
 
 alter table public.gallery_photos enable row level security;
 
+drop policy if exists "gallery_photos: lectura pública de aprobadas" on public.gallery_photos;
 create policy "gallery_photos: lectura pública de aprobadas" on public.gallery_photos
   for select using (status = 'aprobado' or public.is_admin(auth.uid()));
 
+drop policy if exists "gallery_photos: solo administradores suben/editan/eliminan" on public.gallery_photos;
 create policy "gallery_photos: solo administradores suben/editan/eliminan" on public.gallery_photos
   for all to authenticated using (public.is_admin(auth.uid())) with check (public.is_admin(auth.uid()));
 
@@ -251,12 +272,15 @@ insert into storage.buckets (id, name, public)
 values ('gallery', 'gallery', true)
 on conflict (id) do nothing;
 
+drop policy if exists "gallery bucket: lectura pública" on storage.objects;
 create policy "gallery bucket: lectura pública" on storage.objects
   for select using (bucket_id = 'gallery');
 
+drop policy if exists "gallery bucket: solo administradores suben" on storage.objects;
 create policy "gallery bucket: solo administradores suben" on storage.objects
   for insert to authenticated with check (bucket_id = 'gallery' and public.is_admin(auth.uid()));
 
+drop policy if exists "gallery bucket: solo administradores eliminan" on storage.objects;
 create policy "gallery bucket: solo administradores eliminan" on storage.objects
   for delete to authenticated using (bucket_id = 'gallery' and public.is_admin(auth.uid()));
 
@@ -278,15 +302,18 @@ create table if not exists public.chat_messages (
 alter table public.chats enable row level security;
 alter table public.chat_messages enable row level security;
 
+drop policy if exists "chats: dueño o admin ve el chat" on public.chats;
 create policy "chats: dueño o admin ve el chat" on public.chats
   for select to authenticated using (
     user_id = auth.uid()
     or exists (select 1 from public.profiles where id = auth.uid() and admin_role in ('super', 'limitado'))
   );
 
+drop policy if exists "chats: usuario crea su propio chat" on public.chats;
 create policy "chats: usuario crea su propio chat" on public.chats
   for insert to authenticated with check (user_id = auth.uid());
 
+drop policy if exists "chat_messages: dueño o admin lee/escribe" on public.chat_messages;
 create policy "chat_messages: dueño o admin lee/escribe" on public.chat_messages
   for all to authenticated using (
     exists (
