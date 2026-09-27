@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import ImagePlaceholder from "./ImagePlaceholder";
 import CategoryDropdown from "./CategoryDropdown";
 
@@ -132,24 +133,13 @@ export default function Hero() {
         >
           <ImagePlaceholder caption="Foto: Atardecer en San Carlos" />
         </div>
-        <div
-          style={{
-            position: "absolute",
-            top: 150,
-            right: 0,
-            width: 56,
-            height: 68,
-            background: "#EB600A",
-            borderRadius: "50% 50% 50% 0",
-            transform: "rotate(-45deg)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: "0 8px 16px rgba(235,96,10,0.35)",
-          }}
-        >
-          <span style={{ transform: "rotate(45deg)", width: 26, height: 26, borderRadius: "50%", background: "rgba(255,255,255,0.9)" }} />
-        </div>
+        <Image
+          src="/uploads/Recurso 4pin.png"
+          alt=""
+          width={64}
+          height={88}
+          style={{ position: "absolute", top: 150, right: 0, width: 64, height: "auto", filter: "drop-shadow(0 8px 16px rgba(235,96,10,0.35))" }}
+        />
       </div>
       </div>
     </section>
