@@ -37,9 +37,12 @@ export const FOOTER_LINKS = {
   ],
   emergencias: [
     { label: "Emergencias", href: "tel:911" },
-    { label: "Bomberos", href: "tel:+526222241573" },
-    { label: "Cruz roja", href: "tel:+526222241234" },
-    { label: "Rescate San Carlos", href: "tel:+526622260911" },
-    { label: "Policía y transito Guaymas", href: "tel:+526222210911" },
+    { label: "Comisaría", href: "tel:+526222261400" },
+    { label: "Rescate", href: "tel:+526222260911" },
+    { label: "Bomberos", href: "tel:+526226902180" },
+    { label: "Green Angels", href: "tel:078" },
+    { label: "Agua (CEA)", href: "tel:+526222261310" },
+    { label: "Luz (CFE)", href: "tel:071" },
+    { label: "Teléfono (Telmex)", href: "tel:+526222260050" },
   ],
 } as const;
