@@ -23,8 +23,8 @@ export default function MisionVisionValores() {
           }}
         >
           <Image
-            src="/uploads/acerca-de-mision-vision.jpg"
-            alt="Cerro Tetakawi y la bahía de San Carlos al atardecer"
+            src="/uploads/acerca-de-atardecer.jpg"
+            alt="Atardecer en la marina de San Carlos, con el cerro Tetakawi de fondo"
             fill
             style={{ objectFit: "cover" }}
           />
