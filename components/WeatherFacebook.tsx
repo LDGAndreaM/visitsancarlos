@@ -29,7 +29,7 @@ export default function WeatherFacebook() {
       </div>
       <div style={{ background: "#ffffff", borderRadius: 20, padding: 24, boxShadow: "0 10px 24px rgba(0,60,66,0.1)", display: "flex", flexDirection: "column", gap: 14, alignItems: "center" }}>
         <h3 style={{ margin: 0, alignSelf: "flex-start", fontSize: 18, fontWeight: 800, color: "#143840" }}>Desde nuestro Facebook</h3>
-        <FacebookPagePlugin />
+        <FacebookPagePlugin height={360} />
       </div>
     </section>
   );
