@@ -77,6 +77,16 @@ button {
   display: none;
 }
 
+.vsc-cookie-banner {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 80;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
 @media (max-width: 768px) {
   .vsc-desktop-only {
     display: none;
@@ -86,5 +96,8 @@ button {
   }
   body {
     padding-bottom: 76px;
+  }
+  .vsc-cookie-banner {
+    bottom: 92px;
   }
 }

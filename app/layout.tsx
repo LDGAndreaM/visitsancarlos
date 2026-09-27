@@ -3,7 +3,7 @@ import { Poppins, Caveat } from "next/font/google";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL, DEFAULT_OG_IMAGE, absoluteUrl } from "@/lib/site";
 import { SOCIAL_LINKS } from "@/lib/nav";
 import JsonLd from "@/components/JsonLd";
-import GoogleAnalytics from "@/components/GoogleAnalytics";
+import CookieConsent from "@/components/CookieConsent";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -84,8 +84,8 @@ export default function RootLayout({
     <html lang="es">
       <body className={`${poppins.variable} ${caveat.variable}`}>
         <JsonLd data={[organizationJsonLd, websiteJsonLd]} />
-        {gaMeasurementId && <GoogleAnalytics measurementId={gaMeasurementId} />}
         {children}
+        <CookieConsent gaMeasurementId={gaMeasurementId} />
       </body>
     </html>
   );
