@@ -20,6 +20,7 @@ import NewEventModal from "./NewEventModal";
 import EditEventAdminModal from "./EditEventAdminModal";
 import GaleriaAdminTab from "./GaleriaAdminTab";
 import UploadPhotoModal from "./UploadPhotoModal";
+import EditPhotoModal from "./EditPhotoModal";
 import PublicidadAdminTab from "./PublicidadAdminTab";
 import SoporteTab from "./SoporteTab";
 import ContactoAdminTab from "./ContactoAdminTab";
@@ -32,7 +33,7 @@ import { createBusinessAsAdmin, deleteBusiness, fetchAllBusinessesAdmin, setBusi
 import { createEventAsAdmin, deleteEvent as deleteEventApi, fetchAllEventsAdmin, setEventFeatured, setEventStatus, updateEventFromAdmin } from "@/lib/supabase/events";
 import { createClasificadoAsAdmin, deleteClasificado, fetchAllClasificadosAdmin, setClasificadoStatus } from "@/lib/supabase/classifieds";
 import { createPost, deletePost as deletePostApi, fetchAllPostsAdmin, setPostPublished, updatePost, type PostAuthorFields } from "@/lib/supabase/blogPosts";
-import { deletePhoto, fetchAllPhotosAdmin, uploadPhoto, type GalleryPhotoView } from "@/lib/supabase/gallery";
+import { deletePhoto, fetchAllPhotosAdmin, updatePhoto, uploadPhoto, type GalleryPhotoView } from "@/lib/supabase/gallery";
 import { deleteContactMessage, fetchContactMessages, setContactMessageRead, type ContactMessage } from "@/lib/supabase/contact";
 
 const TITLES: Record<AdminTab, [string, string]> = {
@@ -78,6 +79,7 @@ export default function AdminApp() {
   const [showAddBusiness, setShowAddBusiness] = useState(false);
   const [showAddClasificado, setShowAddClasificado] = useState(false);
   const [showUploadPhoto, setShowUploadPhoto] = useState(false);
+  const [editingPhoto, setEditingPhoto] = useState<GalleryPhotoView | null>(null);
   const [showAddAdmin, setShowAddAdmin] = useState(false);
   const [editingBusinessId, setEditingBusinessId] = useState<string | null>(null);
   const [editingEventId, setEditingEventId] = useState<string | null>(null);
@@ -284,12 +286,19 @@ export default function AdminApp() {
     await refreshClasificados();
   };
 
-  const uploadPhotoHandler = async (file: File, values: { caption: string; category: string; tall: boolean }) => {
+  const uploadPhotoHandler = async (file: File, values: { caption: string; categories: string[]; tall: boolean }) => {
     if (!currentAccount) return;
     const { error } = await uploadPhoto(currentAccount.id, file, values);
     if (!error) {
       await refreshPhotos();
       setShowUploadPhoto(false);
+    }
+  };
+  const updatePhotoHandler = async (id: string, values: { caption: string; categories: string[]; tall: boolean }) => {
+    const { error } = await updatePhoto(id, values);
+    if (!error) {
+      await refreshPhotos();
+      setEditingPhoto(null);
     }
   };
   const deletePhotoHandler = async (id: string) => {
@@ -405,7 +414,7 @@ export default function AdminApp() {
         {tab === "eventos" && (
           <EventosAdminTab events={events} onOpenNewEvent={() => setShowNewEvent(true)} onToggleFeatured={toggleEventFeatured} onEdit={setEditingEventId} onArchive={toggleArchiveEvent} onDelete={deleteEventHandler} />
         )}
-        {tab === "galeria" && <GaleriaAdminTab photos={photos} onOpenUpload={() => setShowUploadPhoto(true)} onDelete={deletePhotoHandler} />}
+        {tab === "galeria" && <GaleriaAdminTab photos={photos} onOpenUpload={() => setShowUploadPhoto(true)} onEdit={setEditingPhoto} onDelete={deletePhotoHandler} />}
         {tab === "publicidad" && <PublicidadAdminTab ads={ads} adminAdStats={adminAdStats} revenueFmt={stats.revenueFmt} />}
         {tab === "soporte" && <SoporteTab chats={chats} activeChatId={activeChatId} onSelectChat={selectChat} onSendMessage={sendChatMessage} />}
         {tab === "contacto" && <ContactoAdminTab messages={contactMessages} onToggleRead={toggleContactMessageRead} onDelete={deleteContactMessageHandler} />}
@@ -417,6 +426,7 @@ export default function AdminApp() {
       {showAddBusiness && <AddBusinessAdminModal onClose={() => setShowAddBusiness(false)} onSave={addBusinessAdmin} />}
       {showAddClasificado && <AddClasificadoAdminModal onClose={() => setShowAddClasificado(false)} onSave={addClasificadoAdmin} />}
       {showUploadPhoto && <UploadPhotoModal onClose={() => setShowUploadPhoto(false)} onUpload={uploadPhotoHandler} />}
+      {editingPhoto && <EditPhotoModal photo={editingPhoto} onClose={() => setEditingPhoto(null)} onSave={updatePhotoHandler} />}
       {showAddAdmin && <AddAdminModal existingEmails={accounts.map((a) => a.email)} onClose={() => setShowAddAdmin(false)} onSave={addAdmin} />}
       {editingBusiness && <EditBusinessAdminModal business={editingBusiness} onClose={() => setEditingBusinessId(null)} onSave={saveBusinessEdit} />}
       {editingEvent && <EditEventAdminModal event={editingEvent} onClose={() => setEditingEventId(null)} onSave={saveEventEdit} />}

@@ -1,13 +1,15 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { GALLERY_FILTERS } from "@/lib/galleryData";
+import type { GalleryPhotoView } from "@/lib/supabase/gallery";
 
 const CATEGORIES = GALLERY_FILTERS.filter((c) => c !== "Todas");
 
-type UploadPhotoModalProps = {
+type EditPhotoModalProps = {
+  photo: GalleryPhotoView;
   onClose: () => void;
-  onUpload: (file: File, values: { caption: string; categories: string[]; tall: boolean }) => Promise<void>;
+  onSave: (id: string, values: { caption: string; categories: string[]; tall: boolean }) => Promise<void>;
 };
 
 const fieldStyle: React.CSSProperties = { display: "flex", flexDirection: "column", gap: 6 };
@@ -30,33 +32,26 @@ function categoryPillStyle(checked: boolean): React.CSSProperties {
   };
 }
 
-export default function UploadPhotoModal({ onClose, onUpload }: UploadPhotoModalProps) {
-  const fileRef = useRef<HTMLInputElement>(null);
-  const [fileName, setFileName] = useState("");
-  const [caption, setCaption] = useState("");
-  const [categories, setCategories] = useState<string[]>([CATEGORIES[0]]);
-  const [tall, setTall] = useState(false);
+export default function EditPhotoModal({ photo, onClose, onSave }: EditPhotoModalProps) {
+  const [caption, setCaption] = useState(photo.caption);
+  const [categories, setCategories] = useState<string[]>(photo.categories);
+  const [tall, setTall] = useState(photo.tall);
   const [error, setError] = useState("");
-  const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   const toggleCategory = (c: string) => {
     setCategories((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
   };
 
-  const handleUpload = async () => {
-    const file = fileRef.current?.files?.[0];
-    if (!file) {
-      setError("Selecciona una foto para subir.");
-      return;
-    }
+  const handleSave = async () => {
     if (categories.length === 0) {
       setError("Elige al menos una categoría.");
       return;
     }
     setError("");
-    setUploading(true);
-    await onUpload(file, { caption, categories, tall });
-    setUploading(false);
+    setSaving(true);
+    await onSave(photo.id, { caption, categories, tall });
+    setSaving(false);
   };
 
   return (
@@ -65,18 +60,11 @@ export default function UploadPhotoModal({ onClose, onUpload }: UploadPhotoModal
         onClick={(e) => e.stopPropagation()}
         style={{ background: "#ffffff", borderRadius: 20, padding: 32, maxWidth: 440, width: "100%", display: "flex", flexDirection: "column", gap: 14, boxShadow: "0 24px 50px rgba(0,0,0,0.25)" }}
       >
-        <h3 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#143840" }}>Subir foto a la galería</h3>
+        <h3 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#143840" }}>Editar foto</h3>
 
-        <div style={fieldStyle}>
-          <label style={labelStyle}>Foto</label>
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/*"
-            onChange={(e) => setFileName(e.target.files?.[0]?.name ?? "")}
-            style={{ fontSize: 13, fontFamily: "inherit" }}
-          />
-          {fileName && <span style={{ fontSize: 12, color: "#7FA7AA" }}>{fileName}</span>}
+        <div style={{ position: "relative", width: "100%", height: 160, borderRadius: 14, overflow: "hidden" }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={photo.url} alt={photo.caption} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
         </div>
 
         <div style={fieldStyle}>
@@ -111,11 +99,11 @@ export default function UploadPhotoModal({ onClose, onUpload }: UploadPhotoModal
             Cancelar
           </button>
           <button
-            onClick={handleUpload}
-            disabled={uploading}
-            style={{ border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: "11px 22px", borderRadius: 10, cursor: uploading ? "default" : "pointer", opacity: uploading ? 0.6 : 1 }}
+            onClick={handleSave}
+            disabled={saving}
+            style={{ border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: "11px 22px", borderRadius: 10, cursor: saving ? "default" : "pointer", opacity: saving ? 0.6 : 1 }}
           >
-            {uploading ? "Subiendo…" : "Subir foto"}
+            {saving ? "Guardando…" : "Guardar cambios"}
           </button>
         </div>
       </div>

@@ -328,6 +328,11 @@ create table if not exists public.gallery_photos (
   created_at timestamptz not null default now()
 );
 
+-- Varias etiquetas por foto: "category" se conserva (primera etiqueta,
+-- por compatibilidad) y "categories" guarda la lista completa.
+alter table public.gallery_photos add column if not exists categories text[] not null default '{}'::text[];
+update public.gallery_photos set categories = array[category] where categories = '{}'::text[];
+
 alter table public.gallery_photos enable row level security;
 
 drop policy if exists "gallery_photos: lectura pública de aprobadas" on public.gallery_photos;

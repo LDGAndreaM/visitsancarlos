@@ -239,6 +239,15 @@ button {
   background: var(--vsc-orange);
 }
 
+/* Cuadrícula de la galería pública: 4 columnas en escritorio, 2 en
+   móvil (con minmax(0,1fr) para que nunca fuerce overflow). */
+.vsc-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: 160px;
+  gap: 16px;
+}
+
 /* Hero full-bleed: foto de fondo + degradado para legibilidad + texto y
    buscador encima, todo dentro de una sola franja de ancho completo. */
 .vsc-hero-banner {
@@ -374,6 +383,11 @@ button {
 
   .vsc-values-dots {
     display: flex;
+  }
+
+  .vsc-gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 130px;
   }
 
   /* El hero ocupa exactamente lo que queda de pantalla debajo de la barra

@@ -3,10 +3,11 @@ import type { GalleryPhotoView } from "@/lib/supabase/gallery";
 type GaleriaAdminTabProps = {
   photos: GalleryPhotoView[];
   onOpenUpload: () => void;
+  onEdit: (photo: GalleryPhotoView) => void;
   onDelete: (id: string) => void;
 };
 
-export default function GaleriaAdminTab({ photos, onOpenUpload, onDelete }: GaleriaAdminTabProps) {
+export default function GaleriaAdminTab({ photos, onOpenUpload, onEdit, onDelete }: GaleriaAdminTabProps) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -23,10 +24,15 @@ export default function GaleriaAdminTab({ photos, onOpenUpload, onDelete }: Gale
             </div>
             <div style={{ padding: 12, display: "flex", flexDirection: "column", gap: 6 }}>
               <span style={{ fontSize: 12, fontWeight: 700, color: "#143840" }}>{photo.caption || "Sin descripción"}</span>
-              <span style={{ fontSize: 11, color: "#7FA7AA" }}>{photo.category}</span>
-              <button onClick={() => onDelete(photo.id)} style={{ border: "none", background: "none", color: "#B94A2E", fontWeight: 700, fontSize: 12, cursor: "pointer", alignSelf: "flex-start", padding: 0 }}>
-                Eliminar
-              </button>
+              <span style={{ fontSize: 11, color: "#7FA7AA" }}>{photo.categories.join(", ")}</span>
+              <div style={{ display: "flex", gap: 12 }}>
+                <button onClick={() => onEdit(photo)} style={{ border: "none", background: "none", color: "#009BA4", fontWeight: 700, fontSize: 12, cursor: "pointer", padding: 0 }}>
+                  Editar
+                </button>
+                <button onClick={() => onDelete(photo.id)} style={{ border: "none", background: "none", color: "#B94A2E", fontWeight: 700, fontSize: 12, cursor: "pointer", padding: 0 }}>
+                  Eliminar
+                </button>
+              </div>
             </div>
           </div>
         ))}
