@@ -61,10 +61,10 @@ export default function ContactForm() {
   return (
     <section style={{ padding: "20px 48px 50px" }}>
       <div className="vsc-split-grid" style={{ maxWidth: 1080, margin: "0 auto", alignItems: "stretch" }}>
-        <div style={{ position: "relative", borderRadius: 24, overflow: "hidden", boxShadow: "0 16px 36px rgba(0,60,66,0.1)", minHeight: 520 }}>
+        <div style={{ position: "relative", width: "100%", aspectRatio: "971 / 1619", borderRadius: 24, overflow: "hidden", boxShadow: "0 16px 36px rgba(0,60,66,0.1)" }}>
           <Image
             src="/uploads/contacto-pelicano.jpg"
-            alt="Pelícano café en la marina de San Carlos"
+            alt="Pelícano en la marina de San Carlos junto al texto ¿Tienes alguna pregunta? ¡Cuéntanos!"
             fill
             style={{ objectFit: "cover" }}
           />
