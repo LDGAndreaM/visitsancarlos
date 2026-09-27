@@ -6,7 +6,7 @@ export default function QueOfrecemos() {
   return (
     <section style={{ background: "#6AC7E2", padding: "64px 48px" }}>
       <div className="vsc-split-grid" style={{ maxWidth: 1080, margin: "0 auto", alignItems: "center" }}>
-        <div style={{ position: "relative", height: 320, borderRadius: 22, overflow: "hidden", boxShadow: "0 16px 36px rgba(0,60,66,0.15)" }}>
+        <div style={{ position: "relative", width: "100%", maxWidth: 380, aspectRatio: "941 / 1328", borderRadius: 22, overflow: "hidden", boxShadow: "0 16px 36px rgba(0,60,66,0.15)" }}>
           <Image
             src="/uploads/acerca-de-ofrecemos.jpg"
             alt="Vista aérea de la marina y el pueblo de San Carlos"
