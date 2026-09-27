@@ -14,7 +14,6 @@ type HeaderProps = {
   ctaHref?: string;
   onCtaClick?: () => void;
   mobileTitle?: string;
-  mobileSubtitle?: string;
   mobileRightAction?: React.ReactNode;
   mobileBelow?: React.ReactNode;
 };
@@ -48,14 +47,12 @@ export default function Header({
   ctaHref = "/login",
   onCtaClick,
   mobileTitle,
-  mobileSubtitle = "San Carlos y Guaymas",
   mobileRightAction,
   mobileBelow,
 }: HeaderProps) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const resolvedTitle = mobileTitle ?? PAGE_TITLES[pathname] ?? "Visit San Carlos";
-  const resolvedSubtitle = pathname === "/" ? undefined : mobileSubtitle;
 
   return (
     <>
@@ -106,7 +103,6 @@ export default function Header({
 
       <MobileAppBar
         title={resolvedTitle}
-        subtitle={resolvedSubtitle}
         showLogo
         onOpenMenu={() => setMenuOpen(true)}
         rightAction={mobileRightAction}
