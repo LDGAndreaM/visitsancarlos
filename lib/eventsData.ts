@@ -22,10 +22,7 @@ export type EventItem = {
   facebook: string;
   instagram: string;
   website: string;
+  featured: boolean;
 };
 
 export const EVENT_CATEGORIES = ["Cultural", "Deportivo", "Gastronomía", "Comunidad", "Entretenimiento"];
-
-export type Banner = { bg: string; title: string; subtitle: string; cta: string };
-
-export const BANNERS: Banner[] = [];

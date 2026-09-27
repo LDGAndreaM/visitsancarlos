@@ -50,6 +50,8 @@ export default function EventsCalendar() {
 
   return (
     <>
+      <WeekEventsList events={weekList} onEventClick={setDetail} />
+
       <CalendarControls
         view={view}
         monthLabel={monthLabel}
@@ -63,8 +65,6 @@ export default function EventsCalendar() {
       ) : (
         <WeekView weekDays={weekDays} onEventClick={setDetail} />
       )}
-
-      <WeekEventsList events={weekList} onEventClick={setDetail} />
 
       {detail && <EventDetailModal event={detail} onClose={() => setDetail(null)} />}
     </>

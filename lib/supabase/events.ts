@@ -47,6 +47,7 @@ export function toPublicEvent(row: EventRow): EventItem {
     facebook: row.facebook ?? "",
     instagram: row.instagram ?? "",
     website: row.website ?? "",
+    featured: row.featured,
   };
 }
 

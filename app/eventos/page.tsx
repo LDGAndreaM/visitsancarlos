@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import PromoCarousel from "@/components/eventos/PromoCarousel";
 import EventsHero from "@/components/eventos/EventsHero";
+import FeaturedEvents from "@/components/eventos/FeaturedEvents";
 import EventsCalendar from "@/components/eventos/EventsCalendar";
 import JsonLd from "@/components/JsonLd";
 import { fetchApprovedEvents } from "@/lib/supabase/events";
@@ -60,8 +60,8 @@ export default async function Eventos() {
     <div style={{ maxWidth: "100%", overflowX: "hidden", background: "#ffffff", position: "relative" }}>
       {events.length > 0 && <JsonLd data={events.map(eventJsonLd)} />}
       <Header />
-      <PromoCarousel />
       <EventsHero />
+      <FeaturedEvents />
       <EventsCalendar />
       <Footer marginTop={0} padding="0 48px 28px" socials={SOCIAL_SET_MAIN} />
     </div>
