@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ImagePlaceholder from "@/components/ImagePlaceholder";
+import Image from "next/image";
 import { CONTACT_SUBJECTS } from "@/lib/contactoData";
 
 const inputStyle: React.CSSProperties = {
@@ -60,9 +60,14 @@ export default function ContactForm() {
 
   return (
     <section style={{ padding: "20px 48px 50px" }}>
-      <div style={{ maxWidth: 1080, margin: "0 auto", display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 32, alignItems: "stretch" }}>
-        <div style={{ borderRadius: 24, overflow: "hidden", boxShadow: "0 16px 36px rgba(0,60,66,0.1)", minHeight: 520 }}>
-          <ImagePlaceholder caption="Foto: San Carlos / Guaymas" />
+      <div className="vsc-split-grid" style={{ maxWidth: 1080, margin: "0 auto", alignItems: "stretch" }}>
+        <div style={{ position: "relative", borderRadius: 24, overflow: "hidden", boxShadow: "0 16px 36px rgba(0,60,66,0.1)", minHeight: 520 }}>
+          <Image
+            src="/uploads/contacto-pelicano.jpg"
+            alt="Pelícano café en la marina de San Carlos"
+            fill
+            style={{ objectFit: "cover" }}
+          />
         </div>
         <form onSubmit={handleSubmit} style={{ background: "#F4FAFB", borderRadius: 24, padding: 44, display: "flex", flexDirection: "column", gap: 20, boxShadow: "0 16px 36px rgba(0,60,66,0.08)" }}>
           {status === "success" ? (
