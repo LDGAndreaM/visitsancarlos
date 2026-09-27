@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { VALUES } from "@/lib/acercaDeData";
+import ValuesCarousel from "./ValuesCarousel";
 
 export default function MisionVisionValores() {
   return (
@@ -52,32 +52,7 @@ export default function MisionVisionValores() {
           y lo que queremos aportar.
         </p>
       </div>
-      <div className="vsc-values-row vsc-scroll" style={{ gap: 32, maxWidth: 1000, margin: "0 auto" }}>
-        {VALUES.map((v) => (
-          <div key={v.title} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, textAlign: "center", width: 270, flexShrink: 0, scrollSnapAlign: "start" }}>
-            <span style={{ width: 52, height: 52, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span
-                style={{
-                  width: 48,
-                  height: 48,
-                  backgroundColor: "#D4A017",
-                  WebkitMaskImage: `url(${v.icon})`,
-                  maskImage: `url(${v.icon})`,
-                  WebkitMaskSize: "contain",
-                  maskSize: "contain",
-                  WebkitMaskRepeat: "no-repeat",
-                  maskRepeat: "no-repeat",
-                  WebkitMaskPosition: "center",
-                  maskPosition: "center",
-                  display: "inline-block",
-                }}
-              />
-            </span>
-            <h3 style={{ margin: 0, fontFamily: "var(--font-caveat), cursive", fontSize: 19, fontWeight: 700, color: "#EB600A" }}>{v.title}</h3>
-            <p style={{ margin: 0, fontSize: 13, color: "#3B5C61", lineHeight: 1.5 }}>{v.desc}</p>
-          </div>
-        ))}
-      </div>
+      <ValuesCarousel />
     </section>
   );
 }

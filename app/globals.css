@@ -120,13 +120,47 @@ button {
   gap: 32px;
 }
 
-/* display/flex-wrap/justify-content viven aquí (no en línea) para que la
-   versión móvil (carrusel horizontal) pueda pisarlos sin pelear contra un
-   valor en línea, que siempre gana sin importar el media query. */
+/* display/flex-wrap/justify-content/gap viven aquí (no en línea) para que
+   la versión móvil (carrusel horizontal) pueda pisarlos sin pelear contra
+   un valor en línea, que siempre gana sin importar el media query. */
 .vsc-values-row {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  gap: 32px;
+}
+
+.vsc-value-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  width: 270px;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
+
+/* Puntitos debajo del carrusel de valores, solo visibles en móvil (ver
+   media query) — indican cuántas tarjetas hay y cuál se está viendo. */
+.vsc-values-dots {
+  display: none;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.vsc-values-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #dce9ea;
+  transition: width 0.2s, background 0.2s;
+}
+
+.vsc-values-dot.active {
+  width: 20px;
+  background: var(--vsc-orange);
 }
 
 /* Hero full-bleed: foto de fondo + degradado para legibilidad + texto y
@@ -214,7 +248,18 @@ button {
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     justify-content: flex-start;
-    padding-bottom: 12px;
+    gap: 16px;
+    padding-bottom: 4px;
+  }
+
+  /* ~2 tarjetas visibles a la vez (con un poco de la 3ra asomando como
+     pista de que se puede seguir deslizando). */
+  .vsc-value-card {
+    width: 44%;
+  }
+
+  .vsc-values-dots {
+    display: flex;
   }
 
   /* El hero ocupa exactamente lo que queda de pantalla debajo de la barra
