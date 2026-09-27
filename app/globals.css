@@ -88,19 +88,12 @@ button {
 }
 
 /* Grids de 2/3 columnas que se usan en varias secciones del home
-   (Hero, Restaurantes, Clima+Facebook, Blog) — se apilan en una sola
+   (Restaurantes, Clima+Facebook, Blog) — se apilan en una sola
    columna en pantallas angostas para que nada se corte. */
 /* minmax(0, 1fr) en vez de un 1fr a secas: un track "1fr" por defecto no
    se encoge más allá del contenido que no puede achicarse (min-width:auto
    implícito), lo que puede forzar que toda la grid — y su contenedor — se
    ensanche más que la pantalla aunque no se vea scroll horizontal. */
-.vsc-hero-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: center;
-  gap: 20px;
-}
-
 .vsc-split-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -117,6 +110,41 @@ button {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
+}
+
+/* Hero full-bleed: foto de fondo + degradado para legibilidad + texto y
+   buscador encima, todo dentro de una sola franja de ancho completo. */
+.vsc-hero-banner {
+  position: relative;
+  width: 100%;
+  height: 560px;
+  overflow: hidden;
+}
+
+.vsc-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(20, 56, 64, 0.72) 0%,
+    rgba(20, 56, 64, 0.42) 42%,
+    rgba(20, 56, 64, 0.08) 70%,
+    rgba(20, 56, 64, 0) 100%
+  );
+}
+
+.vsc-hero-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 48px;
 }
 
 .vsc-hero-search {
@@ -153,19 +181,26 @@ button {
     bottom: 92px;
   }
 
-  .vsc-hero-grid,
   .vsc-split-grid,
   .vsc-split-grid-wide,
   .vsc-grid-3 {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .vsc-hero-visual {
-    display: none;
+  .vsc-hero-banner {
+    height: 480px;
+  }
+
+  .vsc-hero-content {
+    padding: 0 24px;
   }
 }
 
 @media (max-width: 480px) {
+  .vsc-hero-banner {
+    height: 560px;
+  }
+
   .vsc-hero-search {
     flex-wrap: wrap;
     height: auto;
