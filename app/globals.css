@@ -120,6 +120,22 @@ button {
   gap: 32px;
 }
 
+/* Preguntas frecuentes: 4 columnas en escritorio, una sola columna con
+   acordeón por categoría en móvil. */
+.vsc-faq-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 36px;
+}
+
+/* display vive aquí (no en línea) para que el media query de móvil pueda
+   ocultarlo cuando la categoría está cerrada. */
+.vsc-faq-items {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 /* display/flex-wrap/justify-content/gap viven aquí (no en línea) para que
    la versión móvil (carrusel horizontal) pueda pisarlos sin pelear contra
    un valor en línea, que siempre gana sin importar el media query. */
@@ -139,6 +155,27 @@ button {
   width: 270px;
   flex-shrink: 0;
   scroll-snap-align: start;
+}
+
+/* Franja "Acerca de": foto de fondo a todo lo ancho, sin overlay (a
+   pedido), con el texto dentro del mismo contenedor centrado de 1280px
+   que usa el header, para que el margen izquierdo coincida con el resto
+   del sitio. */
+.vsc-about-banner {
+  position: relative;
+  width: 100%;
+  min-height: 640px;
+  display: flex;
+  align-items: center;
+}
+
+.vsc-about-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 48px;
 }
 
 /* Puntitos debajo del carrusel de valores, solo visibles en móvil (ver
@@ -236,8 +273,33 @@ button {
   .vsc-split-grid,
   .vsc-split-grid-wide,
   .vsc-grid-3,
-  .vsc-grid-photo-2col {
+  .vsc-grid-photo-2col,
+  .vsc-faq-grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Cada categoría de FAQ se cierra por default y el título hace de
+     acordeón: solo se ven sus preguntas cuando esa categoría está
+     abierta (clase .open, controlada desde React). */
+  .vsc-faq-column {
+    border-bottom: 1px solid #eef3f3;
+    padding-bottom: 12px;
+  }
+
+  .vsc-faq-items {
+    display: none;
+  }
+
+  .vsc-faq-column.open .vsc-faq-items {
+    display: flex;
+  }
+
+  .vsc-about-banner {
+    min-height: 520px;
+  }
+
+  .vsc-about-content {
+    padding: 0 24px;
   }
 
   /* "Nuestros valores": en vez de una lista larga hacia abajo, se
