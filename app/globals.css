@@ -200,6 +200,23 @@ button {
   padding: 44px;
 }
 
+/* Fila de contacto (correo / teléfono / redes): sin tarjetas ni sombras,
+   solo separadores delgados entre cada dato. En móvil se apila y los
+   separadores pasan de verticales a horizontales. */
+.vsc-contact-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  row-gap: 24px;
+}
+
+.vsc-contact-info-divider {
+  width: 1px;
+  align-self: stretch;
+  background: #e2ecef;
+}
+
 /* Puntitos debajo del carrusel de valores, solo visibles en móvil (ver
    media query) — indican cuántas tarjetas hay y cuál se está viendo. */
 .vsc-values-dots {
@@ -326,6 +343,15 @@ button {
 
   .vsc-contact-form {
     padding: 24px;
+  }
+
+  .vsc-contact-info-row {
+    flex-direction: column;
+  }
+
+  .vsc-contact-info-divider {
+    width: 60%;
+    height: 1px;
   }
 
   /* "Nuestros valores": en vez de una lista larga hacia abajo, se
