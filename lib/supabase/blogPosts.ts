@@ -29,6 +29,7 @@ export type PublicBlogPost = {
   excerpt: string;
   body: string;
   date: string;
+  publishedAt: string;
   placeholder: string;
   authorName: string;
   authorRole: string;
@@ -57,6 +58,7 @@ export function toPublicBlogPost(row: BlogPostRowWithAuthor): PublicBlogPost {
     excerpt: row.excerpt ?? "",
     body: row.body ?? "",
     date: fmtDateShort(row.created_at),
+    publishedAt: row.created_at,
     placeholder: row.photo_placeholder ?? `Foto: ${row.title}`,
     authorName: row.author_name || row.profiles?.full_name || row.profiles?.email || "Equipo Visit San Carlos",
     authorRole: row.author_role ?? "",

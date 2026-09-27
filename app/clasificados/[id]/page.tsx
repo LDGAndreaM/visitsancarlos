@@ -9,13 +9,33 @@ import ClasificadoDetailHeader from "@/components/clasificados/ClasificadoDetail
 import GalleryWithSeller from "@/components/clasificados/GalleryWithSeller";
 import SpecsSection from "@/components/clasificados/SpecsSection";
 import RelatedClasificados from "@/components/clasificados/RelatedClasificados";
+import JsonLd from "@/components/JsonLd";
 import { relatedItems } from "@/lib/clasificadosUtils";
 import { getClasificadoDetail } from "@/lib/clasificadoDetails";
 import { fetchApprovedClasificadoById, fetchApprovedClasificados } from "@/lib/supabase/classifieds";
+import type { Clasificado } from "@/lib/clasificadosData";
 import { SOCIAL_SET_MAIN } from "@/lib/nav";
-import { pageMetadata } from "@/lib/site";
+import { absoluteUrl, pageMetadata } from "@/lib/site";
 
 type PageProps = { params: Promise<{ id: string }> };
+
+function clasificadoJsonLd(item: Clasificado, id: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: item.title,
+    description: item.description || undefined,
+    category: item.category,
+    offers: {
+      "@type": "Offer",
+      url: absoluteUrl(`/clasificados/${id}`),
+      price: item.price,
+      priceCurrency: "MXN",
+      itemCondition: item.condition === "Nuevo" ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
+      availability: "https://schema.org/InStock",
+    },
+  };
+}
 
 // Supabase aún no configurado o inalcanzable: tratamos ese caso igual que
 // "no existe" en vez de tumbar la página con un 500.
@@ -51,6 +71,7 @@ export default async function ClasificadoDetail({ params }: PageProps) {
 
   return (
     <div style={{ maxWidth: "100%", overflowX: "hidden", background: "#ffffff" }}>
+      <JsonLd data={clasificadoJsonLd(item, id)} />
       <Header />
       <TopActions shareTitle={item.title} backHref="/clasificados" backLabel="← Volver a clasificados" />
       <ClasificadoDetailHeader item={item} />

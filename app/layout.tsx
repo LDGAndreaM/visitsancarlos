@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Poppins, Caveat } from "next/font/google";
-import { SITE_NAME, SITE_DESCRIPTION, SITE_URL, DEFAULT_OG_IMAGE } from "@/lib/site";
+import { SITE_NAME, SITE_DESCRIPTION, SITE_URL, DEFAULT_OG_IMAGE, absoluteUrl } from "@/lib/site";
+import { SOCIAL_LINKS } from "@/lib/nav";
+import JsonLd from "@/components/JsonLd";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -51,12 +54,39 @@ export const viewport: Viewport = {
   themeColor: "#009BA4",
 };
 
+// Solo enlaces reales (no los "#" de redes que aún no existen para el sitio).
+const REAL_SAME_AS = Object.values(SOCIAL_LINKS)
+  .map((s) => s.href)
+  .filter((href) => href && href !== "#");
+
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: SITE_NAME,
+  url: SITE_URL,
+  logo: absoluteUrl(DEFAULT_OG_IMAGE),
+  sameAs: REAL_SAME_AS,
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_NAME,
+  url: SITE_URL,
+};
+
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es">
-      <body className={`${poppins.variable} ${caveat.variable}`}>{children}</body>
+      <body className={`${poppins.variable} ${caveat.variable}`}>
+        <JsonLd data={[organizationJsonLd, websiteJsonLd]} />
+        {gaMeasurementId && <GoogleAnalytics measurementId={gaMeasurementId} />}
+        {children}
+      </body>
     </html>
   );
 }

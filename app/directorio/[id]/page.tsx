@@ -9,12 +9,41 @@ import DescriptionSection from "@/components/DescriptionSection";
 import FeaturesSection from "@/components/establecimiento/FeaturesSection";
 import LocationSection from "@/components/LocationSection";
 import ReviewsSection from "@/components/establecimiento/ReviewsSection";
+import JsonLd from "@/components/JsonLd";
 import { getEstablishmentDetail } from "@/lib/establishmentDetails";
 import { fetchApprovedBusinessById } from "@/lib/supabase/businesses";
+import type { Business, BusinessCategory } from "@/lib/directorioData";
 import { SOCIAL_SET_MAIN } from "@/lib/nav";
-import { pageMetadata } from "@/lib/site";
+import { absoluteUrl, pageMetadata } from "@/lib/site";
 
 type PageProps = { params: Promise<{ id: string }> };
+
+const SCHEMA_TYPE_BY_CATEGORY: Record<BusinessCategory, string> = {
+  HOTELES: "Hotel",
+  RESTAURANTES: "Restaurant",
+  DOCTORES: "MedicalBusiness",
+  NEGOCIOS: "LocalBusiness",
+  CLASIFICADOS: "LocalBusiness",
+};
+
+function businessJsonLd(business: Business, id: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": SCHEMA_TYPE_BY_CATEGORY[business.category],
+    name: business.name,
+    description: business.description || undefined,
+    url: absoluteUrl(`/directorio/${id}`),
+    telephone: business.phone || undefined,
+    priceRange: business.price,
+    address: business.location
+      ? { "@type": "PostalAddress", addressLocality: business.location, addressRegion: "Sonora", addressCountry: "MX" }
+      : undefined,
+    aggregateRating:
+      business.reviewCount > 0
+        ? { "@type": "AggregateRating", ratingValue: business.rating, reviewCount: business.reviewCount }
+        : undefined,
+  };
+}
 
 // Supabase aún no configurado o inalcanzable: tratamos ese caso igual que
 // "no existe" en vez de tumbar la página con un 500.
@@ -49,6 +78,7 @@ export default async function Establecimiento({ params }: PageProps) {
 
   return (
     <div style={{ maxWidth: "100%", overflowX: "hidden", background: "#ffffff" }}>
+      <JsonLd data={businessJsonLd(business, id)} />
       <Header />
       <TopActions shareTitle={business.name} backHref="/directorio" />
       <EstablishmentHeader business={business} tags={detail.tags} />
