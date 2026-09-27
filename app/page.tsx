@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
@@ -9,6 +10,12 @@ import WeatherFacebook from "@/components/WeatherFacebook";
 import AdBanner from "@/components/AdBanner";
 import BlogPreview from "@/components/BlogPreview";
 import NewsletterCta from "@/components/NewsletterCta";
+import { pageMetadata, SITE_NAME, SITE_DESCRIPTION } from "@/lib/site";
+
+export const metadata: Metadata = {
+  ...pageMetadata({ title: SITE_NAME, description: SITE_DESCRIPTION, path: "/" }),
+  title: { absolute: SITE_NAME },
+};
 
 export default function Home() {
   return (

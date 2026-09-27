@@ -6,11 +6,13 @@ import LegalContent from "@/components/legal/LegalContent";
 import LegalSection from "@/components/legal/LegalSection";
 import { TERMINOS_INTRO, TERMINOS_SECTIONS, TERMINOS_UPDATED } from "@/lib/terminosData";
 import { SOCIAL_SET_MAIN } from "@/lib/nav";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Términos y condiciones | Visit San Carlos",
+export const metadata: Metadata = pageMetadata({
+  title: "Términos y condiciones",
   description: "Términos y condiciones de uso de Visit San Carlos.",
-};
+  path: "/terminos-y-condiciones",
+});
 
 export default function TerminosYCondiciones() {
   return (

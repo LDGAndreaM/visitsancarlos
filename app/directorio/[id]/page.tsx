@@ -12,9 +12,15 @@ import ReviewsSection from "@/components/establecimiento/ReviewsSection";
 import { BUSINESSES } from "@/lib/directorioData";
 import { getEstablishmentDetail } from "@/lib/establishmentDetails";
 import { SOCIAL_SET_MAIN } from "@/lib/nav";
+import { absoluteUrl } from "@/lib/site";
 
 type PageProps = { params: Promise<{ id: string }> };
 
+// NOTA: esta página todavía lee de BUSINESSES (datos de ejemplo en
+// lib/directorioData.ts), no de la tabla `businesses` de Supabase. Por eso
+// generateMetadata solo agrega el canonical y evita enriquecer Open Graph con
+// esos datos de ejemplo. Cuando se conecte a Supabase (fetchApprovedBusinessById),
+// usa el mismo patrón que ya tiene app/blog/[id]/page.tsx.
 export function generateStaticParams() {
   return BUSINESSES.map((b) => ({ id: b.id }));
 }
@@ -26,6 +32,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${business.name} | Visit San Carlos`,
     description: getEstablishmentDetail(business).description,
+    alternates: { canonical: absoluteUrl(`/directorio/${id}`) },
   };
 }
 

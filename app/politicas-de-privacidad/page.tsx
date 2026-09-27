@@ -6,11 +6,13 @@ import LegalContent from "@/components/legal/LegalContent";
 import LegalSection from "@/components/legal/LegalSection";
 import { POLITICAS_CAMBIOS, POLITICAS_INTRO, POLITICAS_SECTIONS, POLITICAS_UPDATED } from "@/lib/politicasData";
 import { SOCIAL_SET_MAIN } from "@/lib/nav";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Políticas de privacidad | Visit San Carlos",
+export const metadata: Metadata = pageMetadata({
+  title: "Políticas de privacidad",
   description: "Políticas de privacidad de Visit San Carlos.",
-};
+  path: "/politicas-de-privacidad",
+});
 
 export default function PoliticasDePrivacidad() {
   return (

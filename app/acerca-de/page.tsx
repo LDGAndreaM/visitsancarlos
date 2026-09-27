@@ -7,11 +7,13 @@ import PorQueExiste from "@/components/acerca-de/PorQueExiste";
 import MisionVisionValores from "@/components/acerca-de/MisionVisionValores";
 import QueOfrecemos from "@/components/acerca-de/QueOfrecemos";
 import Faq from "@/components/acerca-de/Faq";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Acerca de | Visit San Carlos",
+export const metadata: Metadata = pageMetadata({
+  title: "Acerca de",
   description: "Qué es Visit San Carlos, nuestra misión y para quién es.",
-};
+  path: "/acerca-de",
+});
 
 export default function AcercaDe() {
   return (

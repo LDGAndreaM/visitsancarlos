@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import Footer from "@/components/Footer";
 import DirectorioApp from "@/components/directorio/DirectorioApp";
 import { SOCIAL_SET_MAIN } from "@/lib/nav";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Directorio | Visit San Carlos",
+export const metadata: Metadata = pageMetadata({
+  title: "Directorio",
   description: "Hoteles, restaurantes, servicios y comercios de San Carlos y Guaymas.",
-};
+  path: "/directorio",
+});
 
 export default function Directorio() {
   return (

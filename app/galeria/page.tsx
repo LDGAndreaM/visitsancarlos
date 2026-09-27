@@ -7,11 +7,13 @@ import GalleryHero from "@/components/gallery/GalleryHero";
 import GalleryGrid from "@/components/gallery/GalleryGrid";
 import { GALLERY_FILTERS } from "@/lib/galleryData";
 import { SOCIAL_SET_MAIN } from "@/lib/nav";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Galería | Visit San Carlos",
+export const metadata: Metadata = pageMetadata({
+  title: "Galería",
   description: "Un vistazo visual a las playas, la gastronomía, los eventos y la comunidad de San Carlos y Guaymas.",
-};
+  path: "/galeria",
+});
 
 export default function Galeria() {
   return (

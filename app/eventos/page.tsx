@@ -5,11 +5,13 @@ import PromoCarousel from "@/components/eventos/PromoCarousel";
 import EventsHero from "@/components/eventos/EventsHero";
 import EventsCalendar from "@/components/eventos/EventsCalendar";
 import { SOCIAL_SET_MAIN } from "@/lib/nav";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Eventos | Visit San Carlos",
+export const metadata: Metadata = pageMetadata({
+  title: "Eventos",
   description: "Qué está pasando en San Carlos: festivales, deportes, gastronomía y actividades comunitarias.",
-};
+  path: "/eventos",
+});
 
 export default function Eventos() {
   return (

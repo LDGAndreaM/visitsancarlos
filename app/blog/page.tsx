@@ -7,11 +7,13 @@ import BlogHero from "@/components/blog/BlogHero";
 import FeaturedPost from "@/components/blog/FeaturedPost";
 import PostsGrid from "@/components/blog/PostsGrid";
 import { BLOG_FILTERS } from "@/lib/blogData";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Blog | Visit San Carlos",
+export const metadata: Metadata = pageMetadata({
+  title: "Blog",
   description: "Guías, historias y recomendaciones locales de San Carlos y Guaymas.",
-};
+  path: "/blog",
+});
 
 export default function Blog() {
   return (

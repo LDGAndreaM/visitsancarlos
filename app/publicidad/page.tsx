@@ -11,11 +11,13 @@ import CommercialMessage from "@/components/publicidad/CommercialMessage";
 import PublicidadNote from "@/components/publicidad/PublicidadNote";
 import PromoCta from "@/components/publicidad/PromoCta";
 import { SOCIAL_SET_MAIN } from "@/lib/nav";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Publicidad | Visit San Carlos",
+export const metadata: Metadata = pageMetadata({
+  title: "Publicidad",
   description: "Espacios publicitarios y paquetes para que tu negocio gane visibilidad en Visit San Carlos.",
-};
+  path: "/publicidad",
+});
 
 export default function Publicidad() {
   return (

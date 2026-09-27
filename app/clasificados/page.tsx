@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import Footer from "@/components/Footer";
 import ClasificadosApp from "@/components/clasificados/ClasificadosApp";
 import { SOCIAL_SET_MAIN } from "@/lib/nav";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Clasificados | Visit San Carlos",
+export const metadata: Metadata = pageMetadata({
+  title: "Clasificados",
   description: "Autos, casas en renta, propiedades en venta y todo tipo de artículos publicados por la comunidad de San Carlos y Guaymas.",
-};
+  path: "/clasificados",
+});
 
 export default function Clasificados() {
   return (

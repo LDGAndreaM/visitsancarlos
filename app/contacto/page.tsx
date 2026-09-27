@@ -5,11 +5,13 @@ import ContactoHero from "@/components/contacto/ContactoHero";
 import ContactForm from "@/components/contacto/ContactForm";
 import ContactInfoCards from "@/components/contacto/ContactInfoCards";
 import { SOCIAL_SET_MAIN } from "@/lib/nav";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Contacto | Visit San Carlos",
+export const metadata: Metadata = pageMetadata({
+  title: "Contacto",
   description: "Escríbenos y te responderemos lo antes posible.",
-};
+  path: "/contacto",
+});
 
 export default function Contacto() {
   return (

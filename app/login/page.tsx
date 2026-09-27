@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import LoginPanel from "@/components/login/LoginPanel";
 import LoginForm from "@/components/login/LoginForm";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Inicia sesión | Visit San Carlos",
+export const metadata: Metadata = pageMetadata({
+  title: "Inicia sesión",
   description: "Inicia sesión o registra tu negocio en Visit San Carlos.",
-};
+  path: "/login",
+});
 
 export default function Login() {
   return (

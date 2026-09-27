@@ -13,9 +13,15 @@ import { ITEMS } from "@/lib/clasificadosData";
 import { relatedItems } from "@/lib/clasificadosUtils";
 import { getClasificadoDetail } from "@/lib/clasificadoDetails";
 import { SOCIAL_SET_MAIN } from "@/lib/nav";
+import { absoluteUrl } from "@/lib/site";
 
 type PageProps = { params: Promise<{ id: string }> };
 
+// NOTA: esta página todavía lee de ITEMS (datos de ejemplo en
+// lib/clasificadosData.ts), no de la tabla `classifieds` de Supabase. Por eso
+// generateMetadata solo agrega el canonical y evita enriquecer Open Graph con
+// esos datos de ejemplo. Cuando se conecte a Supabase (fetchApprovedClasificadoById),
+// usa el mismo patrón que ya tiene app/blog/[id]/page.tsx.
 export function generateStaticParams() {
   return ITEMS.map((it) => ({ id: it.id }));
 }
@@ -27,6 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${item.title} | Visit San Carlos`,
     description: getClasificadoDetail(item).description,
+    alternates: { canonical: absoluteUrl(`/clasificados/${id}`) },
   };
 }
 
