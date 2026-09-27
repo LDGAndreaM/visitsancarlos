@@ -4,11 +4,11 @@ export default function QuienesSomos() {
   return (
     <section className="vsc-about-banner">
       <Image
-        src="/uploads/acerca-de-mision-vision.jpg"
-        alt="Cerro Tetakawi y la bahía de San Carlos al atardecer"
+        src="/uploads/acerca-de-portada.jpg"
+        alt="Cerro Tetakawi y la bahía de San Carlos al atardecer, con ilustraciones decorativas de sol, aves y olas"
         fill
         priority
-        style={{ objectFit: "cover", objectPosition: "center 45%" }}
+        style={{ objectFit: "cover", objectPosition: "center 55%" }}
       />
       <div className="vsc-about-overlay" />
       <div className="vsc-about-content">
