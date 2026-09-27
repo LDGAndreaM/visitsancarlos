@@ -120,6 +120,15 @@ button {
   gap: 32px;
 }
 
+/* display/flex-wrap/justify-content viven aquí (no en línea) para que la
+   versión móvil (carrusel horizontal) pueda pisarlos sin pelear contra un
+   valor en línea, que siempre gana sin importar el media query. */
+.vsc-values-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 /* Hero full-bleed: foto de fondo + degradado para legibilidad + texto y
    buscador encima, todo dentro de una sola franja de ancho completo. */
 .vsc-hero-banner {
@@ -195,6 +204,17 @@ button {
   .vsc-grid-3,
   .vsc-grid-photo-2col {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* "Nuestros valores": en vez de una lista larga hacia abajo, se
+     convierte en un carrusel horizontal con scroll-snap (mismo patrón
+     que Hospedajes/Eventos en el home). */
+  .vsc-values-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    justify-content: flex-start;
+    padding-bottom: 12px;
   }
 
   /* El hero ocupa exactamente lo que queda de pantalla debajo de la barra

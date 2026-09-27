@@ -52,9 +52,9 @@ export default function MisionVisionValores() {
           y lo que queremos aportar.
         </p>
       </div>
-      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 32, maxWidth: 1000, margin: "0 auto" }}>
+      <div className="vsc-values-row vsc-scroll" style={{ gap: 32, maxWidth: 1000, margin: "0 auto" }}>
         {VALUES.map((v) => (
-          <div key={v.title} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, textAlign: "center", width: 270 }}>
+          <div key={v.title} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, textAlign: "center", width: 270, flexShrink: 0, scrollSnapAlign: "start" }}>
             <span style={{ width: 52, height: 52, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <span
                 style={{
