@@ -19,6 +19,7 @@ export type Business = {
   placeholder: string;
   description?: string;
   features?: string[];
+  ownerId?: string;
 };
 
 export const BANNER_PAIRS: [PromoPair, PromoPair][] = [];

@@ -47,6 +47,7 @@ export function toPublicBusiness(row: BusinessRow): Business {
     placeholder: row.photo_placeholder ?? `Foto: ${row.name}`,
     description: row.description ?? "",
     features: row.features ?? [],
+    ownerId: row.owner_id,
   };
 }
 

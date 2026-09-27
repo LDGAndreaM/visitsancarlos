@@ -58,7 +58,7 @@ export default async function Establecimiento({ params }: PageProps) {
       <DescriptionSection description={detail.description} />
       <FeaturesSection features={detail.features} />
       <LocationSection location={business.location} />
-      <ReviewsSection rating={business.rating} reviewCount={business.reviewCount} />
+      <ReviewsSection businessId={business.id} ownerId={business.ownerId} rating={business.rating} reviewCount={business.reviewCount} />
       <Footer marginTop={0} padding="0 48px 28px" socials={SOCIAL_SET_MAIN} />
     </div>
   );

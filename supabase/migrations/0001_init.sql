@@ -144,6 +144,60 @@ drop policy if exists "businesses: dueño o admin elimina" on public.businesses;
 create policy "businesses: dueño o admin elimina" on public.businesses
   for delete to authenticated using (owner_id = auth.uid() or public.is_admin(auth.uid()));
 
+-- ============ RESEÑAS (Directorio) ============
+-- Una reseña por usuario por negocio (constraint unique más abajo). El
+-- rating/review_count de `businesses` se recalculan solos con el trigger de
+-- abajo cada vez que se inserta, edita o borra una reseña.
+create table if not exists public.reviews (
+  id uuid primary key default gen_random_uuid(),
+  business_id uuid not null references public.businesses (id) on delete cascade,
+  author_id uuid not null references public.profiles (id) on delete cascade,
+  rating integer not null check (rating between 1 and 5),
+  comment text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (business_id, author_id)
+);
+
+alter table public.reviews enable row level security;
+
+drop policy if exists "reviews: lectura pública" on public.reviews;
+create policy "reviews: lectura pública" on public.reviews
+  for select using (true);
+
+drop policy if exists "reviews: autenticado crea la suya" on public.reviews;
+create policy "reviews: autenticado crea la suya" on public.reviews
+  for insert to authenticated with check (author_id = auth.uid());
+
+drop policy if exists "reviews: autor edita la suya" on public.reviews;
+create policy "reviews: autor edita la suya" on public.reviews
+  for update to authenticated using (author_id = auth.uid()) with check (author_id = auth.uid());
+
+drop policy if exists "reviews: autor o admin elimina" on public.reviews;
+create policy "reviews: autor o admin elimina" on public.reviews
+  for delete to authenticated using (author_id = auth.uid() or public.is_admin(auth.uid()));
+
+create or replace function public.recalc_business_rating()
+returns trigger language plpgsql security definer set search_path = public as $$
+declare
+  target_id uuid;
+begin
+  target_id := coalesce(new.business_id, old.business_id);
+
+  update public.businesses b
+  set rating = coalesce((select round(avg(r.rating)::numeric, 1) from public.reviews r where r.business_id = target_id), 0),
+      review_count = (select count(*) from public.reviews r where r.business_id = target_id)
+  where b.id = target_id;
+
+  return coalesce(new, old);
+end;
+$$;
+
+drop trigger if exists on_review_change on public.reviews;
+create trigger on_review_change
+  after insert or update or delete on public.reviews
+  for each row execute procedure public.recalc_business_rating();
+
 -- ============ CLASIFICADOS ============
 create table if not exists public.classifieds (
   id uuid primary key default gen_random_uuid(),
