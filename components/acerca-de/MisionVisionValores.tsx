@@ -1,21 +1,25 @@
-import ImagePlaceholder from "@/components/ImagePlaceholder";
+import Image from "next/image";
 import { VALUES } from "@/lib/acercaDeData";
 
 export default function MisionVisionValores() {
   return (
     <section style={{ padding: "70px 48px", background: "#F4FAFB" }}>
       <div
+        className="vsc-grid-3"
         style={{
           maxWidth: 1080,
           margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "0.9fr 1fr 1fr",
           gap: 40,
           marginBottom: 56,
         }}
       >
-        <div style={{ height: 210, borderRadius: 20, overflow: "hidden", boxShadow: "0 14px 28px rgba(0,60,66,0.1)" }}>
-          <ImagePlaceholder caption="Foto: negocio local" />
+        <div style={{ position: "relative", height: 210, borderRadius: 20, overflow: "hidden", boxShadow: "0 14px 28px rgba(0,60,66,0.1)" }}>
+          <Image
+            src="/uploads/acerca-de-mision-vision.jpg"
+            alt="Cerro Tetakawi y la bahía de San Carlos al atardecer"
+            fill
+            style={{ objectFit: "cover" }}
+          />
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "center" }}>
           <h2 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: "#EB600A" }}>Nuestra misión</h2>
