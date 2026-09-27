@@ -9,36 +9,41 @@ import DescriptionSection from "@/components/DescriptionSection";
 import FeaturesSection from "@/components/establecimiento/FeaturesSection";
 import LocationSection from "@/components/LocationSection";
 import ReviewsSection from "@/components/establecimiento/ReviewsSection";
-import { BUSINESSES } from "@/lib/directorioData";
 import { getEstablishmentDetail } from "@/lib/establishmentDetails";
+import { fetchApprovedBusinessById } from "@/lib/supabase/businesses";
 import { SOCIAL_SET_MAIN } from "@/lib/nav";
-import { absoluteUrl } from "@/lib/site";
+import { pageMetadata } from "@/lib/site";
 
 type PageProps = { params: Promise<{ id: string }> };
 
-// NOTA: esta página todavía lee de BUSINESSES (datos de ejemplo en
-// lib/directorioData.ts), no de la tabla `businesses` de Supabase. Por eso
-// generateMetadata solo agrega el canonical y evita enriquecer Open Graph con
-// esos datos de ejemplo. Cuando se conecte a Supabase (fetchApprovedBusinessById),
-// usa el mismo patrón que ya tiene app/blog/[id]/page.tsx.
-export function generateStaticParams() {
-  return BUSINESSES.map((b) => ({ id: b.id }));
+// Supabase aún no configurado o inalcanzable: tratamos ese caso igual que
+// "no existe" en vez de tumbar la página con un 500.
+async function safeFetchBusiness(id: string) {
+  try {
+    return await fetchApprovedBusinessById(id);
+  } catch {
+    return null;
+  }
 }
 
+// Sin generateStaticParams: los negocios reales viven en Supabase y cambian
+// todo el tiempo, así que esta página se renderiza dinámicamente por
+// petición (mismo patrón que app/blog/[id]/page.tsx).
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  const business = BUSINESSES.find((b) => b.id === id);
-  if (!business) return {};
-  return {
-    title: `${business.name} | Visit San Carlos`,
-    description: getEstablishmentDetail(business).description,
-    alternates: { canonical: absoluteUrl(`/directorio/${id}`) },
-  };
+  const business = await safeFetchBusiness(id);
+  if (!business) return { title: "Directorio" };
+
+  return pageMetadata({
+    title: business.name,
+    description: business.description || `${business.category} en ${business.location || "San Carlos y Guaymas"}.`,
+    path: `/directorio/${id}`,
+  });
 }
 
 export default async function Establecimiento({ params }: PageProps) {
   const { id } = await params;
-  const business = BUSINESSES.find((b) => b.id === id);
+  const business = await safeFetchBusiness(id);
   if (!business) notFound();
   const detail = getEstablishmentDetail(business);
 
@@ -53,7 +58,7 @@ export default async function Establecimiento({ params }: PageProps) {
       <DescriptionSection description={detail.description} />
       <FeaturesSection features={detail.features} />
       <LocationSection location={business.location} />
-      <ReviewsSection initialReviews={detail.reviews} />
+      <ReviewsSection rating={business.rating} reviewCount={business.reviewCount} />
       <Footer marginTop={0} padding="0 48px 28px" socials={SOCIAL_SET_MAIN} />
     </div>
   );

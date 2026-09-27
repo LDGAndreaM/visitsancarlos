@@ -35,6 +35,7 @@ export function toPublicClasificado(row: ClasificadoRow): Clasificado {
     addedLabel: fmtDateLabel(row.created_at),
     views: row.views,
     placeholder: row.photo_placeholder ?? `Foto: ${row.title}`,
+    description: row.description ?? "",
   };
 }
 
@@ -91,6 +92,22 @@ export async function fetchApprovedClasificados(): Promise<Clasificado[]> {
   const supabase = createClient();
   const { data } = await supabase.from("classifieds").select("*").eq("status", "aprobado").order("created_at", { ascending: false });
   return (data ?? []).map(toPublicClasificado);
+}
+
+export async function fetchApprovedClasificadoById(id: string): Promise<Clasificado | null> {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("classifieds")
+    .select("*, profiles(full_name, email)")
+    .eq("id", id)
+    .eq("status", "aprobado")
+    .maybeSingle();
+  if (!data) return null;
+  const row = data as ClasificadoRowWithOwner;
+  return {
+    ...toPublicClasificado(row),
+    sellerName: row.profiles?.full_name || row.profiles?.email || "",
+  };
 }
 
 export async function fetchMyClasificados(userId: string): Promise<ClasificadoListing[]> {

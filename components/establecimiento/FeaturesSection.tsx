@@ -1,4 +1,6 @@
 export default function FeaturesSection({ features }: { features: string[] }) {
+  if (features.length === 0) return null;
+
   return (
     <section style={{ padding: "24px 48px 0", maxWidth: 1180, margin: "0 auto" }}>
       <div style={{ background: "#ffffff", border: "1px solid #EEF3F3", borderRadius: 18, padding: 28 }}>

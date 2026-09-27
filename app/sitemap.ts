@@ -1,13 +1,8 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 
-// Rutas públicas reales que ya existen en el sitio. Cuando el directorio,
-// clasificados y eventos tengan su propia página de detalle conectada a
-// Supabase (hoy siguen usando datos de ejemplo), agrega aquí el mismo patrón
-// que ya usamos abajo para el blog: consulta las filas aprobadas/publicadas
-// y mapea cada una a `${SITE_URL}/seccion/${id}`. No agregues esas URLs antes
-// de que la página de detalle lea datos reales — mientras tanto quedarían
-// fuera del sitemap a propósito.
+// Rutas públicas reales que ya existen en el sitio. Eventos no tiene página
+// de detalle individual (es un calendario), así que no aplica aquí.
 const STATIC_ROUTES = [
   "",
   "/acerca-de",
@@ -24,7 +19,11 @@ const STATIC_ROUTES = [
   "/terminos-y-condiciones",
 ];
 
-async function fetchPublishedBlogEntries(): Promise<MetadataRoute.Sitemap> {
+async function fetchDynamicEntries(
+  table: string,
+  statusFilter: { column: string; value: string | boolean },
+  pathPrefix: string
+): Promise<MetadataRoute.Sitemap> {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!supabaseUrl || !supabaseAnonKey) return [];
@@ -32,9 +31,9 @@ async function fetchPublishedBlogEntries(): Promise<MetadataRoute.Sitemap> {
   try {
     const { createClient } = await import("@/lib/supabase/server");
     const supabase = await createClient();
-    const { data } = await supabase.from("blog_posts").select("id, created_at").eq("published", true);
+    const { data } = await supabase.from(table).select("id, created_at").eq(statusFilter.column, statusFilter.value);
     return (data ?? []).map((row: { id: string; created_at: string }) => ({
-      url: `${SITE_URL}/blog/${row.id}`,
+      url: `${SITE_URL}${pathPrefix}/${row.id}`,
       lastModified: new Date(row.created_at),
       changeFrequency: "monthly" as const,
     }));
@@ -52,7 +51,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: path === "" ? 1 : 0.7,
   }));
 
-  const blogEntries = await fetchPublishedBlogEntries();
+  const [blogEntries, businessEntries, clasificadoEntries] = await Promise.all([
+    fetchDynamicEntries("blog_posts", { column: "published", value: true }, "/blog"),
+    fetchDynamicEntries("businesses", { column: "status", value: "aprobado" }, "/directorio"),
+    fetchDynamicEntries("classifieds", { column: "status", value: "aprobado" }, "/clasificados"),
+  ]);
 
-  return [...staticEntries, ...blogEntries];
+  return [...staticEntries, ...blogEntries, ...businessEntries, ...clasificadoEntries];
 }

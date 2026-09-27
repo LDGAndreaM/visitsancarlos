@@ -45,6 +45,8 @@ export function toPublicBusiness(row: BusinessRow): Business {
     phone: row.phone ?? "",
     badge: row.featured ? "Popular" : isNew ? "Nuevo" : "",
     placeholder: row.photo_placeholder ?? `Foto: ${row.name}`,
+    description: row.description ?? "",
+    features: row.features ?? [],
   };
 }
 
@@ -102,6 +104,12 @@ export async function fetchApprovedBusinesses(): Promise<Business[]> {
   const supabase = createClient();
   const { data } = await supabase.from("businesses").select("*").eq("status", "aprobado").order("created_at", { ascending: false });
   return (data ?? []).map(toPublicBusiness);
+}
+
+export async function fetchApprovedBusinessById(id: string): Promise<Business | null> {
+  const supabase = createClient();
+  const { data } = await supabase.from("businesses").select("*").eq("id", id).eq("status", "aprobado").maybeSingle();
+  return data ? toPublicBusiness(data as BusinessRow) : null;
 }
 
 export async function fetchMyBusinesses(userId: string): Promise<DirectorioListing[]> {

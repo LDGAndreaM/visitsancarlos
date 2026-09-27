@@ -1,6 +1,6 @@
 type SellerCardProps = {
   name: string;
-  kind: string;
+  kind?: string;
   phone: string;
 };
 
@@ -21,7 +21,7 @@ export default function SellerCard({ name, kind, phone }: SellerCardProps) {
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <span style={{ fontSize: 15, fontWeight: 700, color: "#143840" }}>{name}</span>
-          <span style={{ fontSize: 12, color: "#7FA7AA" }}>{kind}</span>
+          {kind && <span style={{ fontSize: 12, color: "#7FA7AA" }}>{kind}</span>}
         </div>
       </div>
       <a
