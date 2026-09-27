@@ -11,11 +11,11 @@ export type AdminAccount = {
 
 export const SUPER_ADMIN_EMAIL = "visit.sancarlos.son@gmail.com";
 
-export type AdminTab = "resumen" | "administradores" | "usuarios" | "aprobaciones" | "directorio" | "clasificados" | "blog" | "eventos" | "galeria" | "publicidad" | "soporte";
+export type AdminTab = "resumen" | "administradores" | "usuarios" | "aprobaciones" | "directorio" | "clasificados" | "blog" | "eventos" | "galeria" | "publicidad" | "soporte" | "contacto";
 
-const ALL_TABS: AdminTab[] = ["resumen", "administradores", "usuarios", "aprobaciones", "directorio", "clasificados", "blog", "eventos", "galeria", "publicidad", "soporte"];
+const ALL_TABS: AdminTab[] = ["resumen", "administradores", "usuarios", "aprobaciones", "directorio", "clasificados", "blog", "eventos", "galeria", "publicidad", "soporte", "contacto"];
 
-const LIMITED_TABS: AdminTab[] = ["resumen", "aprobaciones", "blog", "soporte"];
+const LIMITED_TABS: AdminTab[] = ["resumen", "aprobaciones", "blog", "soporte", "contacto"];
 
 export function tabsForRole(role: AdminRole): AdminTab[] {
   return role === "super" ? ALL_TABS : LIMITED_TABS;

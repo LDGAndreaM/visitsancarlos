@@ -14,9 +14,10 @@ const NAV_LABELS: Record<AdminTab, string> = {
   galeria: "Galería",
   publicidad: "Publicidad",
   soporte: "Soporte",
+  contacto: "Contacto",
 };
 
-const NAV_ORDER: AdminTab[] = ["resumen", "administradores", "usuarios", "aprobaciones", "directorio", "clasificados", "blog", "eventos", "galeria", "publicidad", "soporte"];
+const NAV_ORDER: AdminTab[] = ["resumen", "administradores", "usuarios", "aprobaciones", "directorio", "clasificados", "blog", "eventos", "galeria", "publicidad", "soporte", "contacto"];
 
 type AdminSidebarProps = {
   tab: AdminTab;
@@ -24,14 +25,16 @@ type AdminSidebarProps = {
   allowedTabs: AdminTab[];
   pendingCount: number;
   unreadCount: number;
+  unreadContactCount: number;
   account: AdminAccount;
   onLogout: () => void;
 };
 
-export default function AdminSidebar({ tab, onTabChange, allowedTabs, pendingCount, unreadCount, account, onLogout }: AdminSidebarProps) {
+export default function AdminSidebar({ tab, onTabChange, allowedTabs, pendingCount, unreadCount, unreadContactCount, account, onLogout }: AdminSidebarProps) {
   const badgeFor = (t: AdminTab): number | null => {
     if (t === "aprobaciones") return pendingCount || null;
     if (t === "soporte") return unreadCount || null;
+    if (t === "contacto") return unreadContactCount || null;
     return null;
   };
 

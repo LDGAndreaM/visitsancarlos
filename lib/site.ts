@@ -10,6 +10,11 @@ export const SITE_DESCRIPTION = "San Carlos no solo se visita… se vive. Direct
 
 export const DEFAULT_OG_IMAGE = "/og-default.jpg";
 
+// Buzones reales del dominio (Hostinger). El formulario de contacto reparte
+// el correo según el asunto elegido: ver app/api/contact/route.ts.
+export const CONTACT_EMAIL_GENERAL = "hola@visitsancarlos.com.mx";
+export const CONTACT_EMAIL_SOPORTE = "soporte@visitsancarlos.com.mx";
+
 export function absoluteUrl(path: string): string {
   return `${SITE_URL}${path.startsWith("/") ? path : `/${path}`}`;
 }

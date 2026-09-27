@@ -22,6 +22,7 @@ import GaleriaAdminTab from "./GaleriaAdminTab";
 import UploadPhotoModal from "./UploadPhotoModal";
 import PublicidadAdminTab from "./PublicidadAdminTab";
 import SoporteTab from "./SoporteTab";
+import ContactoAdminTab from "./ContactoAdminTab";
 import AdministradoresTab from "./AdministradoresTab";
 import AddAdminModal from "./AddAdminModal";
 import { INITIAL_ADMIN_ADS, INITIAL_CHATS, INITIAL_USERS, fmtMoneyMXN, type AdminBusiness, type AdminClasificado, type AdminEvent, type Chat } from "@/lib/adminData";
@@ -32,6 +33,7 @@ import { createEventAsAdmin, deleteEvent as deleteEventApi, fetchAllEventsAdmin,
 import { createClasificadoAsAdmin, deleteClasificado, fetchAllClasificadosAdmin, setClasificadoStatus } from "@/lib/supabase/classifieds";
 import { createPost, deletePost as deletePostApi, fetchAllPostsAdmin, setPostPublished, updatePost, type PostAuthorFields } from "@/lib/supabase/blogPosts";
 import { deletePhoto, fetchAllPhotosAdmin, uploadPhoto, type GalleryPhotoView } from "@/lib/supabase/gallery";
+import { deleteContactMessage, fetchContactMessages, setContactMessageRead, type ContactMessage } from "@/lib/supabase/contact";
 
 const TITLES: Record<AdminTab, [string, string]> = {
   resumen: ["Panel administrativo", "Resumen general de Visit San Carlos"],
@@ -45,6 +47,7 @@ const TITLES: Record<AdminTab, [string, string]> = {
   galeria: ["Galería", "Fotos publicadas en la página de galería"],
   publicidad: ["Publicidad", "Espacios contratados por todos los negocios"],
   soporte: ["Soporte", "Conversaciones con usuarios"],
+  contacto: ["Contacto", "Mensajes enviados desde el formulario de contacto"],
 };
 
 export default function AdminApp() {
@@ -60,6 +63,7 @@ export default function AdminApp() {
   const [blogPosts, setBlogPosts] = useState<Awaited<ReturnType<typeof fetchAllPostsAdmin>>>([]);
   const [events, setEvents] = useState<AdminEvent[]>([]);
   const [photos, setPhotos] = useState<GalleryPhotoView[]>([]);
+  const [contactMessages, setContactMessages] = useState<ContactMessage[]>([]);
   const [ads] = useState(INITIAL_ADMIN_ADS);
   const [chats, setChats] = useState<Chat[]>(INITIAL_CHATS);
   const [activeChatId, setActiveChatId] = useState("chat-1");
@@ -93,16 +97,18 @@ export default function AdminApp() {
         return;
       }
       setCurrentAccount(account);
-      const [accts, biz, evs, cls, posts, pics] = await Promise.all([
+      const [accts, biz, evs, cls, posts, pics, msgs] = await Promise.all([
         fetchAdminAccounts(),
         fetchAllBusinessesAdmin(),
         fetchAllEventsAdmin(),
         fetchAllClasificadosAdmin(),
         fetchAllPostsAdmin(),
         fetchAllPhotosAdmin(),
+        fetchContactMessages(),
       ]);
       setAccounts(accts);
       setBusinesses(biz);
+      setContactMessages(msgs);
       setEvents(evs);
       setClasificados(cls);
       setBlogPosts(posts);
@@ -133,6 +139,7 @@ export default function AdminApp() {
   const pendingEvents = events.filter((ev) => ev.status === "Pendiente");
   const pendingClasificados = clasificados.filter((c) => c.status === "Pendiente");
   const unreadChats = chats.filter((c) => c.unread);
+  const unreadContactMessages = contactMessages.filter((m) => !m.read);
   const publishedCount = businesses.filter((b) => b.status === "Publicado").length;
   const activeAds = ads.filter((a) => a.status === "Activo");
   const revenueFmt = fmtMoneyMXN(activeAds.reduce((sum, a) => sum + a.price, 0));
@@ -290,6 +297,15 @@ export default function AdminApp() {
     setPhotos((prev) => prev.filter((p) => p.id !== id));
   };
 
+  const toggleContactMessageRead = async (id: string, read: boolean) => {
+    setContactMessages((prev) => prev.map((m) => (m.id === id ? { ...m, read } : m)));
+    await setContactMessageRead(id, read);
+  };
+  const deleteContactMessageHandler = async (id: string) => {
+    await deleteContactMessage(id);
+    setContactMessages((prev) => prev.filter((m) => m.id !== id));
+  };
+
   const selectChat = (id: string) => {
     setActiveChatId(id);
     setChats((prev) => prev.map((c) => (c.id === id ? { ...c, unread: false } : c)));
@@ -320,6 +336,7 @@ export default function AdminApp() {
         allowedTabs={allowedTabs}
         pendingCount={stats.pendingCount}
         unreadCount={unreadChats.length}
+        unreadContactCount={unreadContactMessages.length}
         account={currentAccount}
         onLogout={handleLogout}
       />
@@ -391,6 +408,7 @@ export default function AdminApp() {
         {tab === "galeria" && <GaleriaAdminTab photos={photos} onOpenUpload={() => setShowUploadPhoto(true)} onDelete={deletePhotoHandler} />}
         {tab === "publicidad" && <PublicidadAdminTab ads={ads} adminAdStats={adminAdStats} revenueFmt={stats.revenueFmt} />}
         {tab === "soporte" && <SoporteTab chats={chats} activeChatId={activeChatId} onSelectChat={selectChat} onSendMessage={sendChatMessage} />}
+        {tab === "contacto" && <ContactoAdminTab messages={contactMessages} onToggleRead={toggleContactMessageRead} onDelete={deleteContactMessageHandler} />}
       </main>
 
       {approvalDetail && <ApprovalDetailModal business={approvalDetail} onClose={closeApprovalDetail} onApprove={approveFromDetail} onReject={rejectFromDetail} />}

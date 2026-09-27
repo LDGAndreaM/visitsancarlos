@@ -395,3 +395,37 @@ create policy "chat_messages: dueño o admin lee/escribe" on public.chat_message
         ))
     )
   );
+
+-- ============ MENSAJES DE CONTACTO ============
+-- Envíos del formulario de /contacto. Cualquiera (incluso sin sesión) puede
+-- insertar el suyo; solo un admin puede leerlos/marcarlos/borrarlos. El
+-- envío del correo real se maneja aparte, en el route handler de la app.
+create table if not exists public.contact_messages (
+  id uuid primary key default gen_random_uuid(),
+  first_name text not null,
+  last_name text,
+  email text not null,
+  phone text,
+  subject text not null,
+  message text not null,
+  read boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
+alter table public.contact_messages enable row level security;
+
+drop policy if exists "contact_messages: cualquiera puede enviar" on public.contact_messages;
+create policy "contact_messages: cualquiera puede enviar" on public.contact_messages
+  for insert with check (true);
+
+drop policy if exists "contact_messages: solo admin lee" on public.contact_messages;
+create policy "contact_messages: solo admin lee" on public.contact_messages
+  for select to authenticated using (public.is_admin(auth.uid()));
+
+drop policy if exists "contact_messages: solo admin edita" on public.contact_messages;
+create policy "contact_messages: solo admin edita" on public.contact_messages
+  for update to authenticated using (public.is_admin(auth.uid())) with check (public.is_admin(auth.uid()));
+
+drop policy if exists "contact_messages: solo admin elimina" on public.contact_messages;
+create policy "contact_messages: solo admin elimina" on public.contact_messages
+  for delete to authenticated using (public.is_admin(auth.uid()));
