@@ -15,7 +15,17 @@ export default function Hero() {
         fill
         priority
         sizes="100vw"
+        className="vsc-desktop-only"
         style={{ objectFit: "cover", objectPosition: "center 32%" }}
+      />
+      <Image
+        src="/uploads/hero-san-carlos-mobile.jpg"
+        alt="Letrero de bienvenida a San Carlos, Sonora"
+        fill
+        priority
+        sizes="100vw"
+        className="vsc-mobile-only"
+        style={{ objectFit: "cover", objectPosition: "center" }}
       />
       <div className="vsc-hero-overlay" />
 

@@ -188,8 +188,14 @@ button {
     grid-template-columns: minmax(0, 1fr);
   }
 
+  /* El hero ocupa exactamente lo que queda de pantalla debajo de la barra
+     superior (58px), así la barra de navegación inferior queda justo en
+     su borde y, al hacer scroll, entra directo el contenido de abajo en
+     vez de seguir viéndose la foto. dvh además se ajusta cuando el
+     navegador del celular muestra/oculta su propia barra de direcciones. */
   .vsc-hero-banner {
-    height: 900px;
+    height: calc(100vh - 58px);
+    height: calc(100dvh - 58px);
   }
 
   /* En móvil el texto y el buscador se anclan arriba (no centrados) para
