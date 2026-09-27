@@ -184,11 +184,7 @@ export type DashboardAd = {
   statusBg: string;
 };
 
-export const INITIAL_ADS: DashboardAd[] = [
-  { id: "ad-1", name: "Vistas Doradas — Carrusel Home", businessId: "db-1", billing: "mensual", price: 1500, period: "1 sep – 30 sep 2026", expires: "2026-09-30", status: "Activo", statusColor: "#009BA4", statusBg: "#E5F6F7" },
-  { id: "ad-2", name: "Directorio Premium — Carrusel Directorio", businessId: "db-2", billing: "mensual", price: 1900, period: "1 jul – 1 ago 2026", expires: "2026-08-01", status: "Vencido", statusColor: "#B94A2E", statusBg: "#FBEAE6" },
-  { id: "ad-3", name: "Eventos Destacados — Carrusel Eventos", businessId: "db-1", billing: "trimestral", price: 4320, period: "15 sep – 15 dic 2026", expires: "2026-12-15", status: "Activo", statusColor: "#009BA4", statusBg: "#E5F6F7" },
-];
+export const INITIAL_ADS: DashboardAd[] = [];
 
 export type AdCatalogItem = {
   id: string;

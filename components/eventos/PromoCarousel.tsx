@@ -7,11 +7,14 @@ export default function PromoCarousel() {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
+    if (BANNERS.length === 0) return;
     const interval = setInterval(() => {
       setIndex((i) => (i + 1) % BANNERS.length);
     }, 10000);
     return () => clearInterval(interval);
   }, []);
+
+  if (BANNERS.length === 0) return null;
 
   return (
     <section style={{ position: "relative", height: 280, overflow: "hidden" }}>

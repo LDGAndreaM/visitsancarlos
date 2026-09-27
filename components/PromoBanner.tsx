@@ -8,11 +8,14 @@ export default function PromoBanner({ pairs }: { pairs: [PromoPair, PromoPair][]
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
+    if (pairs.length === 0) return;
     const interval = setInterval(() => {
       setIndex((i) => (i + 1) % pairs.length);
     }, 10000);
     return () => clearInterval(interval);
   }, [pairs.length]);
+
+  if (pairs.length === 0) return null;
 
   return (
     <section style={{ position: "relative", height: 220, overflow: "hidden" }}>
