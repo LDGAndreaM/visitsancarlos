@@ -2,7 +2,7 @@ import ImagePlaceholder from "./ImagePlaceholder";
 
 export default function AdBanner() {
   return (
-    <section style={{ padding: "20px 48px" }}>
+    <section style={{ padding: "20px 48px", maxWidth: 1280, margin: "0 auto" }}>
       <div style={{ borderRadius: 18, overflow: "hidden", height: 150, position: "relative", boxShadow: "0 10px 24px rgba(0,60,66,0.1)" }}>
         <ImagePlaceholder caption="Banner publicitario 1200×150" />
         <span

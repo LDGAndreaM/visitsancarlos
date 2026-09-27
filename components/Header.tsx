@@ -35,45 +35,43 @@ export default function Header({ ctaLabel = "AGREGAR NEGOCIO", ctaHref = "/login
         position: "sticky",
         top: 0,
         zIndex: 50,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: 24,
         padding: "14px 48px",
         background: "#ffffff",
         boxShadow: "0 2px 14px rgba(0,60,66,0.08)",
       }}
     >
-      <Link href="/" style={{ flexShrink: 0, display: "flex" }}>
-        <Image
-          src="/uploads/Recurso 1visitsancarlos.png"
-          alt="Visit San Carlos"
-          height={52}
-          width={180}
-          style={{ height: 52, width: "auto" }}
-          priority
-        />
-      </Link>
-      <nav style={{ display: "flex", alignItems: "center", gap: 32, flexWrap: "wrap" }}>
-        {NAV_LINKS.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            style={{ fontWeight: 600, fontSize: 15, color: pathname === link.href ? "#009BA4" : "#143840" }}
-          >
-            {link.label}
-          </Link>
-        ))}
-      </nav>
-      {onCtaClick ? (
-        <button onClick={onCtaClick} style={ctaStyle}>
-          {ctaLabel}
-        </button>
-      ) : (
-        <Link href={ctaHref} style={ctaStyle}>
-          {ctaLabel}
+      <div style={{ maxWidth: 1280, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24 }}>
+        <Link href="/" style={{ flexShrink: 0, display: "flex" }}>
+          <Image
+            src="/uploads/Recurso 1visitsancarlos.png"
+            alt="Visit San Carlos"
+            height={52}
+            width={180}
+            style={{ height: 52, width: "auto" }}
+            priority
+          />
         </Link>
-      )}
+        <nav style={{ display: "flex", alignItems: "center", gap: 32, flexWrap: "wrap" }}>
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              style={{ fontWeight: 600, fontSize: 15, color: pathname === link.href ? "#009BA4" : "#143840" }}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+        {onCtaClick ? (
+          <button onClick={onCtaClick} style={ctaStyle}>
+            {ctaLabel}
+          </button>
+        ) : (
+          <Link href={ctaHref} style={ctaStyle}>
+            {ctaLabel}
+          </Link>
+        )}
+      </div>
     </header>
   );
 }

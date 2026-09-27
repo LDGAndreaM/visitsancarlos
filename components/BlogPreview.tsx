@@ -12,7 +12,7 @@ export default function BlogPreview() {
   }, []);
 
   return (
-    <section id="blog" style={{ padding: "56px 48px 20px" }}>
+    <section id="blog" style={{ padding: "56px 48px 20px", maxWidth: 1280, margin: "0 auto" }}>
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 24, flexWrap: "wrap", gap: 10 }}>
         <h2 style={{ margin: 0, fontSize: 26, fontWeight: 800, color: "#143840" }}>Del blog</h2>
       </div>

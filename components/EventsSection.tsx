@@ -4,7 +4,7 @@ import { EVENTS } from "@/lib/homeData";
 
 export default function EventsSection() {
   return (
-    <section id="eventos" style={{ padding: "56px 48px 20px" }}>
+    <section id="eventos" style={{ padding: "56px 48px 20px", maxWidth: 1280, margin: "0 auto" }}>
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
         <h2 style={{ margin: 0, fontSize: 26, fontWeight: 800, color: "#143840" }}>Próximos eventos</h2>
         <Link href="/eventos" style={{ fontWeight: 700, fontSize: 14 }}>

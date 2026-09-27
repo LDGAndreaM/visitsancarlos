@@ -24,6 +24,7 @@ export default function Footer({ marginTop = 70, padding = "64px 48px 28px", soc
         borderTop: "1px solid #EEF3F3",
       }}
     >
+      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
       <div
         style={{
           display: "grid",
@@ -125,6 +126,7 @@ export default function Footer({ marginTop = 70, padding = "64px 48px 28px", soc
         }}
       >
         © Derechos reservados Visit San Carlos 2026 | Creado por Black &amp; White Studio
+      </div>
       </div>
     </footer>
   );

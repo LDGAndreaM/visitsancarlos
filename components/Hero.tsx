@@ -11,15 +11,21 @@ export default function Hero() {
     <section
       id="inicio"
       style={{
-        position: "relative",
         padding: "70px 48px 90px",
         background: "#ffffff",
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        alignItems: "center",
-        gap: 20,
       }}
     >
+      <div
+        style={{
+          position: "relative",
+          maxWidth: 1280,
+          margin: "0 auto",
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          alignItems: "center",
+          gap: 20,
+        }}
+      >
       <svg
         style={{ position: "absolute", top: 0, right: 0, width: 930, height: 519, zIndex: 0, opacity: 0.5, pointerEvents: "none" }}
         viewBox="0 0 500 560"
@@ -144,6 +150,7 @@ export default function Hero() {
         >
           <span style={{ transform: "rotate(45deg)", width: 26, height: 26, borderRadius: "50%", background: "rgba(255,255,255,0.9)" }} />
         </div>
+      </div>
       </div>
     </section>
   );

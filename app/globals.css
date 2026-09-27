@@ -8,6 +8,7 @@
   --vsc-muted: #5c7679;
   --vsc-faint: #7fa7aa;
   --vsc-line: #eef3f3;
+  --gutter: clamp(24px, 6vw, 160px);
 }
 
 * {

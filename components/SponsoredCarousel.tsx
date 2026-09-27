@@ -22,7 +22,7 @@ export default function SponsoredCarousel() {
   }, []);
 
   return (
-    <section style={{ padding: "64px 48px 20px" }}>
+    <section style={{ padding: "64px 48px 20px", maxWidth: 1280, margin: "0 auto" }}>
       <div ref={ref} className="vsc-scroll" style={{ display: "flex", gap: 20, overflowX: "auto", scrollSnapType: "x mandatory" }}>
         {SPONSORED.map((s) => (
           <div

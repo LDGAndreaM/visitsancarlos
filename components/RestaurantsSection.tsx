@@ -4,7 +4,7 @@ import { RESTAURANTS } from "@/lib/homeData";
 
 export default function RestaurantsSection() {
   return (
-    <section style={{ padding: "56px 48px 20px", display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 28 }}>
+    <section style={{ padding: "56px 48px 20px", maxWidth: 1280, margin: "0 auto", display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 28 }}>
       <div>
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
           <h2 style={{ margin: 0, fontSize: 26, fontWeight: 800, color: "#143840" }}>Dónde comer</h2>

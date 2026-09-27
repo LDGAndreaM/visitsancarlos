@@ -29,19 +29,27 @@ export default function PromoCarousel() {
             pointerEvents: i === index ? "auto" : "none",
             zIndex: i === index ? 1 : 0,
             transition: "opacity 0.8s ease",
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            alignItems: "center",
-            padding: "0 56px",
           }}
         >
-          <div />
-          <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-end", textAlign: "right" }}>
-            <h2 style={{ margin: 0, fontSize: 30, fontWeight: 800, color: "#ffffff" }}>{b.title}</h2>
-            <p style={{ margin: 0, fontSize: 15, color: "#ffffff", maxWidth: 420 }}>{b.subtitle}</p>
-            <a href="#" style={{ border: "2px solid #ffffff", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: "10px 22px", borderRadius: 8 }}>
-              {b.cta}
-            </a>
+          <div
+            style={{
+              maxWidth: 1280,
+              height: "100%",
+              margin: "0 auto",
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              alignItems: "center",
+              padding: "0 56px",
+            }}
+          >
+            <div />
+            <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-end", textAlign: "right" }}>
+              <h2 style={{ margin: 0, fontSize: 30, fontWeight: 800, color: "#ffffff" }}>{b.title}</h2>
+              <p style={{ margin: 0, fontSize: 15, color: "#ffffff", maxWidth: 420 }}>{b.subtitle}</p>
+              <a href="#" style={{ border: "2px solid #ffffff", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: "10px 22px", borderRadius: 8 }}>
+                {b.cta}
+              </a>
+            </div>
           </div>
         </div>
       ))}

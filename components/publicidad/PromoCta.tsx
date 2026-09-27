@@ -4,7 +4,8 @@ export default function PromoCta() {
   return (
     <section
       style={{
-        margin: "20px 48px 56px",
+        margin: "20px auto 56px",
+        width: "min(100% - 96px, 1280px)",
         padding: "48px 56px",
         borderRadius: 24,
         background: "linear-gradient(120deg,#009BA4,#00767E)",

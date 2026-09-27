@@ -10,7 +10,7 @@ type NewsletterCtaProps = {
 
 export default function NewsletterCta({
   id,
-  margin = "56px 48px 0",
+  margin = "56px auto 0",
   body = "Eventos, promociones y novedades directo a tu correo.",
 }: NewsletterCtaProps) {
   const [email, setEmail] = useState("");
@@ -25,6 +25,7 @@ export default function NewsletterCta({
       id={id}
       style={{
         margin,
+        width: "min(100% - 96px, 1280px)",
         padding: "48px 56px",
         borderRadius: 24,
         background: "linear-gradient(120deg,#009BA4,#00767E)",

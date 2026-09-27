@@ -14,7 +14,7 @@ export default function HotelsCarousel() {
   };
 
   return (
-    <section id="directorio" style={{ padding: "56px 48px 20px" }}>
+    <section id="directorio" style={{ padding: "56px 48px 20px", maxWidth: 1280, margin: "0 auto" }}>
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
         <h2 style={{ margin: 0, fontSize: 26, fontWeight: 800, color: "#143840" }}>Hospedajes</h2>
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>

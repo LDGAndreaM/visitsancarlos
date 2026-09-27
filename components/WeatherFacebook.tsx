@@ -4,7 +4,7 @@ import { FB_POSTS } from "@/lib/homeData";
 
 export default function WeatherFacebook() {
   return (
-    <section style={{ padding: "56px 48px 20px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28 }}>
+    <section style={{ padding: "56px 48px 20px", maxWidth: 1280, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28 }}>
       <div
         style={{
           display: "flex",

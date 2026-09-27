@@ -6,14 +6,21 @@ export default function QuienesSomos() {
       style={{
         background: "#6AC7E2",
         padding: "19px 48px 0",
-        display: "grid",
-        gridTemplateColumns: "1.1fr 1fr",
-        gap: 48,
-        alignItems: "center",
         height: 474,
         marginTop: 3,
       }}
     >
+      <div
+        style={{
+          maxWidth: 1280,
+          height: "100%",
+          margin: "0 auto",
+          display: "grid",
+          gridTemplateColumns: "1.1fr 1fr",
+          gap: 48,
+          alignItems: "center",
+        }}
+      >
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         <h1 style={{ margin: 0, fontSize: 36, fontWeight: 800, color: "#ffffff" }}>Acerca de Visit San Carlos</h1>
         <p style={{ margin: 0, fontSize: 16, lineHeight: 1.7, color: "#ffffff" }}>
@@ -59,6 +66,7 @@ export default function QuienesSomos() {
         >
           <ImagePlaceholder caption="Foto: atardecer en San Carlos" />
         </div>
+      </div>
       </div>
     </section>
   );

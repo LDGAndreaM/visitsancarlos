@@ -24,7 +24,12 @@ export default function PromoBanner({ pairs }: { pairs: [PromoPair, PromoPair][]
           key={i}
           style={{
             position: "absolute",
-            inset: 0,
+            top: 0,
+            bottom: 0,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "100%",
+            maxWidth: 1280,
             opacity: i === index ? 1 : 0,
             pointerEvents: i === index ? "auto" : "none",
             zIndex: i === index ? 1 : 0,
