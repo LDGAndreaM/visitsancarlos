@@ -157,16 +157,31 @@ button {
   scroll-snap-align: start;
 }
 
-/* Franja "Acerca de": foto de fondo a todo lo ancho, sin overlay (a
-   pedido), con el texto dentro del mismo contenedor centrado de 1280px
-   que usa el header, para que el margen izquierdo coincida con el resto
-   del sitio. */
+/* Franja "Acerca de": foto de fondo a todo lo ancho, con el texto dentro
+   del mismo contenedor centrado de 1280px que usa el header, para que el
+   margen izquierdo coincida con el resto del sitio. */
 .vsc-about-banner {
   position: relative;
   width: 100%;
-  min-height: 640px;
+  min-height: 820px;
   display: flex;
   align-items: center;
+}
+
+/* Degradado ligero (izquierda oscuro, derecha transparente) solo para
+   ayudar al contraste del texto — mucho más suave que el del Hero,
+   la idea es que la foto se siga viendo casi sin oscurecer. */
+.vsc-about-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(20, 56, 64, 0.38) 0%,
+    rgba(20, 56, 64, 0.2) 42%,
+    rgba(20, 56, 64, 0.05) 70%,
+    rgba(20, 56, 64, 0) 100%
+  );
 }
 
 .vsc-about-content {
@@ -295,7 +310,7 @@ button {
   }
 
   .vsc-about-banner {
-    min-height: 520px;
+    min-height: 560px;
   }
 
   .vsc-about-content {
