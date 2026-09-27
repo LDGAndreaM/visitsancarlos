@@ -13,7 +13,7 @@ export default function MisionVisionValores() {
           marginBottom: 56,
         }}
       >
-        <div style={{ position: "relative", height: 280, borderRadius: 20, overflow: "hidden", boxShadow: "0 14px 28px rgba(0,60,66,0.1)" }}>
+        <div style={{ position: "relative", width: "100%", aspectRatio: "1672 / 941", borderRadius: 20, overflow: "hidden", boxShadow: "0 14px 28px rgba(0,60,66,0.1)" }}>
           <Image
             src="/uploads/acerca-de-mision-vision.jpg"
             alt="Cerro Tetakawi y la bahía de San Carlos al atardecer"
