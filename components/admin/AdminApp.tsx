@@ -14,6 +14,7 @@ import ClasificadosAdminTab from "./ClasificadosAdminTab";
 import AddClasificadoAdminModal from "./AddClasificadoAdminModal";
 import BlogAdminTab from "./BlogAdminTab";
 import NewPostModal from "./NewPostModal";
+import EditPostModal from "./EditPostModal";
 import EventosAdminTab from "./EventosAdminTab";
 import NewEventModal from "./NewEventModal";
 import EditEventAdminModal from "./EditEventAdminModal";
@@ -29,7 +30,7 @@ import { fetchAdminAccounts, getCurrentAdminAccount, inviteAdmin, revokeAdmin, s
 import { createBusinessAsAdmin, deleteBusiness, fetchAllBusinessesAdmin, setBusinessFeatured, setBusinessStatus, updateBusinessFromAdmin } from "@/lib/supabase/businesses";
 import { createEventAsAdmin, deleteEvent as deleteEventApi, fetchAllEventsAdmin, setEventFeatured, setEventStatus, updateEventFromAdmin } from "@/lib/supabase/events";
 import { createClasificadoAsAdmin, deleteClasificado, fetchAllClasificadosAdmin, setClasificadoStatus } from "@/lib/supabase/classifieds";
-import { createPost, deletePost as deletePostApi, fetchAllPostsAdmin, setPostPublished } from "@/lib/supabase/blogPosts";
+import { createPost, deletePost as deletePostApi, fetchAllPostsAdmin, setPostPublished, updatePost, type PostAuthorFields } from "@/lib/supabase/blogPosts";
 import { deletePhoto, fetchAllPhotosAdmin, uploadPhoto, type GalleryPhotoView } from "@/lib/supabase/gallery";
 
 const TITLES: Record<AdminTab, [string, string]> = {
@@ -76,6 +77,7 @@ export default function AdminApp() {
   const [showAddAdmin, setShowAddAdmin] = useState(false);
   const [editingBusinessId, setEditingBusinessId] = useState<string | null>(null);
   const [editingEventId, setEditingEventId] = useState<string | null>(null);
+  const [editingPostId, setEditingPostId] = useState<string | null>(null);
 
   const refreshBusinesses = async () => setBusinesses(await fetchAllBusinessesAdmin());
   const refreshEvents = async () => setEvents(await fetchAllEventsAdmin());
@@ -139,6 +141,7 @@ export default function AdminApp() {
   const [pageTitle, pageSubtitle] = TITLES[tab];
   const editingBusiness = businesses.find((b) => b.id === editingBusinessId) ?? null;
   const editingEvent = events.find((ev) => ev.id === editingEventId) ?? null;
+  const editingPost = blogPosts.find((p) => p.id === editingPostId) ?? null;
   const approvalDetail = businesses.find((b) => b.id === approvalDetailId) ?? null;
 
   const approveBusiness = async (id: string) => {
@@ -200,10 +203,16 @@ export default function AdminApp() {
     await deletePostApi(id);
     setBlogPosts((prev) => prev.filter((p) => p.id !== id));
   };
-  const saveNewPost = async (draft: { title: string; author: string }) => {
+  const saveNewPost = async (draft: { title: string; category: string; excerpt: string; body: string } & PostAuthorFields) => {
     setShowNewPost(false);
     if (!currentAccount || !draft.title.trim()) return;
-    await createPost(currentAccount.id, { title: draft.title });
+    await createPost(currentAccount.id, draft);
+    await refreshBlogPosts();
+  };
+  const saveEditPost = async (values: { title: string; category: string; excerpt: string; body: string } & PostAuthorFields) => {
+    if (!editingPostId || !values.title.trim()) return;
+    setEditingPostId(null);
+    await updatePost(editingPostId, values);
     await refreshBlogPosts();
   };
 
@@ -373,7 +382,9 @@ export default function AdminApp() {
             onRemove={removeClasificado}
           />
         )}
-        {tab === "blog" && <BlogAdminTab posts={blogPosts} onOpenNewPost={() => setShowNewPost(true)} onTogglePublish={togglePostStatus} onDelete={deletePostHandler} />}
+        {tab === "blog" && (
+          <BlogAdminTab posts={blogPosts} onOpenNewPost={() => setShowNewPost(true)} onEdit={setEditingPostId} onTogglePublish={togglePostStatus} onDelete={deletePostHandler} />
+        )}
         {tab === "eventos" && (
           <EventosAdminTab events={events} onOpenNewEvent={() => setShowNewEvent(true)} onToggleFeatured={toggleEventFeatured} onEdit={setEditingEventId} onArchive={toggleArchiveEvent} onDelete={deleteEventHandler} />
         )}
@@ -391,6 +402,7 @@ export default function AdminApp() {
       {showAddAdmin && <AddAdminModal existingEmails={accounts.map((a) => a.email)} onClose={() => setShowAddAdmin(false)} onSave={addAdmin} />}
       {editingBusiness && <EditBusinessAdminModal business={editingBusiness} onClose={() => setEditingBusinessId(null)} onSave={saveBusinessEdit} />}
       {editingEvent && <EditEventAdminModal event={editingEvent} onClose={() => setEditingEventId(null)} onSave={saveEventEdit} />}
+      {editingPost && <EditPostModal post={editingPost} onClose={() => setEditingPostId(null)} onSave={saveEditPost} />}
     </div>
   );
 }

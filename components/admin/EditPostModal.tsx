@@ -2,35 +2,36 @@
 
 import { useState } from "react";
 import { BLOG_FILTERS } from "@/lib/blogData";
+import type { AdminBlogPost } from "@/lib/adminData";
 import RichTextEditor from "./RichTextEditor";
 import { uploadBlogImage } from "@/lib/supabase/blogPosts";
 
 const CATEGORIES = BLOG_FILTERS.filter((c) => c !== "Todos");
 
-type PostDraft = { title: string; category: string; excerpt: string; body: string; authorName: string; authorRole: string; authorPhotoUrl: string; authorFacebook: string; authorInstagram: string; authorWebsite: string };
+type PostValues = { title: string; category: string; excerpt: string; body: string; authorName: string; authorRole: string; authorPhotoUrl: string; authorFacebook: string; authorInstagram: string; authorWebsite: string };
 
-type NewPostModalProps = {
+type EditPostModalProps = {
+  post: AdminBlogPost;
   onClose: () => void;
-  onSave: (draft: PostDraft) => void;
+  onSave: (values: PostValues) => void;
 };
 
 const fieldStyle: React.CSSProperties = { display: "flex", flexDirection: "column", gap: 6 };
 const labelStyle: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: "#143840" };
 const inputStyle: React.CSSProperties = { border: "1px solid #E2ECED", outline: "none", borderRadius: 10, padding: "11px 14px", fontSize: 14, fontFamily: "inherit" };
 
-export default function NewPostModal({ onClose, onSave }: NewPostModalProps) {
-  const [title, setTitle] = useState("");
-  const [category, setCategory] = useState(CATEGORIES[0]);
-  const [excerpt, setExcerpt] = useState("");
-  const [body, setBody] = useState("");
-  const [authorName, setAuthorName] = useState("");
-  const [authorRole, setAuthorRole] = useState("");
-  const [authorPhotoUrl, setAuthorPhotoUrl] = useState("");
-  const [authorFacebook, setAuthorFacebook] = useState("");
-  const [authorInstagram, setAuthorInstagram] = useState("");
-  const [authorWebsite, setAuthorWebsite] = useState("");
+export default function EditPostModal({ post, onClose, onSave }: EditPostModalProps) {
+  const [title, setTitle] = useState(post.title);
+  const [category, setCategory] = useState(post.category);
+  const [excerpt, setExcerpt] = useState(post.excerpt);
+  const [body, setBody] = useState(post.body);
+  const [authorName, setAuthorName] = useState(post.authorName);
+  const [authorRole, setAuthorRole] = useState(post.authorRole);
+  const [authorPhotoUrl, setAuthorPhotoUrl] = useState(post.authorPhotoUrl);
+  const [authorFacebook, setAuthorFacebook] = useState(post.authorFacebook);
+  const [authorInstagram, setAuthorInstagram] = useState(post.authorInstagram);
+  const [authorWebsite, setAuthorWebsite] = useState(post.authorWebsite);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
-  const [error, setError] = useState("");
 
   const handleAuthorPhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -42,25 +43,17 @@ export default function NewPostModal({ onClose, onSave }: NewPostModalProps) {
     if (url) setAuthorPhotoUrl(url);
   };
 
-  const handleSave = () => {
-    if (!title.trim()) {
-      setError("Ponle un título a la entrada.");
-      return;
-    }
-    onSave({ title: title.trim(), category, excerpt: excerpt.trim(), body, authorName, authorRole, authorPhotoUrl, authorFacebook, authorInstagram, authorWebsite });
-  };
-
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(20,56,64,0.55)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
       <div
         onClick={(e) => e.stopPropagation()}
         style={{ background: "#ffffff", borderRadius: 20, padding: 32, maxWidth: 680, width: "100%", maxHeight: "90vh", overflowY: "auto", display: "flex", flexDirection: "column", gap: 14, boxShadow: "0 24px 50px rgba(0,0,0,0.25)" }}
       >
-        <h3 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#143840" }}>Nueva entrada de blog</h3>
+        <h3 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#143840" }}>Editar entrada — {post.title}</h3>
 
         <div style={fieldStyle}>
           <label style={labelStyle}>Título</label>
-          <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Ej. 5 playas imperdibles en San Carlos" style={inputStyle} />
+          <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" style={inputStyle} />
         </div>
 
         <div style={fieldStyle}>
@@ -76,13 +69,7 @@ export default function NewPostModal({ onClose, onSave }: NewPostModalProps) {
 
         <div style={fieldStyle}>
           <label style={labelStyle}>Resumen breve</label>
-          <textarea
-            value={excerpt}
-            onChange={(e) => setExcerpt(e.target.value)}
-            rows={2}
-            placeholder="Se muestra en las tarjetas del blog, en una o dos líneas."
-            style={{ ...inputStyle, resize: "vertical" }}
-          />
+          <textarea value={excerpt} onChange={(e) => setExcerpt(e.target.value)} rows={2} style={{ ...inputStyle, resize: "vertical" }} />
         </div>
 
         <div style={fieldStyle}>
@@ -136,14 +123,15 @@ export default function NewPostModal({ onClose, onSave }: NewPostModalProps) {
           </div>
         </div>
 
-        {error && <p style={{ margin: 0, fontSize: 12, color: "#E23E7E", fontWeight: 600 }}>{error}</p>}
-
         <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 6 }}>
           <button onClick={onClose} style={{ border: "2px solid #E2ECED", background: "#ffffff", color: "#5C7679", fontWeight: 700, fontSize: 14, padding: "11px 22px", borderRadius: 10, cursor: "pointer" }}>
             Cancelar
           </button>
-          <button onClick={handleSave} style={{ border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: "11px 22px", borderRadius: 10, cursor: "pointer" }}>
-            Guardar borrador
+          <button
+            onClick={() => onSave({ title: title.trim(), category, excerpt: excerpt.trim(), body, authorName, authorRole, authorPhotoUrl, authorFacebook, authorInstagram, authorWebsite })}
+            style={{ border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: "11px 22px", borderRadius: 10, cursor: "pointer" }}
+          >
+            Guardar cambios
           </button>
         </div>
       </div>

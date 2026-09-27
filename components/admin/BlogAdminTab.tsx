@@ -1,15 +1,16 @@
 import type { AdminBlogPost } from "@/lib/adminData";
 
-const gridCols = "2fr 1.2fr 1fr 1fr 1.2fr";
+const gridCols = "2fr 1.2fr 1fr 1fr 1.6fr";
 
 type BlogAdminTabProps = {
   posts: AdminBlogPost[];
   onOpenNewPost: () => void;
+  onEdit: (id: string) => void;
   onTogglePublish: (id: string) => void;
   onDelete: (id: string) => void;
 };
 
-export default function BlogAdminTab({ posts, onOpenNewPost, onTogglePublish, onDelete }: BlogAdminTabProps) {
+export default function BlogAdminTab({ posts, onOpenNewPost, onEdit, onTogglePublish, onDelete }: BlogAdminTabProps) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -37,7 +38,13 @@ export default function BlogAdminTab({ posts, onOpenNewPost, onTogglePublish, on
               >
                 {p.status}
               </span>
-              <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+              <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", flexWrap: "wrap" }}>
+                <button
+                  onClick={() => onEdit(p.id)}
+                  style={{ border: "2px solid #E2ECED", background: "#ffffff", color: "#5C7679", fontWeight: 700, fontSize: 12, padding: "8px 12px", borderRadius: 8, cursor: "pointer" }}
+                >
+                  Editar
+                </button>
                 <button
                   onClick={() => onTogglePublish(p.id)}
                   style={{ border: "2px solid #009BA4", background: "#ffffff", color: "#009BA4", fontWeight: 700, fontSize: 12, padding: "8px 12px", borderRadius: 8, cursor: "pointer" }}

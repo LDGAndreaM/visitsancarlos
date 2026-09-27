@@ -232,8 +232,25 @@ create table if not exists public.blog_posts (
   category text,
   photo_placeholder text,
   published boolean not null default false,
+  -- Firma de autor que se muestra al final del artículo. Por default se usa el
+  -- nombre/foto de la cuenta que publica, pero se puede sobrescribir aquí
+  -- cuando la redactora o redactor es alguien más.
+  author_name text,
+  author_role text,
+  author_photo_url text,
+  author_facebook text,
+  author_instagram text,
+  author_website text,
   created_at timestamptz not null default now()
 );
+
+-- Por si la tabla ya existía de una corrida anterior de este script.
+alter table public.blog_posts add column if not exists author_name text;
+alter table public.blog_posts add column if not exists author_role text;
+alter table public.blog_posts add column if not exists author_photo_url text;
+alter table public.blog_posts add column if not exists author_facebook text;
+alter table public.blog_posts add column if not exists author_instagram text;
+alter table public.blog_posts add column if not exists author_website text;
 
 alter table public.blog_posts enable row level security;
 

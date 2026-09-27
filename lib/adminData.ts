@@ -32,6 +32,15 @@ export type AdminBlogPost = {
   author: string;
   date: string;
   status: "Publicado" | "Borrador";
+  category: string;
+  excerpt: string;
+  body: string;
+  authorName: string;
+  authorRole: string;
+  authorPhotoUrl: string;
+  authorFacebook: string;
+  authorInstagram: string;
+  authorWebsite: string;
 };
 
 export type AdminEventStatus = "Publicado" | "Pendiente" | "Rechazado" | "Archivado";
