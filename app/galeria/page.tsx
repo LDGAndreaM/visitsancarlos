@@ -11,7 +11,7 @@ import { pageMetadata } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
   title: "Galería",
-  description: "Un vistazo visual a las playas, la gastronomía, los eventos y la comunidad de San Carlos y Guaymas.",
+  description: "Un vistazo visual a las playas, la gastronomía, los eventos y la comunidad de San Carlos.",
   path: "/galeria",
 });
 

@@ -8,7 +8,16 @@ export default function QuienesSomos() {
         alt="Cerro Tetakawi y la bahía de San Carlos al atardecer, con ilustraciones decorativas de sol, aves y olas"
         fill
         priority
+        className="vsc-desktop-only"
         style={{ objectFit: "cover", objectPosition: "center 55%" }}
+      />
+      <Image
+        src="/uploads/acerca-de-portada-mobile.jpg"
+        alt="Cerro Tetakawi al atardecer, con ilustraciones decorativas de sol y aves"
+        fill
+        priority
+        className="vsc-mobile-only"
+        style={{ objectFit: "cover", objectPosition: "20% center" }}
       />
       <div className="vsc-about-overlay" />
       <div className="vsc-about-content">
