@@ -112,6 +112,14 @@ button {
   gap: 24px;
 }
 
+/* Foto | texto | texto, con la foto ocupando el doble de ancho que cada
+   columna de texto (como una franja de 4 columnas: 2 para la foto). */
+.vsc-grid-photo-2col {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 32px;
+}
+
 /* Hero full-bleed: foto de fondo + degradado para legibilidad + texto y
    buscador encima, todo dentro de una sola franja de ancho completo. */
 .vsc-hero-banner {
@@ -184,7 +192,8 @@ button {
 
   .vsc-split-grid,
   .vsc-split-grid-wide,
-  .vsc-grid-3 {
+  .vsc-grid-3,
+  .vsc-grid-photo-2col {
     grid-template-columns: minmax(0, 1fr);
   }
 
