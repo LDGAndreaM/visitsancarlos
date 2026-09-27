@@ -48,8 +48,8 @@ export default function Footer({ marginTop = 70, padding = "64px 48px 28px", soc
           <div style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 14 }}>
             <span>Guaymas, Sonora</span>
           </div>
-          <a href="mailto:visit.sancarlos.son@gmail.com" style={{ fontSize: 14, color: "#5C7679" }}>
-            visit.sancarlos.son@gmail.com
+          <a href="mailto:hola@visitsancarlos.com.mx" style={{ fontSize: 14, color: "#5C7679" }}>
+            hola@visitsancarlos.com.mx
           </a>
           <a href="tel:+526221145316" style={{ fontSize: 14, color: "#5C7679" }}>
             +52 622 114 5316

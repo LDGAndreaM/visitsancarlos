@@ -27,7 +27,7 @@ export default function TerminosYCondiciones() {
         ))}
         <LegalSection title="9. Contacto">
           Si tienes dudas sobre estos términos, contáctanos en{" "}
-          <a href="mailto:visit.sancarlos.son@gmail.com">visit.sancarlos.son@gmail.com</a> o al teléfono <a href="tel:+526221145316">+52 622 114 5316</a>.
+          <a href="mailto:hola@visitsancarlos.com.mx">hola@visitsancarlos.com.mx</a> o al teléfono <a href="tel:+526221145316">+52 622 114 5316</a>.
         </LegalSection>
       </LegalContent>
       <Footer marginTop={0} padding="0 48px 28px" socials={SOCIAL_SET_MAIN} activeHref="/terminos-y-condiciones" />

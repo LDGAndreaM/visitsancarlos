@@ -25,8 +25,8 @@ export default function ContactInfoCards() {
             </svg>
           </span>
           <span style={{ fontSize: 13, color: "#3B5C61" }}>Mándanos un correo</span>
-          <a href="mailto:visit.sancarlos.son@gmail.com" style={{ fontSize: 14, fontWeight: 700, color: "#143840" }}>
-            visit.sancarlos.son@gmail.com
+          <a href="mailto:hola@visitsancarlos.com.mx" style={{ fontSize: 14, fontWeight: 700, color: "#143840" }}>
+            hola@visitsancarlos.com.mx
           </a>
         </div>
         <div style={cardStyle}>

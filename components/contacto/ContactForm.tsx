@@ -54,7 +54,7 @@ export default function ContactForm() {
       setStatus("success");
     } catch {
       setStatus("error");
-      setErrorMsg("No pudimos enviar tu mensaje. Intenta de nuevo o escríbenos directo a visit.sancarlos.son@gmail.com.");
+      setErrorMsg("No pudimos enviar tu mensaje. Intenta de nuevo o escríbenos directo a hola@visitsancarlos.com.mx.");
     }
   };
 
