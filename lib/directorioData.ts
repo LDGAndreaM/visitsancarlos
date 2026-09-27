@@ -61,3 +61,12 @@ export const SORT_LABELS: Record<SortKey, string> = {
 export const SORT_KEYS = Object.keys(SORT_LABELS) as SortKey[];
 
 export const PAGE_SIZE = 12;
+
+export const CATEGORY_CHIPS: { value: BusinessCategory | "Todo"; label: string; icon: string }[] = [
+  { value: "Todo", label: "Todo", icon: "todo" },
+  { value: "HOTELES", label: "Hoteles", icon: "hospedaje" },
+  { value: "RESTAURANTES", label: "Restaurantes", icon: "comida" },
+  { value: "DOCTORES", label: "Salud", icon: "salud" },
+  { value: "NEGOCIOS", label: "Negocios", icon: "tienda" },
+  { value: "CLASIFICADOS", label: "Clasificados", icon: "tag" },
+];

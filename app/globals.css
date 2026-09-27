@@ -72,3 +72,19 @@ button {
   background: var(--vsc-teal);
   animation: vscTypingDot 1s infinite;
 }
+
+.vsc-mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .vsc-desktop-only {
+    display: none;
+  }
+  .vsc-mobile-only {
+    display: block;
+  }
+  body {
+    padding-bottom: 76px;
+  }
+}

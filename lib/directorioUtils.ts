@@ -1,4 +1,4 @@
-import { PRICE_RANK, type Business, type SortKey } from "./directorioData";
+import { PRICE_RANK, type Business, type BusinessCategory, type SortKey } from "./directorioData";
 
 export const SORTERS: Record<SortKey, (a: Business, b: Business) => number> = {
   az: (a, b) => a.name.localeCompare(b.name),
@@ -16,10 +16,12 @@ export type BusinessFilters = {
   rating: string;
   searchText: string;
   searchLocation: string;
+  category?: BusinessCategory | "Todo";
 };
 
 export function filterBusinesses(businesses: Business[], filters: BusinessFilters): Business[] {
   return businesses.filter((b) => {
+    if (filters.category && filters.category !== "Todo" && b.category !== filters.category) return false;
     if (filters.price !== "Todos" && b.price !== filters.price) return false;
     if (Number(filters.rating) > 0 && b.rating < Number(filters.rating)) return false;
     if (filters.searchText && !b.name.toLowerCase().includes(filters.searchText.toLowerCase())) return false;

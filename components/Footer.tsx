@@ -16,6 +16,7 @@ export default function Footer({ marginTop = 70, padding = "64px 48px 28px", soc
   return (
     <footer
       id="contacto"
+      className="vsc-desktop-only"
       style={{
         marginTop,
         background: "#ffffff",
