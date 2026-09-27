@@ -87,6 +87,58 @@ button {
   margin: 0 auto;
 }
 
+/* Grids de 2/3 columnas que se usan en varias secciones del home
+   (Hero, Restaurantes, Clima+Facebook, Blog) — se apilan en una sola
+   columna en pantallas angostas para que nada se corte. */
+/* minmax(0, 1fr) en vez de un 1fr a secas: un track "1fr" por defecto no
+   se encoge más allá del contenido que no puede achicarse (min-width:auto
+   implícito), lo que puede forzar que toda la grid — y su contenedor — se
+   ensanche más que la pantalla aunque no se vea scroll horizontal. */
+.vsc-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 20px;
+}
+
+.vsc-split-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 28px;
+}
+
+.vsc-split-grid-wide {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 28px;
+}
+
+.vsc-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.vsc-hero-search {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #e2eced;
+  border-radius: 999px;
+  padding: 6px 8px 6px 20px;
+  box-shadow: 0 12px 28px rgba(0, 60, 66, 0.08);
+  width: 100%;
+  max-width: 620px;
+  flex-wrap: nowrap;
+  height: 46px;
+}
+
+.vsc-hero-search-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 @media (max-width: 768px) {
   .vsc-desktop-only {
     display: none;
@@ -99,5 +151,35 @@ button {
   }
   .vsc-cookie-banner {
     bottom: 92px;
+  }
+
+  .vsc-hero-grid,
+  .vsc-split-grid,
+  .vsc-split-grid-wide,
+  .vsc-grid-3 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vsc-hero-visual {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .vsc-hero-search {
+    flex-wrap: wrap;
+    height: auto;
+    border-radius: 20px;
+    row-gap: 10px;
+    padding: 14px 16px;
+  }
+
+  .vsc-hero-search-actions {
+    flex-basis: 100%;
+    justify-content: space-between;
+  }
+
+  .vsc-hero-search-actions > span:first-child {
+    display: none;
   }
 }

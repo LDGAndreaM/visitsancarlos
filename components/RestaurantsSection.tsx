@@ -4,7 +4,7 @@ import { RESTAURANTS } from "@/lib/homeData";
 
 export default function RestaurantsSection() {
   return (
-    <section style={{ padding: "56px 48px 20px", maxWidth: 1280, margin: "0 auto", display: "grid", gridTemplateColumns: "1.6fr 1fr", gap: 28 }}>
+    <section className="vsc-split-grid-wide" style={{ padding: "56px 48px 20px", maxWidth: 1280, margin: "0 auto" }}>
       <div>
         <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 20, flexWrap: "wrap", gap: 10 }}>
           <h2 style={{ margin: 0, fontSize: 26, fontWeight: 800, color: "#143840" }}>Dónde comer</h2>
@@ -41,7 +41,7 @@ export default function RestaurantsSection() {
           Ver más
         </Link>
       </div>
-      <div style={{ borderRadius: 18, overflow: "hidden", position: "relative", boxShadow: "0 10px 24px rgba(0,60,66,0.1)" }}>
+      <div style={{ borderRadius: 18, overflow: "hidden", position: "relative", minHeight: 240, boxShadow: "0 10px 24px rgba(0,60,66,0.1)" }}>
         <ImagePlaceholder caption="Espacio publicitario: restaurante de paga" />
         <span
           style={{

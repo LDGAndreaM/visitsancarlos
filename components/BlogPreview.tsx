@@ -16,7 +16,7 @@ export default function BlogPreview() {
       <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 24, flexWrap: "wrap", gap: 10 }}>
         <h2 style={{ margin: 0, fontSize: 26, fontWeight: 800, color: "#143840" }}>Del blog</h2>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 24 }}>
+      <div className="vsc-grid-3">
         {posts.map((p) => (
           <div key={p.id} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             <div style={{ height: 180, borderRadius: 16, overflow: "hidden" }}>

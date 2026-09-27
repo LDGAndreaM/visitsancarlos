@@ -17,17 +17,15 @@ export default function Hero() {
       }}
     >
       <div
+        className="vsc-hero-grid"
         style={{
           position: "relative",
           maxWidth: 1280,
           margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          alignItems: "center",
-          gap: 20,
         }}
       >
       <svg
+        className="vsc-hero-visual"
         style={{ position: "absolute", top: 0, right: 0, width: 930, height: 519, zIndex: 0, opacity: 0.5, pointerEvents: "none" }}
         viewBox="0 0 500 560"
         fill="none"
@@ -42,30 +40,15 @@ export default function Hero() {
         <polyline points="10,540 470,540 470,300" stroke="#6AC7E2" strokeWidth="5" fill="none" />
       </svg>
 
-      <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", gap: 18, maxWidth: 660, width: 638 }}>
-        <h1 style={{ margin: 0, fontSize: 46, lineHeight: 1.15, fontWeight: 800, color: "#143840", width: 514 }}>
+      <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", gap: 18, maxWidth: 660, width: "100%" }}>
+        <h1 style={{ margin: 0, fontSize: 46, lineHeight: 1.15, fontWeight: 800, color: "#143840" }}>
           Comienza a explorar
           <br />
           <span style={{ color: "#EB600A" }}>San Carlos</span>
         </h1>
         <p style={{ margin: 0, fontSize: 16, color: "#3B5C61" }}>Todo lo que necesitas saber, en un solo lugar.</p>
 
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 0,
-            background: "#ffffff",
-            border: "1px solid #E2ECED",
-            borderRadius: 999,
-            padding: "6px 8px 6px 20px",
-            boxShadow: "0 12px 28px rgba(0,60,66,0.08)",
-            width: 596,
-            maxWidth: 620,
-            flexWrap: "nowrap",
-            height: 46,
-          }}
-        >
+        <div className="vsc-hero-search">
           <span
             style={{
               width: 16,
@@ -94,23 +77,25 @@ export default function Hero() {
               background: "transparent",
             }}
           />
-          <span style={{ width: 1, height: 22, background: "#E2ECED", flexShrink: 0, margin: "0 10px" }} />
-          <CategoryDropdown selected={catSelected} onSelect={setCatSelected} />
-          <button
-            style={{
-              border: "none",
-              background: "#EB600A",
-              color: "#ffffff",
-              fontWeight: 700,
-              fontSize: 14,
-              padding: "12px 24px",
-              borderRadius: 999,
-              cursor: "pointer",
-              flexShrink: 0,
-            }}
-          >
-            Buscar
-          </button>
+          <div className="vsc-hero-search-actions">
+            <span style={{ width: 1, height: 22, background: "#E2ECED", flexShrink: 0, margin: "0 10px" }} />
+            <CategoryDropdown selected={catSelected} onSelect={setCatSelected} />
+            <button
+              style={{
+                border: "none",
+                background: "#EB600A",
+                color: "#ffffff",
+                fontWeight: 700,
+                fontSize: 14,
+                padding: "12px 24px",
+                borderRadius: 999,
+                cursor: "pointer",
+                flexShrink: 0,
+              }}
+            >
+              Buscar
+            </button>
+          </div>
         </div>
       </div>
 
