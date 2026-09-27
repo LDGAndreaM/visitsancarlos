@@ -107,7 +107,7 @@ export default function Header({
       <MobileAppBar
         title={resolvedTitle}
         subtitle={resolvedSubtitle}
-        showLogo={pathname === "/"}
+        showLogo
         onOpenMenu={() => setMenuOpen(true)}
         rightAction={mobileRightAction}
       >
