@@ -104,7 +104,13 @@ export default function Header({
         </div>
       </header>
 
-      <MobileAppBar title={resolvedTitle} subtitle={resolvedSubtitle} onOpenMenu={() => setMenuOpen(true)} rightAction={mobileRightAction}>
+      <MobileAppBar
+        title={resolvedTitle}
+        subtitle={resolvedSubtitle}
+        showLogo={pathname === "/"}
+        onOpenMenu={() => setMenuOpen(true)}
+        rightAction={mobileRightAction}
+      >
         {mobileBelow}
       </MobileAppBar>
       <MobileDrawer open={menuOpen} onClose={() => setMenuOpen(false)} activeHref={pathname} />

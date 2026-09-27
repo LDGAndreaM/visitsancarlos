@@ -189,11 +189,16 @@ button {
   }
 
   .vsc-hero-banner {
-    height: 560px;
+    height: 900px;
   }
 
+  /* En móvil el texto y el buscador se anclan arriba (no centrados) para
+     no tapar el letrero "SAN CARLOS", que en la foto queda hacia la mitad
+     inferior del encuadre. */
   .vsc-hero-content {
-    padding: 0 24px;
+    justify-content: flex-start;
+    padding: 56px 24px 0;
+    gap: 14px;
   }
 
   /* El bloque categoría+botón, junto al input, solo cabía en una sola
