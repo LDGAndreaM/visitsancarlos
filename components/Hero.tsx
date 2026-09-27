@@ -15,7 +15,7 @@ export default function Hero() {
         fill
         priority
         sizes="100vw"
-        style={{ objectFit: "cover", objectPosition: "center 45%" }}
+        style={{ objectFit: "cover", objectPosition: "center 32%" }}
       />
       <div className="vsc-hero-overlay" />
 

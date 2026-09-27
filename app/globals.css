@@ -117,8 +117,7 @@ button {
 .vsc-hero-banner {
   position: relative;
   width: 100%;
-  height: 560px;
-  overflow: hidden;
+  height: 720px;
 }
 
 .vsc-hero-overlay {
@@ -188,19 +187,18 @@ button {
   }
 
   .vsc-hero-banner {
-    height: 480px;
+    height: 560px;
   }
 
   .vsc-hero-content {
     padding: 0 24px;
   }
-}
 
-@media (max-width: 480px) {
-  .vsc-hero-banner {
-    height: 560px;
-  }
-
+  /* El bloque categoría+botón, junto al input, solo cabía en una sola
+     línea en un rango estrecho de anchos (justo antes de que activara el
+     apilado a 480px), donde el botón terminaba sobresaliendo fuera de la
+     píldora blanca. Apilarlo aquí, en el mismo quiebre que el resto del
+     hero, quita ese rango peligroso por completo. */
   .vsc-hero-search {
     flex-wrap: wrap;
     height: auto;
