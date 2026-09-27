@@ -29,8 +29,10 @@ async function saveToSupabase(payload: ContactPayload): Promise<boolean> {
       subject: payload.subject,
       message: payload.message,
     });
+    if (error) console.error("[contact] error guardando en Supabase:", error.message);
     return !error;
-  } catch {
+  } catch (err) {
+    console.error("[contact] excepción guardando en Supabase:", err);
     return false;
   }
 }
@@ -40,7 +42,10 @@ async function sendEmail(payload: ContactPayload): Promise<boolean> {
   const port = Number(process.env.CONTACT_SMTP_PORT || 465);
   const user = process.env.CONTACT_SMTP_USER;
   const pass = process.env.CONTACT_SMTP_PASS;
-  if (!user || !pass) return false;
+  if (!user || !pass) {
+    console.error("[contact] CONTACT_SMTP_USER o CONTACT_SMTP_PASS no están configuradas");
+    return false;
+  }
 
   try {
     const transporter = nodemailer.createTransport({
@@ -67,7 +72,8 @@ async function sendEmail(payload: ContactPayload): Promise<boolean> {
       ].join("\n"),
     });
     return true;
-  } catch {
+  } catch (err) {
+    console.error("[contact] error enviando el correo SMTP:", err);
     return false;
   }
 }
