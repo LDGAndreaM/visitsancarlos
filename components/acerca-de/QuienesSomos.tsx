@@ -1,23 +1,19 @@
-import ImagePlaceholder from "@/components/ImagePlaceholder";
+import Image from "next/image";
 
 export default function QuienesSomos() {
   return (
     <section
       style={{
         background: "#6AC7E2",
-        padding: "19px 48px 0",
-        height: 474,
+        padding: "48px 48px",
         marginTop: 3,
       }}
     >
       <div
+        className="vsc-split-grid"
         style={{
           maxWidth: 1280,
-          height: "100%",
           margin: "0 auto",
-          display: "grid",
-          gridTemplateColumns: "1.1fr 1fr",
-          gap: 48,
           alignItems: "center",
         }}
       >
@@ -49,7 +45,12 @@ export default function QuienesSomos() {
             border: "4px solid #ffffff",
           }}
         >
-          <ImagePlaceholder caption="Foto: equipo Visit San Carlos" />
+          <Image
+            src="/uploads/acerca-de-atardecer.jpg"
+            alt="Atardecer en la marina de San Carlos, con el cerro Tetakawi de fondo"
+            fill
+            style={{ objectFit: "cover" }}
+          />
         </div>
         <div
           style={{
@@ -64,7 +65,12 @@ export default function QuienesSomos() {
             border: "4px solid #ffffff",
           }}
         >
-          <ImagePlaceholder caption="Foto: atardecer en San Carlos" />
+          <Image
+            src="/uploads/acerca-de-san-carlos.jpg"
+            alt="Letrero de bienvenida a San Carlos, Sonora"
+            fill
+            style={{ objectFit: "cover" }}
+          />
         </div>
       </div>
       </div>
