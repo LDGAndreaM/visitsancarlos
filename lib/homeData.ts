@@ -5,5 +5,3 @@ export const HOTELS: { id: string; name: string; price: string; desc: string; ra
 export const RESTAURANTS: { id: string; name: string; desc: string; rating: string; logoPlaceholder: string }[] = [];
 
 export const EVENTS: { id: string; date: string; name: string; place: string; placeholder: string }[] = [];
-
-export const FB_POSTS: { id: string; text: string; time: string; placeholder: string }[] = [];
