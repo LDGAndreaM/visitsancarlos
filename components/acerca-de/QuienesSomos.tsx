@@ -31,18 +31,17 @@ export default function QuienesSomos() {
           recomendaciones incompletas.
         </p>
       </div>
-      <div style={{ position: "relative", height: 340 }}>
+      <div style={{ position: "relative", height: 380 }}>
         <div
           style={{
             position: "absolute",
             top: 0,
             left: 0,
-            width: "64%",
-            height: 210,
+            width: "72%",
+            height: 250,
             borderRadius: 20,
             overflow: "hidden",
             boxShadow: "0 16px 32px rgba(0,60,66,0.2)",
-            border: "4px solid #ffffff",
           }}
         >
           <Image
@@ -57,12 +56,11 @@ export default function QuienesSomos() {
             position: "absolute",
             bottom: 0,
             right: 0,
-            width: "58%",
-            height: 190,
+            width: "64%",
+            height: 220,
             borderRadius: 20,
             overflow: "hidden",
             boxShadow: "0 16px 32px rgba(0,60,66,0.2)",
-            border: "4px solid #ffffff",
           }}
         >
           <Image
