@@ -13,7 +13,7 @@ export default function WeatherFacebook() {
           padding: 28,
         }}
       >
-        <h3 style={{ margin: 0, alignSelf: "flex-start", fontSize: 18, fontWeight: 800, color: "#009BA4" }}>Clima y mareas</h3>
+        <h3 style={{ margin: 0, textAlign: "center", fontSize: 18, fontWeight: 800, color: "#009BA4" }}>Clima y mareas</h3>
         <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
         <div style={{ width: "100%", maxWidth: 340, margin: "0 auto" }}>
           <div className="elfsight-app-b5c53759-b649-4399-a5ab-97a110adedfa" data-elfsight-app-lazy />
@@ -22,7 +22,7 @@ export default function WeatherFacebook() {
           href="https://tablademareas.com/mx/sonora/guaymas"
           target="_blank"
           rel="noreferrer"
-          style={{ fontSize: 13, fontWeight: 700, color: "#009BA4", alignSelf: "flex-start" }}
+          style={{ fontSize: 13, fontWeight: 700, color: "#EB600A", textAlign: "center" }}
         >
           Ver tabla de mareas completa →
         </a>
