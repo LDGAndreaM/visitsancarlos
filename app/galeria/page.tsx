@@ -22,7 +22,7 @@ export default function Galeria() {
       <GalleryHero />
       <FilterPills filters={GALLERY_FILTERS} />
       <GalleryGrid />
-      <NewsletterCta margin="0 48px 56px" />
+      <NewsletterCta margin="0 auto 56px" />
       <Footer marginTop={0} padding="0 48px 28px" socials={SOCIAL_SET_MAIN} activeHref="/galeria" />
     </div>
   );

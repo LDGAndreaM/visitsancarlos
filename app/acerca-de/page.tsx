@@ -24,7 +24,7 @@ export default function AcercaDe() {
       <MisionVisionValores />
       <QueOfrecemos />
       <Faq />
-      <NewsletterCta margin="20px 48px 56px" />
+      <NewsletterCta margin="20px auto 56px" />
       <Footer marginTop={0} padding="0 48px 28px" />
     </div>
   );
