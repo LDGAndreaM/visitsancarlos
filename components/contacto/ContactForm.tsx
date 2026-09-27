@@ -69,7 +69,7 @@ export default function ContactForm() {
             style={{ objectFit: "cover" }}
           />
         </div>
-        <form onSubmit={handleSubmit} style={{ background: "#F4FAFB", borderRadius: 24, padding: 44, display: "flex", flexDirection: "column", gap: 20, boxShadow: "0 16px 36px rgba(0,60,66,0.08)" }}>
+        <form onSubmit={handleSubmit} className="vsc-contact-form" style={{ background: "#F4FAFB", borderRadius: 24, display: "flex", flexDirection: "column", gap: 20, boxShadow: "0 16px 36px rgba(0,60,66,0.08)" }}>
           {status === "success" ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "flex-start" }}>
               <span style={{ fontSize: 17, fontWeight: 800, color: "#143840" }}>¡Gracias por escribirnos!</span>
@@ -84,7 +84,7 @@ export default function ContactForm() {
             </div>
           ) : (
             <>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              <div className="vsc-split-grid" style={{ gap: 16 }}>
                 <div style={fieldStyle}>
                   <label style={labelStyle}>Nombre</label>
                   <input value={form.firstName} onChange={(e) => setForm((f) => ({ ...f, firstName: e.target.value }))} type="text" placeholder="Tu nombre" style={inputStyle} />
@@ -94,7 +94,7 @@ export default function ContactForm() {
                   <input value={form.lastName} onChange={(e) => setForm((f) => ({ ...f, lastName: e.target.value }))} type="text" placeholder="Tu apellido" style={inputStyle} />
                 </div>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              <div className="vsc-split-grid" style={{ gap: 16 }}>
                 <div style={fieldStyle}>
                   <label style={labelStyle}>Correo electrónico</label>
                   <input value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} type="email" placeholder="tu@correo.com" style={inputStyle} />

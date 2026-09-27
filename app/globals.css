@@ -193,6 +193,13 @@ button {
   padding: 0 48px;
 }
 
+/* Padding del form de contacto: vive aquí (no en línea) para poder
+   reducirlo en móvil, donde 44px de cada lado dejaba muy poco ancho
+   disponible para los campos. */
+.vsc-contact-form {
+  padding: 44px;
+}
+
 /* Puntitos debajo del carrusel de valores, solo visibles en móvil (ver
    media query) — indican cuántas tarjetas hay y cuál se está viendo. */
 .vsc-values-dots {
@@ -315,6 +322,10 @@ button {
 
   .vsc-about-content {
     padding: 0 24px;
+  }
+
+  .vsc-contact-form {
+    padding: 24px;
   }
 
   /* "Nuestros valores": en vez de una lista larga hacia abajo, se
