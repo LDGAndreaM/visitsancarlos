@@ -16,7 +16,7 @@ export default function MisionVisionValores() {
           style={{
             position: "relative",
             width: "100%",
-            aspectRatio: "1672 / 941",
+            aspectRatio: "16 / 9",
             borderRadius: 20,
             overflow: "hidden",
             boxShadow: "0 14px 28px rgba(0,60,66,0.1)",
