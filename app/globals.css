@@ -87,6 +87,18 @@ button {
   margin: 0 auto;
 }
 
+/* Botones flotantes (volver arriba + chat), presentes en todo el sitio. */
+.vsc-floating-actions {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 65;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
 /* Grids de 2/3 columnas que se usan en varias secciones del home
    (Restaurantes, Clima+Facebook, Blog) — se apilan en una sola
    columna en pantallas angostas para que nada se corte. */
@@ -316,6 +328,11 @@ button {
   }
   .vsc-cookie-banner {
     bottom: 92px;
+  }
+
+  .vsc-floating-actions {
+    right: 16px;
+    bottom: 96px;
   }
 
   .vsc-split-grid,

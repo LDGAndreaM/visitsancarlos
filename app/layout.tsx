@@ -4,6 +4,7 @@ import { SITE_NAME, SITE_DESCRIPTION, SITE_URL, DEFAULT_OG_IMAGE, absoluteUrl } 
 import { SOCIAL_LINKS } from "@/lib/nav";
 import JsonLd from "@/components/JsonLd";
 import CookieConsent from "@/components/CookieConsent";
+import FloatingActions from "@/components/FloatingActions";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -85,6 +86,7 @@ export default function RootLayout({
       <body className={`${poppins.variable} ${caveat.variable}`}>
         <JsonLd data={[organizationJsonLd, websiteJsonLd]} />
         {children}
+        <FloatingActions />
         <CookieConsent gaMeasurementId={gaMeasurementId} />
       </body>
     </html>

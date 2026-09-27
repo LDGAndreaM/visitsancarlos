@@ -11,7 +11,7 @@ import TutorialsGrid from "./TutorialsGrid";
 import TutorialModal from "./TutorialModal";
 import FilesList from "./FilesList";
 import EmailCta from "./EmailCta";
-import SupportChat, { type SupportChatHandle } from "./SupportChat";
+import type { SupportChatHandle } from "./SupportChat";
 import { FAQS, FILES, TUTORIALS, type Faq, type SupportCategory, type Tutorial } from "@/lib/soporteData";
 import { matchesQuery } from "@/lib/soporteUtils";
 
@@ -67,21 +67,17 @@ export default function SoporteApp() {
       <SoporteHero query={query} onQueryChange={handleQueryChange} />
 
       <section style={{ padding: "44px 48px 64px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "minmax(0,1fr) 400px", gap: 36, alignItems: "start" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 24, minWidth: 0 }}>
-            <HelpTabs tab={tab} onTabChange={handleTabChange} counts={counts} />
-            <CategoryPills active={cat} onSelect={handleCatChange} />
+        <div style={{ maxWidth: 860, margin: "0 auto", display: "flex", flexDirection: "column", gap: 24 }}>
+          <HelpTabs tab={tab} onTabChange={handleTabChange} counts={counts} />
+          <CategoryPills active={cat} onSelect={handleCatChange} />
 
-            {counts[tab] === 0 && <EmptyState onAskInChat={handleAskInChat} />}
+          {counts[tab] === 0 && <EmptyState onAskInChat={handleAskInChat} />}
 
-            {tab === "faq" && counts.faq > 0 && <FaqList faqs={faqs} openIndex={openFaq} onToggle={handleToggleFaq} voted={voted} onVote={handleVoteFaq} />}
-            {tab === "tut" && counts.tut > 0 && <TutorialsGrid tutorials={tutorials} onOpen={setTutIdx} />}
-            {tab === "files" && counts.files > 0 && <FilesList files={files} />}
+          {tab === "faq" && counts.faq > 0 && <FaqList faqs={faqs} openIndex={openFaq} onToggle={handleToggleFaq} voted={voted} onVote={handleVoteFaq} />}
+          {tab === "tut" && counts.tut > 0 && <TutorialsGrid tutorials={tutorials} onOpen={setTutIdx} />}
+          {tab === "files" && counts.files > 0 && <FilesList files={files} />}
 
-            <EmailCta />
-          </div>
-
-          <SupportChat ref={chatRef} />
+          <EmailCta />
         </div>
       </section>
 
