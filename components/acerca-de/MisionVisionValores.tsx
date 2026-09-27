@@ -4,16 +4,18 @@ import { VALUES } from "@/lib/acercaDeData";
 export default function MisionVisionValores() {
   return (
     <section style={{ padding: "70px 48px", background: "#F4FAFB" }}>
-      <div
-        className="vsc-grid-3"
-        style={{
-          maxWidth: 1080,
-          margin: "0 auto",
-          gap: 40,
-          marginBottom: 56,
-        }}
-      >
-        <div style={{ position: "relative", width: "100%", aspectRatio: "1672 / 941", borderRadius: 20, overflow: "hidden", boxShadow: "0 14px 28px rgba(0,60,66,0.1)" }}>
+      <div style={{ maxWidth: 1080, margin: "0 auto 56px" }}>
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            aspectRatio: "1672 / 941",
+            borderRadius: 20,
+            overflow: "hidden",
+            boxShadow: "0 14px 28px rgba(0,60,66,0.1)",
+            marginBottom: 32,
+          }}
+        >
           <Image
             src="/uploads/acerca-de-mision-vision.jpg"
             alt="Cerro Tetakawi y la bahía de San Carlos al atardecer"
@@ -21,19 +23,21 @@ export default function MisionVisionValores() {
             style={{ objectFit: "cover" }}
           />
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "center" }}>
-          <h2 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: "#EB600A" }}>Nuestra misión</h2>
-          <p style={{ margin: 0, fontSize: 14, lineHeight: 1.7, color: "#3B5C61" }}>
-            Promover San Carlos y Guaymas como destinos turísticos únicos, ofreciendo información confiable,
-            actualizada y auténtica, mientras apoyamos a los negocios locales y fomentamos experiencias memorables.
-          </p>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "center" }}>
-          <h2 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: "#EB600A" }}>Nuestra visión</h2>
-          <p style={{ margin: 0, fontSize: 14, lineHeight: 1.7, color: "#3B5C61" }}>
-            Ser la plataforma digital más completa y confiable de San Carlos y Guaymas, reconocida por viajeros,
-            empresas y locales como el punto de encuentro entre la comunidad y el turismo.
-          </p>
+        <div className="vsc-split-grid" style={{ gap: 40 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "center" }}>
+            <h2 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: "#EB600A" }}>Nuestra misión</h2>
+            <p style={{ margin: 0, fontSize: 14, lineHeight: 1.7, color: "#3B5C61" }}>
+              Promover San Carlos y Guaymas como destinos turísticos únicos, ofreciendo información confiable,
+              actualizada y auténtica, mientras apoyamos a los negocios locales y fomentamos experiencias memorables.
+            </p>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, textAlign: "center" }}>
+            <h2 style={{ margin: 0, fontSize: 22, fontWeight: 800, color: "#EB600A" }}>Nuestra visión</h2>
+            <p style={{ margin: 0, fontSize: 14, lineHeight: 1.7, color: "#3B5C61" }}>
+              Ser la plataforma digital más completa y confiable de San Carlos y Guaymas, reconocida por viajeros,
+              empresas y locales como el punto de encuentro entre la comunidad y el turismo.
+            </p>
+          </div>
         </div>
       </div>
 
