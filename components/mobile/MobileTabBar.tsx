@@ -16,8 +16,8 @@ export default function MobileTabBar() {
   const pathname = usePathname();
 
   return (
+    <div className="vsc-mobile-only">
     <nav
-      className="vsc-mobile-only"
       style={{
         position: "fixed",
         left: 0,
@@ -70,5 +70,6 @@ export default function MobileTabBar() {
         );
       })}
     </nav>
+    </div>
   );
 }
