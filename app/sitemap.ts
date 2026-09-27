@@ -1,6 +1,12 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/site";
 
+// Sin esto, Next.js genera el sitemap una sola vez en el build y lo sirve
+// congelado — los negocios/clasificados/posts que se aprueben después no
+// aparecerían hasta el próximo deploy. Con esto se recalcula como máximo
+// cada hora.
+export const revalidate = 3600;
+
 // Rutas públicas reales que ya existen en el sitio. Eventos no tiene página
 // de detalle individual (es un calendario), así que no aplica aquí.
 const STATIC_ROUTES = [
