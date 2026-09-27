@@ -1,17 +1,6 @@
 import SocialIcon from "@/components/SocialIcon";
 import { SOCIAL_LINKS } from "@/lib/nav";
 
-const iconWrap = (bg: string): React.CSSProperties => ({
-  width: 44,
-  height: 44,
-  borderRadius: "50%",
-  background: bg,
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  flexShrink: 0,
-});
-
 const itemStyle: React.CSSProperties = { display: "flex", alignItems: "center", gap: 14, padding: "0 32px" };
 const labelStyle: React.CSSProperties = { fontSize: 12, color: "#5C7679" };
 const valueStyle: React.CSSProperties = { fontSize: 15, fontWeight: 700, color: "#143840" };
@@ -21,12 +10,10 @@ export default function ContactInfoCards() {
     <section style={{ padding: "0 48px 60px" }}>
       <div className="vsc-contact-info-row" style={{ maxWidth: 1040, margin: "0 auto" }}>
         <div style={itemStyle}>
-          <span style={iconWrap("#E5F6F7")}>
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-              <rect x="2" y="4" width="16" height="12" rx="2" stroke="#009BA4" strokeWidth="1.6" />
-              <path d="M3 5l7 6 7-6" stroke="#009BA4" strokeWidth="1.6" fill="none" />
-            </svg>
-          </span>
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#009BA4" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+            <polyline points="22,6 12,13 2,6" />
+          </svg>
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <span style={labelStyle}>Mándanos un correo</span>
             <a href="mailto:hola@visitsancarlos.com.mx" style={valueStyle}>
@@ -38,11 +25,11 @@ export default function ContactInfoCards() {
         <span className="vsc-contact-info-divider" />
 
         <div style={itemStyle}>
-          <span style={iconWrap("#EAF8FA")}>
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-              <rect x="6" y="2" width="8" height="16" rx="2" stroke="#6AC7E2" strokeWidth="1.6" />
-            </svg>
-          </span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6AC7E2" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+            <path d="M15 7a2 2 0 0 1 2 2" />
+            <path d="M15 3a6 6 0 0 1 6 6" />
+            <path d="M21 16.42v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21 16.42z" />
+          </svg>
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <span style={labelStyle}>Llámanos</span>
             <a href="tel:+526221145316" style={valueStyle}>
