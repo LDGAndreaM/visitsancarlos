@@ -27,9 +27,9 @@ export default function WeatherFacebook() {
           Ver tabla de mareas completa →
         </a>
       </div>
-      <div style={{ background: "#ffffff", borderRadius: 20, padding: 24, boxShadow: "0 10px 24px rgba(0,60,66,0.1)", display: "flex", flexDirection: "column", gap: 14, alignItems: "center" }}>
-        <h3 style={{ margin: 0, alignSelf: "flex-start", fontSize: 18, fontWeight: 800, color: "#143840" }}>Desde nuestro Facebook</h3>
-        <FacebookPagePlugin height={360} />
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 18, padding: 28 }}>
+        <h3 style={{ margin: 0, textAlign: "center", fontSize: 18, fontWeight: 800, color: "#143840" }}>Desde nuestro Facebook</h3>
+        <FacebookPagePlugin width={480} height={520} />
       </div>
     </section>
   );
