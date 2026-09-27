@@ -152,7 +152,9 @@ button {
   background: #ffffff;
   border: 1px solid #e2eced;
   border-radius: 999px;
-  padding: 6px 8px 6px 20px;
+  /* Sin padding a la derecha: el botón "Buscar" llega hasta la orilla de
+     la píldora y comparte su misma curva, en vez de flotar despegado. */
+  padding: 6px 0 6px 20px;
   box-shadow: 0 12px 28px rgba(0, 60, 66, 0.08);
   width: 100%;
   max-width: 620px;
@@ -204,7 +206,7 @@ button {
     height: auto;
     border-radius: 20px;
     row-gap: 10px;
-    padding: 14px 16px;
+    padding: 14px 0 14px 16px;
   }
 
   .vsc-hero-search-actions {

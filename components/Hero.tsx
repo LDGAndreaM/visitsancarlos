@@ -69,9 +69,13 @@ export default function Hero() {
                 fontWeight: 700,
                 fontSize: 14,
                 padding: "12px 24px",
-                borderRadius: 999,
+                borderRadius: "0 999px 999px 0",
                 cursor: "pointer",
                 flexShrink: 0,
+                alignSelf: "stretch",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               Buscar
