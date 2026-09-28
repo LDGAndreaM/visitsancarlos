@@ -35,8 +35,8 @@ export const POPULAR_FEATURES = [
 
 export type SocialPackage = {
   name: string;
-  mensual: string;
-  trimestral: string;
+  mensual: number;
+  trimestral: number;
   features: string[];
   extra?: string;
   highlighted?: boolean;
@@ -46,14 +46,14 @@ export type SocialPackage = {
 export const SOCIAL_PACKAGES: SocialPackage[] = [
   {
     name: "Presencia Digital",
-    mensual: "$1,400",
-    trimestral: "$3,780 MXN / trimestre",
+    mensual: 1400,
+    trimestral: 3780,
     features: ["4 posts al mes", "2 stories en nuestras cuentas", "Etiquetado del negocio", "Copy promocional básico"],
   },
   {
     name: "Promoción Premium",
-    mensual: "$2,600",
-    trimestral: "$7,020 MXN / trimestre",
+    mensual: 2600,
+    trimestral: 7020,
     features: ["8 publicaciones al mes", "4 stories/reels en nuestras cuentas", "Etiquetado del negocio", "Diseño gráfico básico + copywriting"],
     extra: "📸 Trimestral: sesión de fotos (2h) + dron*",
     highlighted: true,
@@ -63,8 +63,8 @@ export const SOCIAL_PACKAGES: SocialPackage[] = [
 
 export type ComboPackage = {
   name: string;
-  mensual: string;
-  trimestral: string;
+  mensual: number;
+  trimestral: number;
   features: string[];
   highlighted?: boolean;
   badge?: string;
@@ -73,26 +73,26 @@ export type ComboPackage = {
 export const COMBO_PACKAGES: ComboPackage[] = [
   {
     name: "Presencia Estratégica",
-    mensual: "$3,500",
-    trimestral: "$9,450 /trimestre",
+    mensual: 3500,
+    trimestral: 9450,
     features: ["Carrusel Home – Vistas Doradas", "⭐ Perfil Destacado en Directorio", "Mención en newsletter", "4 posts + 2 stories al mes", "Copy y diseño básico"],
   },
   {
     name: "Visibilidad Plus",
-    mensual: "$5,000",
-    trimestral: "$13,500 /trimestre",
+    mensual: 5000,
+    trimestral: 13500,
     features: ["Carrusel Home – Vistas Doradas", "Presencia adicional en otra sección", "⭐ Perfil Destacado + newsletter", "8 posts + 4 stories/reels al mes", "Diseño y copywriting"],
   },
   {
     name: "Impacto Total",
-    mensual: "$6,500",
-    trimestral: "$17,550 /trimestre",
+    mensual: 6500,
+    trimestral: 17550,
     features: ["Banner destacado – Estrella del mes", "⭐ Perfil Destacado + newsletter", "8 posts + 4 stories/reels al mes", "Diseño, copywriting", "Mayor exposición en el sitio"],
   },
   {
     name: "Socio Elite Visit San Carlos",
-    mensual: "$8,500",
-    trimestral: "$22,950 /trimestre",
+    mensual: 8500,
+    trimestral: 22950,
     features: ["Banner exclusivo – Estrella del mes", "Carrusel Directorio Premium", "Perfil completo + ⭐ Destacado", "8 posts + 4 stories/reels al mes", "Prioridad en campañas especiales"],
     highlighted: true,
     badge: "TOP · SOCIO ELITE",

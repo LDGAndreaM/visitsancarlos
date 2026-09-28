@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
-import { WEB_PACKAGES, formatMXN } from "@/lib/publicidadData";
+import { WEB_PACKAGES } from "@/lib/publicidadData";
+import { useCurrency } from "@/lib/publicidad/currency";
 
 export default function WebPackages() {
+  const { currency, format } = useCurrency();
+
   return (
     <section style={{ padding: "20px 48px 8px" }}>
       <div style={{ maxWidth: 1180, margin: "0 auto" }}>
@@ -48,12 +53,12 @@ export default function WebPackages() {
               <h3 style={{ margin: 0, fontSize: 16, fontWeight: 800, color: "#143840" }}>{p.name}</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: 2, padding: "10px 0", borderTop: "1px solid #F4FAFB", borderBottom: "1px solid #F4FAFB" }}>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 5 }}>
-                  <span style={{ fontSize: 20, fontWeight: 800, color: "#143840" }}>{formatMXN(p.mensual)}</span>
-                  <span style={{ fontSize: 11, color: "#5C7679" }}>MXN / mes</span>
+                  <span style={{ fontSize: 20, fontWeight: 800, color: "#143840" }}>{format(p.mensual)}</span>
+                  <span style={{ fontSize: 11, color: "#5C7679" }}>{currency} / mes</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 5 }}>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: "#009BA4" }}>{formatMXN(p.trimestral)}</span>
-                  <span style={{ fontSize: 11, color: "#5C7679" }}>MXN / trimestre</span>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: "#009BA4" }}>{format(p.trimestral)}</span>
+                  <span style={{ fontSize: 11, color: "#5C7679" }}>{currency} / trimestre</span>
                 </div>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 2 }}>

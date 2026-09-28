@@ -1,7 +1,12 @@
+"use client";
+
 import Link from "next/link";
 import { COMBO_PACKAGES } from "@/lib/publicidadData";
+import { useCurrency } from "@/lib/publicidad/currency";
 
 export default function ComboPackages() {
+  const { currency, format } = useCurrency();
+
   return (
     <section style={{ padding: "36px 48px 8px" }}>
       <div style={{ maxWidth: 1180, margin: "0 auto" }}>
@@ -33,10 +38,12 @@ export default function ComboPackages() {
               <h3 style={{ margin: 0, fontSize: 15, fontWeight: 800, color: "#143840" }}>{p.name}</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                 <span style={{ fontSize: 22, fontWeight: 800, color: "#143840" }}>
-                  {p.mensual}
-                  <span style={{ fontSize: 11, fontWeight: 600, color: "#5C7679" }}> /mes</span>
+                  {format(p.mensual)}
+                  <span style={{ fontSize: 11, fontWeight: 600, color: "#5C7679" }}> {currency} /mes</span>
                 </span>
-                <span style={{ fontSize: 12, fontWeight: 700, color: p.highlighted ? "#EB600A" : "#009BA4" }}>{p.trimestral}</span>
+                <span style={{ fontSize: 12, fontWeight: 700, color: p.highlighted ? "#EB600A" : "#009BA4" }}>
+                  {format(p.trimestral)} {currency} /trimestre
+                </span>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 6, marginTop: 4 }}>
                 {p.features.map((f) => (

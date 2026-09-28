@@ -12,6 +12,7 @@ import PublicidadNote from "@/components/publicidad/PublicidadNote";
 import PromoCta from "@/components/publicidad/PromoCta";
 import { SOCIAL_SET_MAIN } from "@/lib/nav";
 import { pageMetadata } from "@/lib/site";
+import { CurrencyProvider } from "@/lib/publicidad/currency";
 
 export const metadata: Metadata = pageMetadata({
   title: "Paquetes de publicidad",
@@ -23,11 +24,13 @@ export default function Publicidad() {
   return (
     <div style={{ maxWidth: "100%", overflowX: "hidden", background: "#ffffff" }}>
       <Header />
-      <PublicidadHero />
-      <WebPackages />
-      <PopularFeatures />
-      <SocialPackages />
-      <ComboPackages />
+      <CurrencyProvider>
+        <PublicidadHero />
+        <WebPackages />
+        <PopularFeatures />
+        <SocialPackages />
+        <ComboPackages />
+      </CurrencyProvider>
       <QuarterlyBenefit />
       <CommercialMessage />
       <PublicidadNote />
