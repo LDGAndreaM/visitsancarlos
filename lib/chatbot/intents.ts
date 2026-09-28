@@ -14,6 +14,26 @@ const TIDE_WORDS = ["marea", "mareas"];
 const EVENT_WORDS = ["evento", "eventos", "que hacer", "actividades", "concierto", "festival"];
 const CLASIFICADOS_WORDS = ["clasificado", "clasificados", "se vende", "empleo", "vacante", "trabajo"];
 
+// Verbos de "quiero publicar/crear algo", para distinguir "cómo agrego un
+// evento" (instrucciones) de "qué eventos hay" (búsqueda en la base de datos).
+const PUBLISH_ACTION_WORDS = ["agregar", "agrego", "publicar", "publico", "subir", "subo", "registrar", "registro", "dar de alta", "doy de alta", "crear", "creo", "poner mi", "anunciar", "anuncio mi"];
+const SELL_WORDS = ["vender", "vendo", "poner en venta"];
+
+const HOW_TO_PUBLISH: { topics: string[]; reply: string }[] = [
+  {
+    topics: ["negocio", "directorio", "restaurante", "hotel"],
+    reply: 'Inicia sesión y ve a tu Dashboard → botón "Agregar" → elige "Negocio". Completa nombre, categoría, ubicación y descripción; tu ficha queda visible en el Directorio tras una breve revisión (24–48 horas).',
+  },
+  {
+    topics: ["clasificado"],
+    reply: 'Inicia sesión y ve a tu Dashboard → botón "Agregar" → elige "Clasificado". Agrega fotos, precio y descripción; tu anuncio queda visible tras una breve revisión.',
+  },
+  {
+    topics: ["evento"],
+    reply: 'Inicia sesión y ve a tu Dashboard → botón "Agregar" → elige "Evento". Completa fecha, lugar y descripción; tu evento queda visible en el calendario tras una breve revisión.',
+  },
+];
+
 const DIRECTORIO_CATEGORY_WORDS: Record<BusinessCategory, string[]> = {
   RESTAURANTES: ["restaurante", "restaurantes", "donde comer", "comida", "antojo", "cenar", "desayunar", "almorzar"],
   HOTELES: ["hotel", "hoteles", "hospedaje", "donde quedarme", "donde dormir", "airbnb", "cabanas"],
@@ -176,6 +196,15 @@ function replyFaq(text: string): ChatReply | null {
   return hit ? { text: hit.reply } : null;
 }
 
+function matchHowToPublish(text: string): ChatReply | null {
+  if (includesAny(text, SELL_WORDS) && !includesAny(text, ["evento", "negocio"])) {
+    return { text: HOW_TO_PUBLISH.find((h) => h.topics.includes("clasificado"))!.reply };
+  }
+  if (!includesAny(text, PUBLISH_ACTION_WORDS)) return null;
+  const match = HOW_TO_PUBLISH.find((h) => includesAny(text, h.topics));
+  return match ? { text: match.reply } : null;
+}
+
 export async function resolveChatReply(rawMessage: string): Promise<ChatReply> {
   const text = normalize(rawMessage);
 
@@ -188,8 +217,11 @@ export async function resolveChatReply(rawMessage: string): Promise<ChatReply> {
   }
 
   // Preguntas de "cómo hago X" (procedimiento) van antes que las búsquedas
-  // en base de datos, para que "cómo publico un clasificado" no se confunda
-  // con "quiero ver clasificados de autos".
+  // en base de datos, para que "cómo publico un clasificado/evento/negocio"
+  // no se confunda con "quiero ver clasificados/eventos/negocios".
+  const howTo = matchHowToPublish(text);
+  if (howTo) return howTo;
+
   const faq = replyFaq(text);
   if (faq) return faq;
 
