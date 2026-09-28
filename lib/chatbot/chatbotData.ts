@@ -16,5 +16,8 @@ export const CANNED_REPLIES: CannedReply[] = [
 export const FALLBACK_REPLY =
   "No estoy seguro de haber entendido eso. Puedo ayudarte con negocios del directorio (restaurantes, hoteles, doctores...), clasificados, eventos, el clima, o dudas sobre el sitio. También puedes escribirnos desde la página de Contacto.";
 
-export const GREETING =
-  "¡Hola! 👋 Soy el asistente de Visit San Carlos. Puedo recomendarte negocios, avisarte del clima o los próximos eventos, ayudarte con clasificados, o resolver dudas del sitio. ¿En qué te ayudo?";
+export function greetingFor(name: string): string {
+  const firstName = name.trim().split(/\s+/)[0];
+  const hello = firstName ? `¡Hola, ${firstName}!` : "¡Hola!";
+  return `${hello} 👋 Soy el asistente de Visit San Carlos. Puedo recomendarte negocios, avisarte del clima o los próximos eventos, ayudarte con clasificados, o resolver dudas del sitio. ¿En qué te ayudo?`;
+}

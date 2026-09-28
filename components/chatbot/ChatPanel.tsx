@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { resolveChatReply, type ChatReply } from "@/lib/chatbot/intents";
-import { GREETING, QUICK_SUGGESTIONS } from "@/lib/chatbot/chatbotData";
+import { greetingFor, QUICK_SUGGESTIONS } from "@/lib/chatbot/chatbotData";
 import { createChatConversation, appendChatMessages } from "@/lib/supabase/chatConversations";
 import { subscribeToNewsletter } from "@/lib/supabase/newsletter";
 import ChatGate from "@/components/chatbot/ChatGate";
@@ -28,7 +28,7 @@ export default function ChatPanel({ visible, onClose }: { visible: boolean; onCl
   }, [messages, typing, visible, stage]);
 
   const startChat = async (name: string, email: string, phone: string) => {
-    const greeting: ChatMessage = { from: "bot", text: GREETING, time: now() };
+    const greeting: ChatMessage = { from: "bot", text: greetingFor(name), time: now() };
     setMessages([greeting]);
     setStage("chat");
 
