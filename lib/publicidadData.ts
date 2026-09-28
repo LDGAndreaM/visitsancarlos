@@ -4,6 +4,7 @@ export function formatMXN(n: number): string {
 
 export type WebPackage = {
   letter: string;
+  icon: string;
   name: string;
   space: string;
   mensual: number;
@@ -12,13 +13,13 @@ export type WebPackage = {
 };
 
 export const WEB_PACKAGES: WebPackage[] = [
-  { letter: "A", name: "Vistas Doradas", space: "Carrusel Home", mensual: 1500, trimestral: 4050, features: ["Máx. 6 anunciantes", '⭐ Perfil Destacado "POPULAR"', "Newsletter"] },
-  { letter: "B", name: "Sueño con vista al mar", space: "Carrusel Hospedaje", mensual: 1200, trimestral: 3240, features: ["Máx. 6 establecimientos", '⭐ Perfil Destacado "POPULAR"', "Newsletter"] },
-  { letter: "C", name: "Sabor local", space: "Sección Restaurantes", mensual: 1000, trimestral: 2700, features: ['Presencia en "Dónde comer"', '⭐ Perfil "POPULAR"', "Logo/foto · Rango de precio · Ranking", "Newsletter"] },
-  { letter: "D", name: "Escápate a San Carlos", space: "Anuncio lateral", mensual: 800, trimestral: 2160, features: ["360×440 px · CTA/enlace", '⭐ Perfil "POPULAR"', "2 stories fotográficas/mes", "Newsletter"] },
-  { letter: "E", name: "Estrella del mes", space: "Banner exclusivo", mensual: 2500, trimestral: 6750, features: ["1146×272 px · CTA/enlace", '⭐ Perfil "POPULAR"', "Newsletter"] },
-  { letter: "F", name: "Directorio Premium", space: "Carrusel Directorio", mensual: 1900, trimestral: 5130, features: ["1451×260 px · CTA", "Máx. 5 anunciantes", '⭐ Perfil "POPULAR"', "Newsletter"] },
-  { letter: "G", name: "Eventos Destacados", space: "Carrusel Eventos", mensual: 1600, trimestral: 4320, features: ["1451×260 px · CTA", "Máx. 5 anunciantes", '⭐ Perfil "POPULAR"', "Newsletter"] },
+  { letter: "A", icon: "/uploads/icons/icon-carrusel-home.png", name: "Vistas Doradas", space: "Carrusel Home", mensual: 1500, trimestral: 4050, features: ["Máx. 6 anunciantes", '⭐ Perfil Destacado "POPULAR"', "Newsletter"] },
+  { letter: "B", icon: "/uploads/icons/icon-hospedaje.png", name: "Sueño con vista al mar", space: "Carrusel Hospedaje", mensual: 1200, trimestral: 3240, features: ["Máx. 6 establecimientos", '⭐ Perfil Destacado "POPULAR"', "Newsletter"] },
+  { letter: "C", icon: "/uploads/icons/icon-restaurantes.png", name: "Sabor local", space: "Sección Restaurantes", mensual: 1000, trimestral: 2700, features: ['Presencia en "Dónde comer"', '⭐ Perfil "POPULAR"', "Logo/foto · Rango de precio · Ranking", "Newsletter"] },
+  { letter: "D", icon: "/uploads/icons/icon-anuncio-lateral.png", name: "Escápate a San Carlos", space: "Anuncio lateral", mensual: 800, trimestral: 2160, features: ["360×440 px · CTA/enlace", '⭐ Perfil "POPULAR"', "2 stories fotográficas/mes", "Newsletter"] },
+  { letter: "E", icon: "/uploads/icons/icon-estrella-mes.png", name: "Estrella del mes", space: "Banner exclusivo", mensual: 2500, trimestral: 6750, features: ["1146×272 px · CTA/enlace", '⭐ Perfil "POPULAR"', "Newsletter"] },
+  { letter: "F", icon: "/uploads/icons/icon-directorio-premium.png", name: "Directorio Premium", space: "Carrusel Directorio", mensual: 1900, trimestral: 5130, features: ["1451×260 px · CTA", "Máx. 5 anunciantes", '⭐ Perfil "POPULAR"', "Newsletter"] },
+  { letter: "G", icon: "/uploads/icons/icon-eventos.png", name: "Eventos Destacados", space: "Carrusel Eventos", mensual: 1600, trimestral: 4320, features: ["1451×260 px · CTA", "Máx. 5 anunciantes", '⭐ Perfil "POPULAR"', "Newsletter"] },
 ];
 
 export const POPULAR_FEATURES = [

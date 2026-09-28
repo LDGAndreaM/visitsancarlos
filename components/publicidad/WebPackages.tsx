@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { WEB_PACKAGES } from "@/lib/publicidadData";
 import { useCurrency } from "@/lib/publicidad/currency";
@@ -31,22 +32,8 @@ export default function WebPackages() {
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <span
-                  style={{
-                    width: 26,
-                    height: 26,
-                    borderRadius: "50%",
-                    background: "#009BA4",
-                    color: "#ffffff",
-                    fontSize: 12,
-                    fontWeight: 800,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexShrink: 0,
-                  }}
-                >
-                  {p.letter}
+                <span style={{ position: "relative", width: 24, height: 24, flexShrink: 0 }}>
+                  <Image src={p.icon} alt="" fill style={{ objectFit: "contain" }} />
                 </span>
                 <span style={{ fontSize: 11, fontWeight: 700, color: "#EB600A", letterSpacing: "0.03em", textTransform: "uppercase" }}>{p.space}</span>
               </div>
