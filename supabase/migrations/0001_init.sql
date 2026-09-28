@@ -434,3 +434,60 @@ create policy "contact_messages: solo admin edita" on public.contact_messages
 drop policy if exists "contact_messages: solo admin elimina" on public.contact_messages;
 create policy "contact_messages: solo admin elimina" on public.contact_messages
   for delete to authenticated using (public.is_admin(auth.uid()));
+
+-- ============ CHATBOT: conversaciones grabadas del asistente ============
+-- El visitante deja su nombre y correo/whatsapp antes de chatear; a partir
+-- de ahí la conversación se va guardando (aunque se pierda la conexión)
+-- para que un admin pueda revisarla en Admin → Soporte.
+create table if not exists public.chat_conversations (
+  id uuid primary key default gen_random_uuid(),
+  visitor_name text not null,
+  contact_email text,
+  contact_phone text,
+  messages jsonb not null default '[]'::jsonb,
+  read boolean not null default false,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.chat_conversations enable row level security;
+
+drop policy if exists "chat_conversations: cualquiera puede crear la suya" on public.chat_conversations;
+create policy "chat_conversations: cualquiera puede crear la suya" on public.chat_conversations
+  for insert with check (true);
+
+-- El id lo genera el navegador (uuid), así que no necesita leer de vuelta
+-- la fila para seguir agregando mensajes con update.
+drop policy if exists "chat_conversations: cualquiera puede actualizar la suya" on public.chat_conversations;
+create policy "chat_conversations: cualquiera puede actualizar la suya" on public.chat_conversations
+  for update using (true) with check (true);
+
+drop policy if exists "chat_conversations: solo admin lee" on public.chat_conversations;
+create policy "chat_conversations: solo admin lee" on public.chat_conversations
+  for select to authenticated using (public.is_admin(auth.uid()));
+
+drop policy if exists "chat_conversations: solo admin elimina" on public.chat_conversations;
+create policy "chat_conversations: solo admin elimina" on public.chat_conversations
+  for delete to authenticated using (public.is_admin(auth.uid()));
+
+-- ============ NEWSLETTER: correos suscritos ============
+create table if not exists public.newsletter_subscribers (
+  id uuid primary key default gen_random_uuid(),
+  email text not null unique,
+  source text not null default 'web',
+  created_at timestamptz not null default now()
+);
+
+alter table public.newsletter_subscribers enable row level security;
+
+drop policy if exists "newsletter_subscribers: cualquiera se suscribe" on public.newsletter_subscribers;
+create policy "newsletter_subscribers: cualquiera se suscribe" on public.newsletter_subscribers
+  for insert with check (true);
+
+drop policy if exists "newsletter_subscribers: solo admin lee" on public.newsletter_subscribers;
+create policy "newsletter_subscribers: solo admin lee" on public.newsletter_subscribers
+  for select to authenticated using (public.is_admin(auth.uid()));
+
+drop policy if exists "newsletter_subscribers: solo admin elimina" on public.newsletter_subscribers;
+create policy "newsletter_subscribers: solo admin elimina" on public.newsletter_subscribers
+  for delete to authenticated using (public.is_admin(auth.uid()));

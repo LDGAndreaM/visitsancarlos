@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { subscribeToNewsletter } from "@/lib/supabase/newsletter";
 
 type NewsletterCtaProps = {
   id?: string;
@@ -14,10 +15,15 @@ export default function NewsletterCta({
   body = "Eventos, promociones y novedades directo a tu correo.",
 }: NewsletterCtaProps) {
   const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "done">("idle");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: wire up to the newsletter subscription API once it exists.
+    if (!email.trim() || status === "sending") return;
+    setStatus("sending");
+    await subscribeToNewsletter(email.trim(), "newsletter_cta");
+    setStatus("done");
+    setEmail("");
   };
 
   return (
@@ -40,22 +46,27 @@ export default function NewsletterCta({
         <h2 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: "#ffffff" }}>No te pierdas nada de San Carlos y Guaymas</h2>
         <p style={{ margin: 0, fontSize: 14, color: "#DFF6F8" }}>{body}</p>
       </div>
-      <form onSubmit={handleSubmit} style={{ display: "flex", gap: 10, flexWrap: "wrap", flex: 1, maxWidth: 420 }}>
-        <input
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="tu@correo.com"
-          style={{ flex: 1, minWidth: 200, border: "none", outline: "none", borderRadius: 10, padding: "13px 16px", fontFamily: "inherit", fontSize: 14, color: "#143840", background: "#ffffff" }}
-        />
-        <button
-          type="submit"
-          style={{ border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: "13px 24px", borderRadius: 10, cursor: "pointer", flexShrink: 0 }}
-        >
-          Suscribirme
-        </button>
-      </form>
+      {status === "done" ? (
+        <p style={{ margin: 0, fontSize: 14, fontWeight: 700, color: "#ffffff", flex: 1, maxWidth: 420 }}>¡Listo! Ya estás suscrito. 🎉</p>
+      ) : (
+        <form onSubmit={handleSubmit} style={{ display: "flex", gap: 10, flexWrap: "wrap", flex: 1, maxWidth: 420 }}>
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="tu@correo.com"
+            style={{ flex: 1, minWidth: 200, border: "none", outline: "none", borderRadius: 10, padding: "13px 16px", fontFamily: "inherit", fontSize: 14, color: "#143840", background: "#ffffff" }}
+          />
+          <button
+            type="submit"
+            disabled={status === "sending"}
+            style={{ border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: "13px 24px", borderRadius: 10, cursor: status === "sending" ? "default" : "pointer", opacity: status === "sending" ? 0.7 : 1, flexShrink: 0 }}
+          >
+            {status === "sending" ? "Enviando…" : "Suscribirme"}
+          </button>
+        </form>
+      )}
     </section>
   );
 }

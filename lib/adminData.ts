@@ -66,8 +66,8 @@ export type AdminAd = {
 
 export const INITIAL_ADMIN_ADS: AdminAd[] = [];
 
-export type ChatMessage = { from: "user" | "admin"; text: string };
-export type Chat = { id: string; userName: string; unread: boolean; messages: ChatMessage[] };
+export type ChatMessage = { from: "user" | "admin" | "bot"; text: string; time?: string; links?: { label: string; href: string }[] };
+export type Chat = { id: string; userName: string; contactEmail?: string; contactPhone?: string; unread: boolean; messages: ChatMessage[] };
 
 export const INITIAL_CHATS: Chat[] = [];
 

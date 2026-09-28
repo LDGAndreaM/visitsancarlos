@@ -4,6 +4,9 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { resolveChatReply, type ChatReply } from "@/lib/chatbot/intents";
 import { GREETING, QUICK_SUGGESTIONS } from "@/lib/chatbot/chatbotData";
+import { createChatConversation, appendChatMessages } from "@/lib/supabase/chatConversations";
+import { subscribeToNewsletter } from "@/lib/supabase/newsletter";
+import ChatGate from "@/components/chatbot/ChatGate";
 
 type ChatMessage = { from: "bot" | "user"; text: string; links?: { label: string; href: string }[]; time: string };
 
@@ -12,27 +15,43 @@ function now(): string {
 }
 
 export default function ChatPanel({ visible, onClose }: { visible: boolean; onClose: () => void }) {
-  // Arranca vacío en el servidor y en la hidratación (misma marca) para
-  // evitar un mismatch de hidratación por la hora del saludo; el saludo se
-  // agrega justo después de montar, ya en el cliente.
+  const [stage, setStage] = useState<"gate" | "chat">("gate");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [draft, setDraft] = useState("");
   const [typing, setTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setMessages([{ from: "bot", text: GREETING, time: now() }]);
-  }, []);
+  const conversationIdRef = useRef<string | null>(null);
 
   useEffect(() => {
     const el = scrollRef.current;
     if (el) el.scrollTop = el.scrollHeight;
-  }, [messages, typing, visible]);
+  }, [messages, typing, visible, stage]);
+
+  const startChat = async (name: string, email: string, phone: string) => {
+    const greeting: ChatMessage = { from: "bot", text: GREETING, time: now() };
+    setMessages([greeting]);
+    setStage("chat");
+
+    const id = crypto.randomUUID();
+    conversationIdRef.current = id;
+    // Se guarda en segundo plano; si falla, el chat sigue funcionando igual.
+    createChatConversation(id, { visitorName: name, email, phone, messages: [greeting] }).catch(() => {});
+    if (email) subscribeToNewsletter(email, "chatbot").catch(() => {});
+  };
+
+  const resetChat = () => {
+    conversationIdRef.current = null;
+    setMessages([]);
+    setDraft("");
+    setTyping(false);
+    setStage("gate");
+  };
 
   const send = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed || typing) return;
-    setMessages((prev) => [...prev, { from: "user", text: trimmed, time: now() }]);
+    const withUser = [...messages, { from: "user" as const, text: trimmed, time: now() }];
+    setMessages(withUser);
     setDraft("");
     setTyping(true);
     let reply: ChatReply;
@@ -42,7 +61,9 @@ export default function ChatPanel({ visible, onClose }: { visible: boolean; onCl
       reply = { text: "Tuve un problema para buscar esa información. Intenta de nuevo en un momento." };
     }
     setTyping(false);
-    setMessages((prev) => [...prev, { from: "bot", text: reply.text, links: reply.links, time: now() }]);
+    const withReply = [...withUser, { from: "bot" as const, text: reply.text, links: reply.links, time: now() }];
+    setMessages(withReply);
+    if (conversationIdRef.current) appendChatMessages(conversationIdRef.current, withReply).catch(() => {});
   };
 
   const showQuick = messages.length < 2;
@@ -59,86 +80,105 @@ export default function ChatPanel({ visible, onClose }: { visible: boolean; onCl
           <span style={{ fontSize: 14, fontWeight: 700, color: "#ffffff" }}>Asistente Visit San Carlos</span>
           <span style={{ fontSize: 11, color: "#E5F6F7" }}>Respuestas automáticas</span>
         </div>
+        {stage === "chat" && (
+          <button
+            onClick={resetChat}
+            aria-label="Reiniciar chat"
+            title="Reiniciar chat"
+            style={{ border: "none", background: "transparent", color: "#ffffff", cursor: "pointer", padding: 4, flexShrink: 0, display: "flex", alignItems: "center" }}
+          >
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="1 4 1 10 7 10" />
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+            </svg>
+          </button>
+        )}
         <button onClick={onClose} aria-label="Cerrar chat" style={{ border: "none", background: "transparent", color: "#ffffff", cursor: "pointer", fontSize: 22, lineHeight: 1, padding: 4, flexShrink: 0 }}>
           ×
         </button>
       </div>
 
-      <div ref={scrollRef} className="vsc-scroll" style={{ flex: 1, overflowY: "auto", padding: 16, display: "flex", flexDirection: "column", gap: 12, background: "#F4FAFB", minHeight: 0 }}>
-        {messages.map((m, i) =>
-          m.from === "bot" ? (
-            <div key={i} style={{ alignSelf: "flex-start", maxWidth: "88%", display: "flex", flexDirection: "column", gap: 6 }}>
-              <div style={{ background: "#ffffff", color: "#143840", fontSize: 13.5, lineHeight: 1.5, padding: "10px 13px", borderRadius: "14px 14px 14px 4px", boxShadow: "0 2px 8px rgba(0,60,66,0.06)" }}>
-                {m.text}
-              </div>
-              {m.links && m.links.length > 0 && (
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                  {m.links.map((l) => (
-                    <Link
-                      key={l.href + l.label}
-                      href={l.href}
-                      target={l.href.startsWith("http") ? "_blank" : undefined}
-                      rel={l.href.startsWith("http") ? "noreferrer" : undefined}
-                      style={{ fontSize: 12.5, fontWeight: 700, color: "#009BA4", background: "#ffffff", border: "1px solid #E2ECED", borderRadius: 10, padding: "8px 12px" }}
-                    >
-                      {l.label}
-                    </Link>
-                  ))}
+      {stage === "gate" ? (
+        <ChatGate onStart={startChat} />
+      ) : (
+        <>
+          <div ref={scrollRef} className="vsc-scroll" style={{ flex: 1, overflowY: "auto", padding: 16, display: "flex", flexDirection: "column", gap: 12, background: "#F4FAFB", minHeight: 0 }}>
+            {messages.map((m, i) =>
+              m.from === "bot" ? (
+                <div key={i} style={{ alignSelf: "flex-start", maxWidth: "88%", display: "flex", flexDirection: "column", gap: 6 }}>
+                  <div style={{ background: "#ffffff", color: "#143840", fontSize: 13.5, lineHeight: 1.5, padding: "10px 13px", borderRadius: "14px 14px 14px 4px", boxShadow: "0 2px 8px rgba(0,60,66,0.06)" }}>
+                    {m.text}
+                  </div>
+                  {m.links && m.links.length > 0 && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                      {m.links.map((l) => (
+                        <Link
+                          key={l.href + l.label}
+                          href={l.href}
+                          target={l.href.startsWith("http") ? "_blank" : undefined}
+                          rel={l.href.startsWith("http") ? "noreferrer" : undefined}
+                          style={{ fontSize: 12.5, fontWeight: 700, color: "#009BA4", background: "#ffffff", border: "1px solid #E2ECED", borderRadius: 10, padding: "8px 12px" }}
+                        >
+                          {l.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                  <span style={{ fontSize: 10.5, color: "#9DB6B8" }}>{m.time}</span>
                 </div>
-              )}
-              <span style={{ fontSize: 10.5, color: "#9DB6B8" }}>{m.time}</span>
-            </div>
-          ) : (
-            <div key={i} style={{ alignSelf: "flex-end", maxWidth: "88%", display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-end" }}>
-              <div style={{ background: "#EB600A", color: "#ffffff", fontSize: 13.5, lineHeight: 1.5, padding: "10px 13px", borderRadius: "14px 14px 4px 14px" }}>{m.text}</div>
-              <span style={{ fontSize: 10.5, color: "#9DB6B8" }}>{m.time}</span>
-            </div>
-          )
-        )}
-        {typing && (
-          <div style={{ alignSelf: "flex-start", background: "#ffffff", padding: "11px 14px", borderRadius: "14px 14px 14px 4px", display: "flex", gap: 4 }}>
-            <span className="vsc-typing-dot" style={{ animationDelay: "0s" }} />
-            <span className="vsc-typing-dot" style={{ animationDelay: "0.15s" }} />
-            <span className="vsc-typing-dot" style={{ animationDelay: "0.3s" }} />
+              ) : (
+                <div key={i} style={{ alignSelf: "flex-end", maxWidth: "88%", display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-end" }}>
+                  <div style={{ background: "#EB600A", color: "#ffffff", fontSize: 13.5, lineHeight: 1.5, padding: "10px 13px", borderRadius: "14px 14px 4px 14px" }}>{m.text}</div>
+                  <span style={{ fontSize: 10.5, color: "#9DB6B8" }}>{m.time}</span>
+                </div>
+              )
+            )}
+            {typing && (
+              <div style={{ alignSelf: "flex-start", background: "#ffffff", padding: "11px 14px", borderRadius: "14px 14px 14px 4px", display: "flex", gap: 4 }}>
+                <span className="vsc-typing-dot" style={{ animationDelay: "0s" }} />
+                <span className="vsc-typing-dot" style={{ animationDelay: "0.15s" }} />
+                <span className="vsc-typing-dot" style={{ animationDelay: "0.3s" }} />
+              </div>
+            )}
           </div>
-        )}
-      </div>
 
-      {showQuick && (
-        <div style={{ display: "flex", gap: 6, flexWrap: "wrap", padding: "10px 14px 0", background: "#ffffff", flexShrink: 0 }}>
-          {QUICK_SUGGESTIONS.map((label) => (
+          {showQuick && (
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", padding: "10px 14px 0", background: "#ffffff", flexShrink: 0 }}>
+              {QUICK_SUGGESTIONS.map((label) => (
+                <button
+                  key={label}
+                  onClick={() => send(label)}
+                  style={{ border: "1px solid #009BA4", background: "#ffffff", color: "#009BA4", fontSize: 11.5, fontWeight: 600, padding: "6px 11px", borderRadius: 999, cursor: "pointer" }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 14px 14px", background: "#ffffff", flexShrink: 0 }}>
+            <input
+              type="text"
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") send(draft);
+              }}
+              placeholder="Escribe tu pregunta..."
+              style={{ flex: 1, minWidth: 0, border: "1px solid #E2ECED", outline: "none", borderRadius: 999, padding: "10px 15px", fontSize: 13.5, color: "#143840" }}
+            />
             <button
-              key={label}
-              onClick={() => send(label)}
-              style={{ border: "1px solid #009BA4", background: "#ffffff", color: "#009BA4", fontSize: 11.5, fontWeight: 600, padding: "6px 11px", borderRadius: 999, cursor: "pointer" }}
+              onClick={() => send(draft)}
+              aria-label="Enviar"
+              style={{ flexShrink: 0, width: 38, height: 38, border: "none", background: "#EB600A", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
             >
-              {label}
+              <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+                <path d="M3 10l14-7-5 15-2.5-6.5L3 10z" fill="#ffffff" />
+              </svg>
             </button>
-          ))}
-        </div>
+          </div>
+        </>
       )}
-
-      <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "12px 14px 14px", background: "#ffffff", flexShrink: 0 }}>
-        <input
-          type="text"
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") send(draft);
-          }}
-          placeholder="Escribe tu pregunta..."
-          style={{ flex: 1, minWidth: 0, border: "1px solid #E2ECED", outline: "none", borderRadius: 999, padding: "10px 15px", fontSize: 13.5, color: "#143840" }}
-        />
-        <button
-          onClick={() => send(draft)}
-          aria-label="Enviar"
-          style={{ flexShrink: 0, width: 38, height: 38, border: "none", background: "#EB600A", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}
-        >
-          <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
-            <path d="M3 10l14-7-5 15-2.5-6.5L3 10z" fill="#ffffff" />
-          </svg>
-        </button>
-      </div>
     </div>
   );
 }

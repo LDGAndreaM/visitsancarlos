@@ -35,6 +35,7 @@ import { createClasificadoAsAdmin, deleteClasificado, fetchAllClasificadosAdmin,
 import { createPost, deletePost as deletePostApi, fetchAllPostsAdmin, setPostPublished, updatePost, type PostAuthorFields } from "@/lib/supabase/blogPosts";
 import { deletePhoto, fetchAllPhotosAdmin, updatePhoto, uploadPhoto, type GalleryPhotoView } from "@/lib/supabase/gallery";
 import { deleteContactMessage, fetchContactMessages, setContactMessageRead, type ContactMessage } from "@/lib/supabase/contact";
+import { appendChatMessages, fetchAllChatConversationsAdmin, markChatConversationRead } from "@/lib/supabase/chatConversations";
 
 const TITLES: Record<AdminTab, [string, string]> = {
   resumen: ["Panel administrativo", "Resumen general de Visit San Carlos"],
@@ -99,7 +100,7 @@ export default function AdminApp() {
         return;
       }
       setCurrentAccount(account);
-      const [accts, biz, evs, cls, posts, pics, msgs] = await Promise.all([
+      const [accts, biz, evs, cls, posts, pics, msgs, convos] = await Promise.all([
         fetchAdminAccounts(),
         fetchAllBusinessesAdmin(),
         fetchAllEventsAdmin(),
@@ -107,6 +108,7 @@ export default function AdminApp() {
         fetchAllPostsAdmin(),
         fetchAllPhotosAdmin(),
         fetchContactMessages(),
+        fetchAllChatConversationsAdmin(),
       ]);
       setAccounts(accts);
       setBusinesses(biz);
@@ -115,6 +117,8 @@ export default function AdminApp() {
       setClasificados(cls);
       setBlogPosts(posts);
       setPhotos(pics);
+      setChats(convos);
+      if (convos[0]) setActiveChatId(convos[0].id);
       setAuthChecked(true);
     })();
   }, [router]);
@@ -317,14 +321,22 @@ export default function AdminApp() {
 
   const selectChat = (id: string) => {
     setActiveChatId(id);
-    setChats((prev) => prev.map((c) => (c.id === id ? { ...c, unread: false } : c)));
+    const chat = chats.find((c) => c.id === id);
+    if (chat?.unread) {
+      setChats((prev) => prev.map((c) => (c.id === id ? { ...c, unread: false } : c)));
+      markChatConversationRead(id, true);
+    }
   };
   const openChatFromResumen = (id: string) => {
     setTab("soporte");
     selectChat(id);
   };
   const sendChatMessage = (text: string) => {
-    setChats((prev) => prev.map((c) => (c.id === activeChatId ? { ...c, messages: [...c.messages, { from: "admin" as const, text }] } : c)));
+    const activeChat = chats.find((c) => c.id === activeChatId);
+    if (!activeChat) return;
+    const updatedMessages = [...activeChat.messages, { from: "admin" as const, text, time: new Date().toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" }) }];
+    setChats((prev) => prev.map((c) => (c.id === activeChatId ? { ...c, messages: updatedMessages } : c)));
+    appendChatMessages(activeChatId, updatedMessages);
   };
 
   if (!authChecked || !currentAccount) {
