@@ -22,7 +22,7 @@ const MENU_GROUPS: { title: string; items: { icon: string; label: string; href: 
     title: "VISIT SAN CARLOS",
     items: [
       { icon: "info", label: "Acerca de", href: "/acerca-de" },
-      { icon: "megafono", label: "Publicidad", href: "/publicidad" },
+      { icon: "megafono", label: "Publicidad", href: "/paquetes" },
       { icon: "chat", label: "Soporte", href: "/soporte" },
       { icon: "mail", label: "Contacto", href: "/contacto" },
     ],

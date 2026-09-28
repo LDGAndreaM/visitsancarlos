@@ -25,7 +25,7 @@ export const FOOTER_LINKS = {
     { label: "Tabla de mareas", href: "https://tablademareas.com/mx/sonora/guaymas" },
     { label: "Agregar mi negocio", href: "/login" },
     { label: "Iniciar sesión", href: "/login" },
-    { label: "Publicidad", href: "/publicidad" },
+    { label: "Publicidad", href: "/paquetes" },
     { label: "Galería", href: "/galeria" },
     { label: "Blog", href: "/blog" },
   ],

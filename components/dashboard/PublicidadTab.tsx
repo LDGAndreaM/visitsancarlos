@@ -79,7 +79,7 @@ export default function PublicidadTab({ ads, adStats, onOpenAdModal, onAdAction,
       </div>
 
       <p style={{ margin: 0, fontSize: 12.5, color: "#7FA7AA" }}>
-        Los contratos trimestrales incluyen sesión de fotografía (2h) + vuelo de dron. Consulta el <Link href="/publicidad">tarifario completo</Link>.
+        Los contratos trimestrales incluyen sesión de fotografía (2h) + vuelo de dron. Consulta el <Link href="/paquetes">tarifario completo</Link>.
       </p>
     </div>
   );

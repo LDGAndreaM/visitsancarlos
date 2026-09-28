@@ -37,7 +37,7 @@ const PAGE_TITLES: Record<string, string> = {
   "/": "Visit San Carlos",
   ...Object.fromEntries(NAV_LINKS.map((l) => [l.href, l.label])),
   "/galeria": "Galería",
-  "/publicidad": "Publicidad",
+  "/paquetes": "Publicidad",
   "/soporte": "Soporte",
   "/login": "Inicia sesión",
 };

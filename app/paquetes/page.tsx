@@ -14,9 +14,9 @@ import { SOCIAL_SET_MAIN } from "@/lib/nav";
 import { pageMetadata } from "@/lib/site";
 
 export const metadata: Metadata = pageMetadata({
-  title: "Publicidad",
+  title: "Paquetes de publicidad",
   description: "Espacios publicitarios y paquetes para que tu negocio gane visibilidad en Visit San Carlos.",
-  path: "/publicidad",
+  path: "/paquetes",
 });
 
 export default function Publicidad() {
@@ -32,7 +32,7 @@ export default function Publicidad() {
       <CommercialMessage />
       <PublicidadNote />
       <PromoCta />
-      <Footer marginTop={0} padding="0 48px 28px" socials={SOCIAL_SET_MAIN} activeHref="/publicidad" />
+      <Footer marginTop={0} padding="0 48px 28px" socials={SOCIAL_SET_MAIN} activeHref="/paquetes" />
     </div>
   );
 }
