@@ -16,22 +16,25 @@ export default function FeaturedEvents() {
   const [detail, setDetail] = useState<EventItem | null>(null);
 
   useEffect(() => {
-    fetchApprovedEvents().then((all) => setEvents(all.filter((e) => e.featured)));
+    fetchApprovedEvents().then((all) => setEvents(all.filter((e) => e.featured).slice(0, 5)));
   }, []);
 
   if (events.length === 0) return null;
 
   return (
     <section style={{ padding: "0 48px 40px" }}>
-      <div style={{ maxWidth: 1080, margin: "0 auto" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
         <h2 style={{ margin: "0 0 20px", fontSize: 20, fontWeight: 800, color: "#143840" }}>Eventos destacados</h2>
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(events.length, 3)}, 1fr)`, gap: 18 }}>
+        <div className="vsc-scroll" style={{ display: "flex", gap: 18, overflowX: "auto", scrollSnapType: "x mandatory" }}>
           {events.map((e) => (
             <div
               key={e.id}
               onClick={() => setDetail(e)}
               style={{
                 cursor: "pointer",
+                scrollSnapAlign: "start",
+                flex: "0 0 calc((100% - 36px)/3)",
+                minWidth: 260,
                 position: "relative",
                 borderRadius: 16,
                 overflow: "hidden",

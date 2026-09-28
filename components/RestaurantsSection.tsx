@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ImagePlaceholder from "./ImagePlaceholder";
+import RestaurantAdCard from "@/components/ads/RestaurantAdCard";
 import { RESTAURANTS } from "@/lib/homeData";
 
 export default function RestaurantsSection() {
@@ -41,25 +42,7 @@ export default function RestaurantsSection() {
           Ver más
         </Link>
       </div>
-      <div style={{ borderRadius: 18, overflow: "hidden", position: "relative", minHeight: 240, boxShadow: "0 10px 24px rgba(0,60,66,0.1)" }}>
-        <ImagePlaceholder caption="Espacio publicitario: restaurante de paga" />
-        <span
-          style={{
-            position: "absolute",
-            top: 12,
-            left: 12,
-            background: "rgba(0,0,0,0.55)",
-            color: "#ffffff",
-            fontSize: 11,
-            fontWeight: 700,
-            letterSpacing: "0.04em",
-            padding: "5px 10px",
-            borderRadius: 999,
-          }}
-        >
-          PATROCINADO
-        </span>
-      </div>
+      <RestaurantAdCard />
     </section>
   );
 }

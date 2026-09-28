@@ -22,6 +22,8 @@ import GaleriaAdminTab from "./GaleriaAdminTab";
 import UploadPhotoModal from "./UploadPhotoModal";
 import EditPhotoModal from "./EditPhotoModal";
 import PublicidadAdminTab from "./PublicidadAdminTab";
+import AnunciosAdminTab from "./AnunciosAdminTab";
+import AdPlacementModal from "./AdPlacementModal";
 import SoporteTab from "./SoporteTab";
 import ContactoAdminTab from "./ContactoAdminTab";
 import AdministradoresTab from "./AdministradoresTab";
@@ -36,6 +38,7 @@ import { createPost, deletePost as deletePostApi, fetchAllPostsAdmin, setPostPub
 import { deletePhoto, fetchAllPhotosAdmin, updatePhoto, uploadPhoto, type GalleryPhotoView } from "@/lib/supabase/gallery";
 import { deleteContactMessage, fetchContactMessages, setContactMessageRead, type ContactMessage } from "@/lib/supabase/contact";
 import { appendChatMessages, fetchAllChatConversationsAdmin, markChatConversationRead } from "@/lib/supabase/chatConversations";
+import { createAd, deleteAd, fetchAllAdsAdmin, setAdActive, updateAd, type AdPlacement, type AdPlacementInput, type AdSlot } from "@/lib/supabase/adPlacements";
 
 const TITLES: Record<AdminTab, [string, string]> = {
   resumen: ["Panel administrativo", "Resumen general de Visit San Carlos"],
@@ -48,6 +51,7 @@ const TITLES: Record<AdminTab, [string, string]> = {
   eventos: ["Eventos", "Eventos publicados en el sitio"],
   galeria: ["Galería", "Fotos publicadas en la página de galería"],
   publicidad: ["Publicidad", "Espacios contratados por todos los negocios"],
+  anuncios: ["Anuncios", "Espacios publicitarios reales del sitio"],
   soporte: ["Soporte", "Conversaciones con usuarios"],
   contacto: ["Contacto", "Mensajes enviados desde el formulario de contacto"],
 };
@@ -67,6 +71,8 @@ export default function AdminApp() {
   const [photos, setPhotos] = useState<GalleryPhotoView[]>([]);
   const [contactMessages, setContactMessages] = useState<ContactMessage[]>([]);
   const [ads] = useState(INITIAL_ADMIN_ADS);
+  const [adPlacements, setAdPlacements] = useState<AdPlacement[]>([]);
+  const [adModal, setAdModal] = useState<{ mode: "new"; slot: AdSlot } | { mode: "edit"; ad: AdPlacement } | null>(null);
   const [chats, setChats] = useState<Chat[]>(INITIAL_CHATS);
   const [activeChatId, setActiveChatId] = useState("chat-1");
 
@@ -91,6 +97,7 @@ export default function AdminApp() {
   const refreshClasificados = async () => setClasificados(await fetchAllClasificadosAdmin());
   const refreshBlogPosts = async () => setBlogPosts(await fetchAllPostsAdmin());
   const refreshPhotos = async () => setPhotos(await fetchAllPhotosAdmin());
+  const refreshAdPlacements = async () => setAdPlacements(await fetchAllAdsAdmin());
 
   useEffect(() => {
     (async () => {
@@ -100,7 +107,7 @@ export default function AdminApp() {
         return;
       }
       setCurrentAccount(account);
-      const [accts, biz, evs, cls, posts, pics, msgs, convos] = await Promise.all([
+      const [accts, biz, evs, cls, posts, pics, msgs, convos, adsPlacements] = await Promise.all([
         fetchAdminAccounts(),
         fetchAllBusinessesAdmin(),
         fetchAllEventsAdmin(),
@@ -109,6 +116,7 @@ export default function AdminApp() {
         fetchAllPhotosAdmin(),
         fetchContactMessages(),
         fetchAllChatConversationsAdmin(),
+        fetchAllAdsAdmin(),
       ]);
       setAccounts(accts);
       setBusinesses(biz);
@@ -118,6 +126,7 @@ export default function AdminApp() {
       setBlogPosts(posts);
       setPhotos(pics);
       setChats(convos);
+      setAdPlacements(adsPlacements);
       if (convos[0]) setActiveChatId(convos[0].id);
       setAuthChecked(true);
     })();
@@ -310,6 +319,26 @@ export default function AdminApp() {
     setPhotos((prev) => prev.filter((p) => p.id !== id));
   };
 
+  const openNewAd = (slot: AdSlot) => setAdModal({ mode: "new", slot });
+  const openEditAd = (ad: AdPlacement) => setAdModal({ mode: "edit", ad });
+  const saveAdHandler = async (values: AdPlacementInput) => {
+    if (adModal?.mode === "edit") {
+      await updateAd(adModal.ad.id, values);
+    } else {
+      await createAd(values);
+    }
+    setAdModal(null);
+    await refreshAdPlacements();
+  };
+  const toggleAdActiveHandler = async (ad: AdPlacement) => {
+    await setAdActive(ad.id, !ad.active);
+    await refreshAdPlacements();
+  };
+  const deleteAdHandler = async (id: string) => {
+    await deleteAd(id);
+    setAdPlacements((prev) => prev.filter((a) => a.id !== id));
+  };
+
   const toggleContactMessageRead = async (id: string, read: boolean) => {
     setContactMessages((prev) => prev.map((m) => (m.id === id ? { ...m, read } : m)));
     await setContactMessageRead(id, read);
@@ -428,6 +457,9 @@ export default function AdminApp() {
         )}
         {tab === "galeria" && <GaleriaAdminTab photos={photos} onOpenUpload={() => setShowUploadPhoto(true)} onEdit={setEditingPhoto} onDelete={deletePhotoHandler} />}
         {tab === "publicidad" && <PublicidadAdminTab ads={ads} adminAdStats={adminAdStats} revenueFmt={stats.revenueFmt} />}
+        {tab === "anuncios" && (
+          <AnunciosAdminTab ads={adPlacements} onOpenNew={openNewAd} onEdit={openEditAd} onToggleActive={toggleAdActiveHandler} onDelete={deleteAdHandler} />
+        )}
         {tab === "soporte" && <SoporteTab chats={chats} activeChatId={activeChatId} onSelectChat={selectChat} onSendMessage={sendChatMessage} />}
         {tab === "contacto" && <ContactoAdminTab messages={contactMessages} onToggleRead={toggleContactMessageRead} onDelete={deleteContactMessageHandler} />}
       </main>
@@ -443,6 +475,14 @@ export default function AdminApp() {
       {editingBusiness && <EditBusinessAdminModal business={editingBusiness} onClose={() => setEditingBusinessId(null)} onSave={saveBusinessEdit} />}
       {editingEvent && <EditEventAdminModal event={editingEvent} onClose={() => setEditingEventId(null)} onSave={saveEventEdit} />}
       {editingPost && <EditPostModal post={editingPost} onClose={() => setEditingPostId(null)} onSave={saveEditPost} />}
+      {adModal && (
+        <AdPlacementModal
+          ad={adModal.mode === "edit" ? adModal.ad : null}
+          defaultSlot={adModal.mode === "new" ? adModal.slot : undefined}
+          onClose={() => setAdModal(null)}
+          onSave={saveAdHandler}
+        />
+      )}
     </div>
   );
 }

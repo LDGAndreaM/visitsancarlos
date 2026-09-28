@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Header from "@/components/Header";
-import PromoBanner from "@/components/PromoBanner";
+import AdCarouselSection from "@/components/ads/AdCarouselSection";
 import { MobileIcon } from "@/components/mobile/icons";
 import DirectorioHero from "./DirectorioHero";
 import FilterBar, { type ViewMode } from "./FilterBar";
@@ -11,7 +11,7 @@ import ResultsList from "./ResultsList";
 import ResultsMap from "./ResultsMap";
 import AddBusinessBanner from "./AddBusinessBanner";
 import DirectorioMobile from "./DirectorioMobile";
-import { BANNER_PAIRS, PAGE_SIZE, type Business, type BusinessCategory, type SortKey } from "@/lib/directorioData";
+import { PAGE_SIZE, type Business, type BusinessCategory, type SortKey } from "@/lib/directorioData";
 import { SORTERS, filterBusinesses } from "@/lib/directorioUtils";
 import { fetchApprovedBusinesses } from "@/lib/supabase/businesses";
 
@@ -58,7 +58,7 @@ export default function DirectorioApp() {
           </button>
         }
       />
-      <PromoBanner pairs={BANNER_PAIRS} />
+      <AdCarouselSection slot="carrusel_directorio" title="Negocios destacados" cardHeight={160} />
 
       <div className="vsc-desktop-only">
         <DirectorioHero searchText={searchText} onSearchTextChange={setSearchText} searchLocation={searchLocation} onSearchLocationChange={setSearchLocation} />

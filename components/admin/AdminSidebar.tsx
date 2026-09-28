@@ -13,11 +13,12 @@ const NAV_LABELS: Record<AdminTab, string> = {
   eventos: "Eventos",
   galeria: "Galería",
   publicidad: "Publicidad",
+  anuncios: "Anuncios",
   soporte: "Soporte",
   contacto: "Contacto",
 };
 
-const NAV_ORDER: AdminTab[] = ["resumen", "administradores", "usuarios", "aprobaciones", "directorio", "clasificados", "blog", "eventos", "galeria", "publicidad", "soporte", "contacto"];
+const NAV_ORDER: AdminTab[] = ["resumen", "administradores", "usuarios", "aprobaciones", "directorio", "clasificados", "blog", "eventos", "galeria", "publicidad", "anuncios", "soporte", "contacto"];
 
 type AdminSidebarProps = {
   tab: AdminTab;

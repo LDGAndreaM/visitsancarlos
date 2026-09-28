@@ -1,5 +1,3 @@
-import type { PromoPair } from "@/components/PromoBanner";
-
 export type BusinessCategory = "HOTELES" | "RESTAURANTES" | "DOCTORES" | "NEGOCIOS" | "CLASIFICADOS";
 
 export type Business = {
@@ -21,8 +19,6 @@ export type Business = {
   features?: string[];
   ownerId?: string;
 };
-
-export const BANNER_PAIRS: [PromoPair, PromoPair][] = [];
 
 export const PRICE_OPTIONS = ["Todos", "$", "$$", "$$$"] as const;
 

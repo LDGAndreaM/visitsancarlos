@@ -491,3 +491,61 @@ create policy "newsletter_subscribers: solo admin lee" on public.newsletter_subs
 drop policy if exists "newsletter_subscribers: solo admin elimina" on public.newsletter_subscribers;
 create policy "newsletter_subscribers: solo admin elimina" on public.newsletter_subscribers
   for delete to authenticated using (public.is_admin(auth.uid()));
+
+-- ============ ANUNCIOS: espacios pagados de /paquetes ============
+-- Cada fila es un anuncio real dentro de uno de los espacios que se venden
+-- en /paquetes (carrusel_home, carrusel_hospedaje, restaurantes,
+-- banner_estrella, carrusel_directorio). "Carrusel Eventos" (paquete G) no
+-- vive aquí: sigue usando el flag "featured" de events, que ya es real.
+create table if not exists public.ad_placements (
+  id uuid primary key default gen_random_uuid(),
+  slot text not null check (slot in ('carrusel_home', 'carrusel_hospedaje', 'restaurantes', 'banner_estrella', 'carrusel_directorio')),
+  title text not null,
+  subtitle text,
+  image_url text not null,
+  link_url text,
+  starts_at date not null default current_date,
+  ends_at date,
+  active boolean not null default true,
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now()
+);
+
+alter table public.ad_placements enable row level security;
+
+drop policy if exists "ad_placements: lectura pública de vigentes" on public.ad_placements;
+create policy "ad_placements: lectura pública de vigentes" on public.ad_placements
+  for select using (active = true and starts_at <= current_date and (ends_at is null or ends_at >= current_date));
+
+drop policy if exists "ad_placements: solo admin lee todo" on public.ad_placements;
+create policy "ad_placements: solo admin lee todo" on public.ad_placements
+  for select to authenticated using (public.is_admin(auth.uid()));
+
+drop policy if exists "ad_placements: solo admin inserta" on public.ad_placements;
+create policy "ad_placements: solo admin inserta" on public.ad_placements
+  for insert to authenticated with check (public.is_admin(auth.uid()));
+
+drop policy if exists "ad_placements: solo admin actualiza" on public.ad_placements;
+create policy "ad_placements: solo admin actualiza" on public.ad_placements
+  for update to authenticated using (public.is_admin(auth.uid())) with check (public.is_admin(auth.uid()));
+
+drop policy if exists "ad_placements: solo admin elimina" on public.ad_placements;
+create policy "ad_placements: solo admin elimina" on public.ad_placements
+  for delete to authenticated using (public.is_admin(auth.uid()));
+
+-- Bucket de Storage para las imágenes de los anuncios (público de solo lectura).
+insert into storage.buckets (id, name, public)
+values ('ads', 'ads', true)
+on conflict (id) do nothing;
+
+drop policy if exists "ads bucket: lectura pública" on storage.objects;
+create policy "ads bucket: lectura pública" on storage.objects
+  for select using (bucket_id = 'ads');
+
+drop policy if exists "ads bucket: solo administradores suben" on storage.objects;
+create policy "ads bucket: solo administradores suben" on storage.objects
+  for insert to authenticated with check (bucket_id = 'ads' and public.is_admin(auth.uid()));
+
+drop policy if exists "ads bucket: solo administradores borran" on storage.objects;
+create policy "ads bucket: solo administradores borran" on storage.objects
+  for delete to authenticated using (bucket_id = 'ads' and public.is_admin(auth.uid()));
