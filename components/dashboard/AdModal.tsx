@@ -1,19 +1,43 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AD_CATALOG, fmtMoney } from "@/lib/dashboardData";
+import { PACKAGE_SLOT_MAP } from "@/lib/supabase/adOrders";
 import type { ListingRow } from "./DashboardApp";
+
+export type AdModalConfirmParams = {
+  listingId: string;
+  listingType: "business" | "event";
+  listingName: string;
+  billing: "mensual" | "trimestral";
+  packageId: string;
+};
 
 type AdModalProps = {
   listings: ListingRow[];
   onClose: () => void;
-  onConfirm: (params: { businessId: string; billing: "mensual" | "trimestral"; packageId: string }) => void;
+  onConfirm: (params: AdModalConfirmParams) => Promise<void>;
 };
 
 export default function AdModal({ listings, onClose, onConfirm }: AdModalProps) {
-  const [businessId, setBusinessId] = useState(listings[0]?.id ?? "");
   const [billing, setBilling] = useState<"mensual" | "trimestral">("mensual");
   const [packageId, setPackageId] = useState(AD_CATALOG[0].id);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  // El paquete G (Carrusel Eventos) promociona un evento; todos los demás
+  // promocionan un negocio del Directorio.
+  const wantsEvent = PACKAGE_SLOT_MAP[packageId] === "eventos";
+  const eligibleListings = useMemo(() => listings.filter((l) => (wantsEvent ? l.type === "evento" : l.type === "directorio")), [listings, wantsEvent]);
+
+  const [listingId, setListingId] = useState(eligibleListings[0]?.id ?? "");
+
+  useEffect(() => {
+    if (!eligibleListings.some((l) => l.id === listingId)) {
+      setListingId(eligibleListings[0]?.id ?? "");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [eligibleListings]);
 
   const catalogGroups = useMemo(() => {
     const byCategory = new Map<string, typeof AD_CATALOG>();
@@ -26,6 +50,25 @@ export default function AdModal({ listings, onClose, onConfirm }: AdModalProps) 
 
   const selectedPkg = AD_CATALOG.find((p) => p.id === packageId) ?? AD_CATALOG[0];
   const totalFmt = `${fmtMoney(billing === "trimestral" ? selectedPkg.trimestral : selectedPkg.mensual)} MXN / ${billing === "trimestral" ? "trimestre" : "mes"}`;
+  const selectedListing = eligibleListings.find((l) => l.id === listingId);
+
+  const handleConfirm = async () => {
+    if (!selectedListing) return;
+    setSubmitting(true);
+    setError("");
+    try {
+      await onConfirm({
+        listingId: selectedListing.id,
+        listingType: wantsEvent ? "event" : "business",
+        listingName: selectedListing.displayName,
+        billing,
+        packageId,
+      });
+    } catch {
+      setError("No se pudo iniciar el pago. Intenta de nuevo en unos segundos.");
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(20,56,64,0.55)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
@@ -34,35 +77,6 @@ export default function AdModal({ listings, onClose, onConfirm }: AdModalProps) 
         style={{ background: "#ffffff", borderRadius: 20, padding: 32, maxWidth: 520, width: "100%", maxHeight: "88vh", overflowY: "auto", display: "flex", flexDirection: "column", gap: 16, boxShadow: "0 24px 50px rgba(0,0,0,0.25)" }}
       >
         <h3 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#143840" }}>Contratar espacio publicitario</h3>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <label style={{ fontSize: 13, fontWeight: 700, color: "#143840" }}>Publicación a promocionar</label>
-          <select
-            value={businessId}
-            onChange={(e) => setBusinessId(e.target.value)}
-            style={{ border: "1px solid #E2ECED", outline: "none", borderRadius: 10, padding: "11px 14px", fontSize: 14, background: "#ffffff", fontFamily: "inherit" }}
-          >
-            {listings.map((l) => (
-              <option key={l.id} value={l.id}>
-                {l.displayName}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <label style={{ fontSize: 13, fontWeight: 700, color: "#143840" }}>Facturación</label>
-          <div style={{ display: "flex", gap: 16 }}>
-            <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#3B5C61", cursor: "pointer" }}>
-              <input type="radio" name="billing" checked={billing === "mensual"} onChange={() => setBilling("mensual")} />
-              Mensual
-            </label>
-            <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#3B5C61", cursor: "pointer" }}>
-              <input type="radio" name="billing" checked={billing === "trimestral"} onChange={() => setBilling("trimestral")} />
-              Trimestral <span style={{ color: "#009BA4" }}>(mejor precio + sesión de fotos)</span>
-            </label>
-          </div>
-        </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <label style={{ fontSize: 13, fontWeight: 700, color: "#143840" }}>Espacio publicitario</label>
@@ -95,20 +109,58 @@ export default function AdModal({ listings, onClose, onConfirm }: AdModalProps) 
           ))}
         </div>
 
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <label style={{ fontSize: 13, fontWeight: 700, color: "#143840" }}>{wantsEvent ? "Evento a promocionar" : "Negocio a promocionar"}</label>
+          {eligibleListings.length === 0 ? (
+            <p style={{ margin: 0, fontSize: 13, color: "#B94A2E" }}>
+              {wantsEvent ? "Primero agrega un evento en Publicaciones para poder contratar este espacio." : "Primero agrega un negocio en Publicaciones para poder contratar este espacio."}
+            </p>
+          ) : (
+            <select
+              value={listingId}
+              onChange={(e) => setListingId(e.target.value)}
+              style={{ border: "1px solid #E2ECED", outline: "none", borderRadius: 10, padding: "11px 14px", fontSize: 14, background: "#ffffff", fontFamily: "inherit" }}
+            >
+              {eligibleListings.map((l) => (
+                <option key={l.id} value={l.id}>
+                  {l.displayName}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <label style={{ fontSize: 13, fontWeight: 700, color: "#143840" }}>Facturación</label>
+          <div style={{ display: "flex", gap: 16 }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#3B5C61", cursor: "pointer" }}>
+              <input type="radio" name="billing" checked={billing === "mensual"} onChange={() => setBilling("mensual")} />
+              Mensual
+            </label>
+            <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, color: "#3B5C61", cursor: "pointer" }}>
+              <input type="radio" name="billing" checked={billing === "trimestral"} onChange={() => setBilling("trimestral")} />
+              Trimestral <span style={{ color: "#009BA4" }}>(mejor precio + sesión de fotos)</span>
+            </label>
+          </div>
+        </div>
+
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#F4FAFB", borderRadius: 12, padding: "14px 18px" }}>
           <span style={{ fontSize: 13, fontWeight: 700, color: "#143840" }}>Total a contratar</span>
           <span style={{ fontSize: 20, fontWeight: 800, color: "#EB600A" }}>{totalFmt}</span>
         </div>
+
+        {error && <p style={{ margin: 0, fontSize: 12, color: "#B94A2E", fontWeight: 600 }}>{error}</p>}
 
         <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 6 }}>
           <button onClick={onClose} style={{ border: "2px solid #009BA4", background: "#ffffff", color: "#009BA4", fontWeight: 700, fontSize: 14, padding: "11px 22px", borderRadius: 10, cursor: "pointer" }}>
             Cancelar
           </button>
           <button
-            onClick={() => onConfirm({ businessId, billing, packageId })}
-            style={{ border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: "11px 22px", borderRadius: 10, cursor: "pointer" }}
+            onClick={handleConfirm}
+            disabled={!selectedListing || submitting}
+            style={{ border: "none", background: "#EB600A", color: "#ffffff", fontWeight: 700, fontSize: 14, padding: "11px 22px", borderRadius: 10, cursor: !selectedListing || submitting ? "default" : "pointer", opacity: !selectedListing || submitting ? 0.6 : 1 }}
           >
-            Continuar al pago
+            {submitting ? "Conectando con Mercado Pago…" : "Continuar al pago"}
           </button>
         </div>
       </div>

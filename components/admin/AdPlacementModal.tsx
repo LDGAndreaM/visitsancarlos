@@ -6,6 +6,7 @@ import { AD_SLOTS, AD_SLOT_LABELS, uploadAdImage, type AdPlacement, type AdPlace
 type AdPlacementModalProps = {
   ad: AdPlacement | null;
   defaultSlot?: AdSlot;
+  prefill?: Partial<AdPlacementInput>;
   onClose: () => void;
   onSave: (values: AdPlacementInput) => Promise<void>;
 };
@@ -16,16 +17,16 @@ const inputStyle: React.CSSProperties = { border: "1px solid #E2ECED", outline: 
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
 
-export default function AdPlacementModal({ ad, defaultSlot, onClose, onSave }: AdPlacementModalProps) {
+export default function AdPlacementModal({ ad, defaultSlot, prefill, onClose, onSave }: AdPlacementModalProps) {
   const fileRef = useRef<HTMLInputElement>(null);
-  const [slot, setSlot] = useState<AdSlot>(ad?.slot ?? defaultSlot ?? AD_SLOTS[0]);
-  const [title, setTitle] = useState(ad?.title ?? "");
-  const [subtitle, setSubtitle] = useState(ad?.subtitle ?? "");
+  const [slot, setSlot] = useState<AdSlot>(ad?.slot ?? defaultSlot ?? prefill?.slot ?? AD_SLOTS[0]);
+  const [title, setTitle] = useState(ad?.title ?? prefill?.title ?? "");
+  const [subtitle, setSubtitle] = useState(ad?.subtitle ?? prefill?.subtitle ?? "");
   const [imageUrl, setImageUrl] = useState(ad?.imageUrl ?? "");
   const [fileName, setFileName] = useState("");
-  const [linkUrl, setLinkUrl] = useState(ad?.linkUrl ?? "");
-  const [startsAt, setStartsAt] = useState(ad?.startsAt || todayIso());
-  const [endsAt, setEndsAt] = useState(ad?.endsAt ?? "");
+  const [linkUrl, setLinkUrl] = useState(ad?.linkUrl ?? prefill?.linkUrl ?? "");
+  const [startsAt, setStartsAt] = useState(ad?.startsAt || prefill?.startsAt || todayIso());
+  const [endsAt, setEndsAt] = useState(ad?.endsAt ?? prefill?.endsAt ?? "");
   const [active, setActive] = useState(ad?.active ?? true);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);

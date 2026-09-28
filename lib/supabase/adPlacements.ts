@@ -88,20 +88,24 @@ export type AdPlacementInput = {
   sortOrder: number;
 };
 
-export async function createAd(values: AdPlacementInput): Promise<{ error: string | null }> {
+export async function createAd(values: AdPlacementInput): Promise<{ id: string | null; error: string | null }> {
   const supabase = createClient();
-  const { error } = await supabase.from("ad_placements").insert({
-    slot: values.slot,
-    title: values.title,
-    subtitle: values.subtitle || null,
-    image_url: values.imageUrl,
-    link_url: values.linkUrl || null,
-    starts_at: values.startsAt,
-    ends_at: values.endsAt || null,
-    active: values.active,
-    sort_order: values.sortOrder,
-  });
-  return { error: error?.message ?? null };
+  const { data, error } = await supabase
+    .from("ad_placements")
+    .insert({
+      slot: values.slot,
+      title: values.title,
+      subtitle: values.subtitle || null,
+      image_url: values.imageUrl,
+      link_url: values.linkUrl || null,
+      starts_at: values.startsAt,
+      ends_at: values.endsAt || null,
+      active: values.active,
+      sort_order: values.sortOrder,
+    })
+    .select("id")
+    .single();
+  return { id: data?.id ?? null, error: error?.message ?? null };
 }
 
 export async function updateAd(id: string, values: AdPlacementInput): Promise<{ error: string | null }> {

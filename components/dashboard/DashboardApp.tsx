@@ -11,13 +11,10 @@ import ChooseListingTypeModal from "./ChooseListingTypeModal";
 import EditDirectorioModal from "./EditDirectorioModal";
 import EditClasificadoModal from "./EditClasificadoModal";
 import EditEventoModal from "./EditEventoModal";
-import AdModal from "./AdModal";
+import AdModal, { type AdModalConfirmParams } from "./AdModal";
 import {
-  AD_CATALOG,
-  INITIAL_ADS,
   fmtMoney,
   toListingView,
-  type DashboardAd,
   type DashboardListing,
   type DirectorioListing,
   type ClasificadoListing,
@@ -29,28 +26,73 @@ import { getCurrentUser, signOutUser, updateMyName, type CurrentUser } from "@/l
 import { createBusiness, fetchMyBusinesses, updateBusinessFromDashboard } from "@/lib/supabase/businesses";
 import { createEvent, fetchMyEvents, updateEventFromDashboard } from "@/lib/supabase/events";
 import { createClasificado, fetchMyClasificados, updateClasificadoFromDashboard } from "@/lib/supabase/classifieds";
+import { deleteMyDraftOrder, fetchMyAdOrders, type AdOrder } from "@/lib/supabase/adOrders";
 
 export type DashboardTab = "resumen" | "publicaciones" | "publicidad" | "cuenta";
 export type ListingFilter = "todos" | "directorio" | "clasificado" | "evento";
 
 export type ListingRow = ListingView & { onEdit: () => void };
 
-export type AdView = DashboardAd & {
+export type AdView = {
+  id: string;
+  name: string;
   businessName: string;
+  billing: "mensual" | "trimestral";
   billingLabel: string;
+  price: number;
   priceFmt: string;
-  actionLabel: string;
+  period: string;
+  expires: string;
+  status: string;
+  statusColor: string;
+  statusBg: string;
+  canCancel: boolean;
 };
 
-function actionLabelFor(status: string): string {
-  if (status === "Activo") return "Pausar";
-  if (status === "Pausado") return "Reactivar";
-  if (status === "Vencido") return "Renovar";
-  return "Pagar ahora";
+function fmtDateShort(iso: string): string {
+  return new Date(iso + "T00:00:00").toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric" });
 }
 
-function fmtDate(d: Date): string {
-  return d.toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric" });
+function toAdView(order: AdOrder): AdView {
+  const today = new Date().toISOString().slice(0, 10);
+  let status = "Pendiente de pago";
+  let statusColor = "#EB600A";
+  let statusBg = "#FDEEE4";
+  if (order.status === "pendiente_aprobacion") {
+    status = "En revisión";
+    statusColor = "#3FA8C4";
+    statusBg = "#EAF8FA";
+  } else if (order.status === "aprobado") {
+    if (order.endsAt && order.endsAt < today) {
+      status = "Vencido";
+      statusColor = "#5C7679";
+      statusBg = "#EEF3F3";
+    } else {
+      status = "Activo";
+      statusColor = "#009BA4";
+      statusBg = "#E5F6F7";
+    }
+  } else if (order.status === "rechazado") {
+    status = "Rechazado";
+    statusColor = "#B94A2E";
+    statusBg = "#FBEAE6";
+  }
+
+  return {
+    id: order.id,
+    name: order.packageName,
+    businessName: order.listingName,
+    billing: order.billing,
+    billingLabel: order.billing === "trimestral" ? "Trimestral" : "Mensual",
+    price: order.amount,
+    priceFmt: fmtMoney(order.amount) + " MXN",
+    period: order.startsAt && order.endsAt ? `${fmtDateShort(order.startsAt)} – ${fmtDateShort(order.endsAt)}` : "—",
+    expires: order.endsAt,
+    status,
+    statusColor,
+    statusBg,
+    canCancel: order.status === "pendiente_pago",
+  };
 }
 
 async function fetchAllMyListings(userId: string): Promise<DashboardListing[]> {
@@ -65,7 +107,7 @@ export default function DashboardApp() {
 
   const [tab, setTab] = useState<DashboardTab>("resumen");
   const [listings, setListings] = useState<DashboardListing[]>([]);
-  const [ads, setAds] = useState<DashboardAd[]>(INITIAL_ADS);
+  const [adOrders, setAdOrders] = useState<AdOrder[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showTypePicker, setShowTypePicker] = useState(false);
   const [showAdModal, setShowAdModal] = useState(false);
@@ -82,6 +124,12 @@ export default function DashboardApp() {
       setCurrentUser(user);
       setUserNameInput(user.name);
       setListings(await fetchAllMyListings(user.id));
+      setAdOrders(await fetchMyAdOrders(user.id));
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("mp_status")) {
+        window.history.replaceState({}, "", "/dashboard");
+        setTab("publicidad");
+      }
       setAuthChecked(true);
     })();
   }, [router]);
@@ -94,14 +142,7 @@ export default function DashboardApp() {
   const listingRows: ListingRow[] = listings.map((l) => ({ ...toListingView(l), onEdit: () => setEditingId(l.id) }));
   const editing = listings.find((l) => l.id === editingId) ?? null;
 
-  const bizName = (id: string) => listingRows.find((l) => l.id === id)?.displayName ?? "—";
-  const adViews: AdView[] = ads.map((ad) => ({
-    ...ad,
-    businessName: bizName(ad.businessId),
-    billingLabel: ad.billing === "trimestral" ? "Trimestral" : "Mensual",
-    priceFmt: fmtMoney(ad.price) + " MXN",
-    actionLabel: actionLabelFor(ad.status),
-  }));
+  const adViews: AdView[] = adOrders.map(toAdView);
   const activeAds = adViews.filter((a) => a.status === "Activo");
   const adStats = {
     activeCount: activeAds.length,
@@ -171,41 +212,22 @@ export default function DashboardApp() {
     setTab("publicaciones");
   };
 
-  const handleAdAction = (id: string) => {
-    setAds((prev) =>
-      prev.map((ad) => {
-        if (ad.id !== id) return ad;
-        if (ad.status === "Activo") return { ...ad, status: "Pausado", statusColor: "#5C7679", statusBg: "#EEF3F3" };
-        return { ...ad, status: "Activo", statusColor: "#009BA4", statusBg: "#E5F6F7" };
-      })
-    );
+  const handleCancelAd = async (id: string) => {
+    await deleteMyDraftOrder(id);
+    setAdOrders((prev) => prev.filter((o) => o.id !== id));
   };
 
-  const handleCancelAd = (id: string) => {
-    setAds((prev) => prev.filter((ad) => ad.id !== id));
-  };
-
-  const handleConfirmAdModal = ({ businessId, billing, packageId }: { businessId: string; billing: "mensual" | "trimestral"; packageId: string }) => {
-    const pkg = AD_CATALOG.find((p) => p.id === packageId);
-    if (!pkg || !businessId) return;
-    const months = billing === "trimestral" ? 3 : 1;
-    const start = new Date();
-    const end = new Date(start);
-    end.setMonth(end.getMonth() + months);
-    const newAd: DashboardAd = {
-      id: "ad-" + Date.now(),
-      name: pkg.name,
-      businessId,
-      billing,
-      price: billing === "trimestral" ? pkg.trimestral : pkg.mensual,
-      period: `${fmtDate(start)} – ${fmtDate(end)}`,
-      expires: end.toISOString().slice(0, 10),
-      status: "Pendiente de pago",
-      statusColor: "#EB600A",
-      statusBg: "#FDEEE4",
-    };
-    setAds((prev) => [...prev, newAd]);
-    setShowAdModal(false);
+  const handleConfirmAdModal = async ({ listingId, listingType, listingName, billing, packageId }: AdModalConfirmParams) => {
+    const res = await fetch("/api/mercadopago/create-preference", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ packageId, billing, listingType, listingId, listingName }),
+    });
+    const data = await res.json();
+    if (!res.ok || !data.ok || !data.initPoint) {
+      throw new Error(data.error || "unknown_error");
+    }
+    window.location.href = data.initPoint;
   };
 
   const filteredListings = listingRows.filter((l) => listingFilter === "todos" || l.type === listingFilter);
@@ -250,7 +272,7 @@ export default function DashboardApp() {
             onAddListing={() => setShowTypePicker(true)}
           />
         )}
-        {tab === "publicidad" && <PublicidadTab ads={adViews} adStats={adStats} onOpenAdModal={() => setShowAdModal(true)} onAdAction={handleAdAction} onCancelAd={handleCancelAd} />}
+        {tab === "publicidad" && <PublicidadTab ads={adViews} adStats={adStats} onOpenAdModal={() => setShowAdModal(true)} onCancelAd={handleCancelAd} />}
         {tab === "cuenta" && (
           <CuentaTab
             userNameInput={userNameInput}

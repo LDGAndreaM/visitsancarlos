@@ -549,3 +549,51 @@ create policy "ads bucket: solo administradores suben" on storage.objects
 drop policy if exists "ads bucket: solo administradores borran" on storage.objects;
 create policy "ads bucket: solo administradores borran" on storage.objects
   for delete to authenticated using (bucket_id = 'ads' and public.is_admin(auth.uid()));
+
+-- ============ ÓRDENES DE ANUNCIO: compras que hace el negocio desde su Dashboard ============
+-- Un negocio elige un paquete de /paquetes y paga con Mercado Pago (pago único
+-- por el periodo, no suscripción). El precio SIEMPRE se recalcula en el
+-- servidor a partir del catálogo (nunca se confía en lo que mande el navegador).
+-- 'pendiente_pago'       = se creó la orden, esperando que Mercado Pago confirme el cobro.
+-- 'pendiente_aprobacion' = ya se cobró, esperando que un admin revise el contenido y lo publique.
+-- 'aprobado'             = el admin ya lo publicó (creó el ad_placement, marcó el evento
+--                          como destacado, o lo marcó como cumplido manualmente).
+-- 'rechazado'            = el admin no lo publicó; el reembolso (si aplica) se maneja
+--                          manualmente fuera de este sistema.
+create table if not exists public.ad_orders (
+  id uuid primary key default gen_random_uuid(),
+  owner_id uuid not null references public.profiles (id) on delete cascade,
+  package_id text not null,
+  package_name text not null,
+  billing text not null check (billing in ('mensual', 'trimestral')),
+  amount numeric not null,
+  listing_type text check (listing_type in ('business', 'event')),
+  listing_id uuid,
+  listing_name text not null,
+  status text not null default 'pendiente_pago' check (status in ('pendiente_pago', 'pendiente_aprobacion', 'aprobado', 'rechazado')),
+  mp_preference_id text,
+  mp_payment_id text,
+  starts_at date,
+  ends_at date,
+  ad_placement_id uuid references public.ad_placements (id) on delete set null,
+  created_at timestamptz not null default now(),
+  paid_at timestamptz
+);
+
+alter table public.ad_orders enable row level security;
+
+drop policy if exists "ad_orders: dueño ve las suyas, admin ve todas" on public.ad_orders;
+create policy "ad_orders: dueño ve las suyas, admin ve todas" on public.ad_orders
+  for select to authenticated using (owner_id = auth.uid() or public.is_admin(auth.uid()));
+
+drop policy if exists "ad_orders: dueño crea la suya" on public.ad_orders;
+create policy "ad_orders: dueño crea la suya" on public.ad_orders
+  for insert to authenticated with check (owner_id = auth.uid());
+
+drop policy if exists "ad_orders: solo admin actualiza" on public.ad_orders;
+create policy "ad_orders: solo admin actualiza" on public.ad_orders
+  for update to authenticated using (public.is_admin(auth.uid())) with check (public.is_admin(auth.uid()));
+
+drop policy if exists "ad_orders: dueño borra su borrador sin pagar" on public.ad_orders;
+create policy "ad_orders: dueño borra su borrador sin pagar" on public.ad_orders
+  for delete to authenticated using (owner_id = auth.uid() and status = 'pendiente_pago');

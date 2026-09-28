@@ -19,6 +19,7 @@
     "@tiptap/pm": "^3.31.3",
     "@tiptap/react": "^3.31.3",
     "@tiptap/starter-kit": "^3.31.3",
+    "mercadopago": "^3.6.1",
     "next": "^15.0.0",
     "nodemailer": "^10.0.11",
     "react": "^19.0.0",

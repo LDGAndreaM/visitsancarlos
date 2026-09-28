@@ -11,14 +11,13 @@ type PublicidadTabProps = {
   ads: AdView[];
   adStats: AdStats;
   onOpenAdModal: () => void;
-  onAdAction: (id: string) => void;
   onCancelAd: (id: string) => void;
 };
 
 const statCardStyle: React.CSSProperties = { background: "#ffffff", borderRadius: 16, padding: 20, boxShadow: "0 8px 20px rgba(0,60,66,0.06)", display: "flex", flexDirection: "column", gap: 6 };
 const gridCols = "1.8fr 1.3fr 1.3fr 0.9fr 1fr 1.4fr";
 
-export default function PublicidadTab({ ads, adStats, onOpenAdModal, onAdAction, onCancelAd }: PublicidadTabProps) {
+export default function PublicidadTab({ ads, adStats, onOpenAdModal, onCancelAd }: PublicidadTabProps) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
@@ -63,15 +62,11 @@ export default function PublicidadTab({ ads, adStats, onOpenAdModal, onAdAction,
             <span style={{ fontSize: 13, fontWeight: 700, color: "#143840" }}>{ad.priceFmt}</span>
             <span style={{ fontSize: 12, fontWeight: 700, color: ad.statusColor, background: ad.statusBg, padding: "5px 12px", borderRadius: 999, width: "fit-content" }}>{ad.status}</span>
             <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-              <button
-                onClick={() => onAdAction(ad.id)}
-                style={{ border: "2px solid #009BA4", background: "#ffffff", color: "#009BA4", fontWeight: 700, fontSize: 12, padding: "8px 14px", borderRadius: 8, cursor: "pointer", width: "fit-content" }}
-              >
-                {ad.actionLabel}
-              </button>
-              <button onClick={() => onCancelAd(ad.id)} style={{ border: "none", background: "none", color: "#B94A2E", fontWeight: 700, fontSize: 12, cursor: "pointer" }}>
-                Cancelar
-              </button>
+              {ad.canCancel && (
+                <button onClick={() => onCancelAd(ad.id)} style={{ border: "none", background: "none", color: "#B94A2E", fontWeight: 700, fontSize: 12, cursor: "pointer" }}>
+                  Cancelar
+                </button>
+              )}
             </div>
           </div>
         ))}

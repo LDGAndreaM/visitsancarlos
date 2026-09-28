@@ -39,6 +39,7 @@ import { deletePhoto, fetchAllPhotosAdmin, updatePhoto, uploadPhoto, type Galler
 import { deleteContactMessage, fetchContactMessages, setContactMessageRead, type ContactMessage } from "@/lib/supabase/contact";
 import { appendChatMessages, fetchAllChatConversationsAdmin, markChatConversationRead } from "@/lib/supabase/chatConversations";
 import { createAd, deleteAd, fetchAllAdsAdmin, setAdActive, updateAd, type AdPlacement, type AdPlacementInput, type AdSlot } from "@/lib/supabase/adPlacements";
+import { approveOrderAsEventFeature, approveOrderManual, approveOrderWithPlacement, fetchAllOrdersAdmin, rejectOrder, PACKAGE_SLOT_MAP, type AdOrder } from "@/lib/supabase/adOrders";
 
 const TITLES: Record<AdminTab, [string, string]> = {
   resumen: ["Panel administrativo", "Resumen general de Visit San Carlos"],
@@ -72,7 +73,8 @@ export default function AdminApp() {
   const [contactMessages, setContactMessages] = useState<ContactMessage[]>([]);
   const [ads] = useState(INITIAL_ADMIN_ADS);
   const [adPlacements, setAdPlacements] = useState<AdPlacement[]>([]);
-  const [adModal, setAdModal] = useState<{ mode: "new"; slot: AdSlot } | { mode: "edit"; ad: AdPlacement } | null>(null);
+  const [adOrders, setAdOrders] = useState<AdOrder[]>([]);
+  const [adModal, setAdModal] = useState<{ mode: "new"; slot: AdSlot } | { mode: "edit"; ad: AdPlacement } | { mode: "fromOrder"; order: AdOrder; slot: AdSlot } | null>(null);
   const [chats, setChats] = useState<Chat[]>(INITIAL_CHATS);
   const [activeChatId, setActiveChatId] = useState("chat-1");
 
@@ -98,6 +100,7 @@ export default function AdminApp() {
   const refreshBlogPosts = async () => setBlogPosts(await fetchAllPostsAdmin());
   const refreshPhotos = async () => setPhotos(await fetchAllPhotosAdmin());
   const refreshAdPlacements = async () => setAdPlacements(await fetchAllAdsAdmin());
+  const refreshAdOrders = async () => setAdOrders(await fetchAllOrdersAdmin());
 
   useEffect(() => {
     (async () => {
@@ -107,7 +110,7 @@ export default function AdminApp() {
         return;
       }
       setCurrentAccount(account);
-      const [accts, biz, evs, cls, posts, pics, msgs, convos, adsPlacements] = await Promise.all([
+      const [accts, biz, evs, cls, posts, pics, msgs, convos, adsPlacements, orders] = await Promise.all([
         fetchAdminAccounts(),
         fetchAllBusinessesAdmin(),
         fetchAllEventsAdmin(),
@@ -117,6 +120,7 @@ export default function AdminApp() {
         fetchContactMessages(),
         fetchAllChatConversationsAdmin(),
         fetchAllAdsAdmin(),
+        fetchAllOrdersAdmin(),
       ]);
       setAccounts(accts);
       setBusinesses(biz);
@@ -127,6 +131,7 @@ export default function AdminApp() {
       setPhotos(pics);
       setChats(convos);
       setAdPlacements(adsPlacements);
+      setAdOrders(orders);
       if (convos[0]) setActiveChatId(convos[0].id);
       setAuthChecked(true);
     })();
@@ -325,7 +330,11 @@ export default function AdminApp() {
     if (adModal?.mode === "edit") {
       await updateAd(adModal.ad.id, values);
     } else {
-      await createAd(values);
+      const { id } = await createAd(values);
+      if (adModal?.mode === "fromOrder" && id) {
+        await approveOrderWithPlacement(adModal.order.id, id);
+        await refreshAdOrders();
+      }
     }
     setAdModal(null);
     await refreshAdPlacements();
@@ -337,6 +346,24 @@ export default function AdminApp() {
   const deleteAdHandler = async (id: string) => {
     await deleteAd(id);
     setAdPlacements((prev) => prev.filter((a) => a.id !== id));
+  };
+
+  const openOrderPlacementModal = (order: AdOrder) => {
+    const slot = PACKAGE_SLOT_MAP[order.packageId];
+    if (!slot || slot === "eventos") return;
+    setAdModal({ mode: "fromOrder", order, slot });
+  };
+  const approveEventOrderHandler = async (order: AdOrder) => {
+    await approveOrderAsEventFeature(order);
+    await Promise.all([refreshAdOrders(), refreshEvents()]);
+  };
+  const approveManualOrderHandler = async (order: AdOrder) => {
+    await approveOrderManual(order.id);
+    await refreshAdOrders();
+  };
+  const rejectOrderHandler = async (order: AdOrder) => {
+    await rejectOrder(order.id);
+    await refreshAdOrders();
   };
 
   const toggleContactMessageRead = async (id: string, read: boolean) => {
@@ -458,7 +485,18 @@ export default function AdminApp() {
         {tab === "galeria" && <GaleriaAdminTab photos={photos} onOpenUpload={() => setShowUploadPhoto(true)} onEdit={setEditingPhoto} onDelete={deletePhotoHandler} />}
         {tab === "publicidad" && <PublicidadAdminTab ads={ads} adminAdStats={adminAdStats} revenueFmt={stats.revenueFmt} />}
         {tab === "anuncios" && (
-          <AnunciosAdminTab ads={adPlacements} onOpenNew={openNewAd} onEdit={openEditAd} onToggleActive={toggleAdActiveHandler} onDelete={deleteAdHandler} />
+          <AnunciosAdminTab
+            ads={adPlacements}
+            orders={adOrders}
+            onOpenNew={openNewAd}
+            onEdit={openEditAd}
+            onToggleActive={toggleAdActiveHandler}
+            onDelete={deleteAdHandler}
+            onCreatePlacementForOrder={openOrderPlacementModal}
+            onApproveEventOrder={approveEventOrderHandler}
+            onApproveManualOrder={approveManualOrderHandler}
+            onRejectOrder={rejectOrderHandler}
+          />
         )}
         {tab === "soporte" && <SoporteTab chats={chats} activeChatId={activeChatId} onSelectChat={selectChat} onSendMessage={sendChatMessage} />}
         {tab === "contacto" && <ContactoAdminTab messages={contactMessages} onToggleRead={toggleContactMessageRead} onDelete={deleteContactMessageHandler} />}
@@ -478,7 +516,18 @@ export default function AdminApp() {
       {adModal && (
         <AdPlacementModal
           ad={adModal.mode === "edit" ? adModal.ad : null}
-          defaultSlot={adModal.mode === "new" ? adModal.slot : undefined}
+          defaultSlot={adModal.mode === "new" ? adModal.slot : adModal.mode === "fromOrder" ? adModal.slot : undefined}
+          prefill={
+            adModal.mode === "fromOrder"
+              ? {
+                  slot: adModal.slot,
+                  title: adModal.order.listingName,
+                  startsAt: adModal.order.startsAt,
+                  endsAt: adModal.order.endsAt,
+                  linkUrl: adModal.order.listingType === "business" ? `/directorio/${adModal.order.listingId}` : "",
+                }
+              : undefined
+          }
           onClose={() => setAdModal(null)}
           onSave={saveAdHandler}
         />

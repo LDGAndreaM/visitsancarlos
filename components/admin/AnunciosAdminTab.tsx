@@ -1,11 +1,18 @@
+import { fmtMoneyMXN } from "@/lib/adminData";
 import { AD_SLOTS, AD_SLOT_LABELS, AD_SLOT_LIMITS, type AdPlacement, type AdSlot } from "@/lib/supabase/adPlacements";
+import { PACKAGE_SLOT_MAP, type AdOrder } from "@/lib/supabase/adOrders";
 
 type AnunciosAdminTabProps = {
   ads: AdPlacement[];
+  orders: AdOrder[];
   onOpenNew: (slot: AdSlot) => void;
   onEdit: (ad: AdPlacement) => void;
   onToggleActive: (ad: AdPlacement) => void;
   onDelete: (id: string) => void;
+  onCreatePlacementForOrder: (order: AdOrder) => void;
+  onApproveEventOrder: (order: AdOrder) => void;
+  onApproveManualOrder: (order: AdOrder) => void;
+  onRejectOrder: (order: AdOrder) => void;
 };
 
 function fmtDate(iso: string): string {
@@ -13,9 +20,69 @@ function fmtDate(iso: string): string {
   return new Date(iso + "T00:00:00").toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric" });
 }
 
-export default function AnunciosAdminTab({ ads, onOpenNew, onEdit, onToggleActive, onDelete }: AnunciosAdminTabProps) {
+const ORDER_STATUS_DISPLAY: Record<AdOrder["status"], { label: string; color: string; bg: string }> = {
+  pendiente_pago: { label: "Sin pagar (carrito abandonado)", color: "#7FA7AA", bg: "#F4FAFB" },
+  pendiente_aprobacion: { label: "Pagado — pendiente de revisión", color: "#EB600A", bg: "#FDEEE4" },
+  aprobado: { label: "Aprobado", color: "#009BA4", bg: "#E5F6F7" },
+  rechazado: { label: "Rechazado", color: "#B94A2E", bg: "#FBEAE6" },
+};
+
+function OrdersSection({ orders, onCreatePlacementForOrder, onApproveEventOrder, onApproveManualOrder, onRejectOrder }: Pick<AnunciosAdminTabProps, "orders" | "onCreatePlacementForOrder" | "onApproveEventOrder" | "onApproveManualOrder" | "onRejectOrder">) {
+  const actionable = orders.filter((o) => o.status !== "pendiente_pago");
+  if (actionable.length === 0) return null;
+
+  return (
+    <div style={{ background: "#ffffff", borderRadius: 18, boxShadow: "0 8px 20px rgba(0,60,66,0.06)", padding: 20, display: "flex", flexDirection: "column", gap: 14 }}>
+      <span style={{ fontSize: 15, fontWeight: 800, color: "#143840" }}>Solicitudes de compra (Dashboard)</span>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {actionable.map((order) => {
+          const slot = PACKAGE_SLOT_MAP[order.packageId];
+          const display = ORDER_STATUS_DISPLAY[order.status];
+          const pending = order.status === "pendiente_aprobacion";
+          return (
+            <div key={order.id} style={{ border: "1px solid #EEF3F3", borderRadius: 12, padding: 14, display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+              <div style={{ flex: 1, minWidth: 220 }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: "#143840", display: "block" }}>{order.packageName}</span>
+                <span style={{ fontSize: 12.5, color: "#5C7679" }}>
+                  {order.listingName} · {order.billing === "trimestral" ? "Trimestral" : "Mensual"} · {fmtMoneyMXN(order.amount)}
+                </span>
+              </div>
+              <span style={{ fontSize: 11, fontWeight: 700, color: display.color, background: display.bg, padding: "5px 12px", borderRadius: 999 }}>{display.label}</span>
+              {pending && (
+                <div style={{ display: "flex", gap: 10 }}>
+                  {slot && slot !== "eventos" && (
+                    <button onClick={() => onCreatePlacementForOrder(order)} style={{ border: "none", background: "#009BA4", color: "#ffffff", fontWeight: 700, fontSize: 12, padding: "8px 14px", borderRadius: 8, cursor: "pointer" }}>
+                      Crear anuncio
+                    </button>
+                  )}
+                  {slot === "eventos" && (
+                    <button onClick={() => onApproveEventOrder(order)} style={{ border: "none", background: "#009BA4", color: "#ffffff", fontWeight: 700, fontSize: 12, padding: "8px 14px", borderRadius: 8, cursor: "pointer" }}>
+                      Aprobar y destacar evento
+                    </button>
+                  )}
+                  {!slot && (
+                    <button onClick={() => onApproveManualOrder(order)} style={{ border: "none", background: "#009BA4", color: "#ffffff", fontWeight: 700, fontSize: 12, padding: "8px 14px", borderRadius: 8, cursor: "pointer" }}>
+                      Marcar como cumplido
+                    </button>
+                  )}
+                  <button onClick={() => onRejectOrder(order)} style={{ border: "none", background: "none", color: "#B94A2E", fontWeight: 700, fontSize: 12, cursor: "pointer" }}>
+                    Rechazar
+                  </button>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <p style={{ margin: 0, fontSize: 12, color: "#7FA7AA" }}>Si rechazas una solicitud ya pagada, el reembolso se maneja manualmente desde tu cuenta de Mercado Pago.</p>
+    </div>
+  );
+}
+
+export default function AnunciosAdminTab({ ads, orders, onOpenNew, onEdit, onToggleActive, onDelete, onCreatePlacementForOrder, onApproveEventOrder, onApproveManualOrder, onRejectOrder }: AnunciosAdminTabProps) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+      <OrdersSection orders={orders} onCreatePlacementForOrder={onCreatePlacementForOrder} onApproveEventOrder={onApproveEventOrder} onApproveManualOrder={onApproveManualOrder} onRejectOrder={onRejectOrder} />
       {AD_SLOTS.map((slot) => {
         const slotAds = ads.filter((a) => a.slot === slot);
         return (

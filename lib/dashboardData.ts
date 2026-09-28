@@ -198,7 +198,6 @@ export const AD_CATALOG: AdCatalogItem[] = [
   { id: "A", category: "Sitio web", name: "Vistas Doradas — Carrusel Home", mensual: 1500, trimestral: 4050 },
   { id: "B", category: "Sitio web", name: "Sueño con vista al mar — Carrusel Hospedaje", mensual: 1200, trimestral: 3240 },
   { id: "C", category: "Sitio web", name: "Sabor local — Sección Restaurantes", mensual: 1000, trimestral: 2700 },
-  { id: "D", category: "Sitio web", name: "Escápate a San Carlos — Anuncio lateral", mensual: 800, trimestral: 2160 },
   { id: "E", category: "Sitio web", name: "Estrella del mes — Banner exclusivo", mensual: 2500, trimestral: 6750 },
   { id: "F", category: "Sitio web", name: "Directorio Premium — Carrusel Directorio", mensual: 1900, trimestral: 5130 },
   { id: "G", category: "Sitio web", name: "Eventos Destacados — Carrusel Eventos", mensual: 1600, trimestral: 4320 },
