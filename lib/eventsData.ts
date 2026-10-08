@@ -23,6 +23,7 @@ export type EventItem = {
   instagram: string;
   website: string;
   featured: boolean;
+  photoUrl?: string;
 };
 
 export const EVENT_CATEGORIES = ["Cultural", "Deportivo", "Gastronomía", "Comunidad", "Entretenimiento"];

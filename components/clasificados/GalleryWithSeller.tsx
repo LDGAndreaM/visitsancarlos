@@ -2,7 +2,7 @@ import Gallery from "@/components/Gallery";
 import SellerCard from "./SellerCard";
 
 type GalleryWithSellerProps = {
-  images: { id: string; placeholder: string }[];
+  images: { id: string; placeholder: string; url?: string }[];
   sellerName: string;
   phone: string;
 };

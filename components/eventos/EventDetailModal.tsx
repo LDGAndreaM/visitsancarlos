@@ -1,4 +1,4 @@
-import ImagePlaceholder from "@/components/ImagePlaceholder";
+import ListingImage from "@/components/ListingImage";
 import SocialIcon from "@/components/SocialIcon";
 import type { EventItem } from "@/lib/eventsData";
 import { downloadIcs, fmtDateLabel } from "@/lib/eventsUtils";
@@ -37,7 +37,7 @@ export default function EventDetailModal({ event, onClose }: EventDetailModalPro
         }}
       >
         <div style={{ height: 180 }}>
-          <ImagePlaceholder caption="Foto del evento" />
+          <ListingImage src={event.photoUrl} caption="Foto del evento" />
         </div>
         <div style={{ padding: 28, display: "flex", flexDirection: "column", gap: 12 }}>
           <span style={{ fontSize: 12, fontWeight: 700, color: "#EB600A", letterSpacing: "0.03em" }}>{event.category}</span>

@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import ImagePlaceholder from "@/components/ImagePlaceholder";
+import ListingImage from "@/components/ListingImage";
 
 type GalleryProps = {
-  images: { id: string; placeholder: string }[];
+  images: { id: string; placeholder: string; url?: string }[];
 };
 
 export default function Gallery({ images }: GalleryProps) {
@@ -15,7 +15,7 @@ export default function Gallery({ images }: GalleryProps) {
   return (
     <div>
       <div style={{ height: 420, borderRadius: 20, overflow: "hidden", boxShadow: "0 16px 36px rgba(0,60,66,0.1)" }}>
-        <ImagePlaceholder caption={images[active].placeholder} />
+        <ListingImage src={images[active].url} caption={images[active].placeholder} />
       </div>
       {images.length > 1 && (
         <div className="vsc-scroll" style={{ display: "flex", gap: 12, marginTop: 14, overflowX: "auto" }}>
@@ -34,7 +34,7 @@ export default function Gallery({ images }: GalleryProps) {
                 background: "none",
               }}
             >
-              <ImagePlaceholder caption={img.placeholder} />
+              <ListingImage src={img.url} caption={img.placeholder} />
             </button>
           ))}
         </div>

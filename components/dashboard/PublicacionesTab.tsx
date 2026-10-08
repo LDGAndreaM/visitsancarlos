@@ -1,4 +1,4 @@
-import ImagePlaceholder from "@/components/ImagePlaceholder";
+import ListingImage from "@/components/ListingImage";
 import type { ListingFilter, ListingRow } from "./DashboardApp";
 
 type PublicacionesTabProps = {
@@ -52,7 +52,7 @@ export default function PublicacionesTab({ listings, filter, onFilterChange, onA
       {listings.map((l) => (
         <div key={l.id} style={{ background: "#ffffff", borderRadius: 18, padding: 20, boxShadow: "0 8px 20px rgba(0,60,66,0.06)", display: "flex", alignItems: "center", gap: 18 }}>
           <div style={{ width: 72, height: 72, borderRadius: 14, overflow: "hidden", flexShrink: 0 }}>
-            <ImagePlaceholder caption="Foto" />
+            <ListingImage src={l.photoUrl} caption="Foto" />
           </div>
           <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 4 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>

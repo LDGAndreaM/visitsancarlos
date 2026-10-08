@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ImagePlaceholder from "@/components/ImagePlaceholder";
+import ListingImage from "@/components/ListingImage";
 import BizCategoryIcon from "./BizCategoryIcon";
 import type { Business } from "@/lib/directorioData";
 import { badgeColor, priceChars, starsArr } from "@/lib/directorioUtils";
@@ -17,7 +17,7 @@ export default function BusinessGridCard({ business: biz, isFavorite, onToggleFa
       style={{ display: "block", background: "#ffffff", borderRadius: 18, overflow: "hidden", boxShadow: "0 10px 24px rgba(0,60,66,0.08)", color: "inherit" }}
     >
       <div style={{ position: "relative", height: 180 }}>
-        <ImagePlaceholder caption={biz.placeholder} />
+        <ListingImage src={biz.photoUrl} caption={biz.placeholder} />
         {biz.badge && (
           <span style={{ position: "absolute", top: 10, left: 10, background: badgeColor(biz.badge), color: "#ffffff", fontSize: 11, fontWeight: 700, padding: "5px 12px", borderRadius: 999, zIndex: 2 }}>
             {biz.badge}

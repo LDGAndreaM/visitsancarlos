@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import ImagePlaceholder from "@/components/ImagePlaceholder";
+import ListingImage from "@/components/ListingImage";
 import MobileBottomSheet from "@/components/mobile/MobileBottomSheet";
 import { MobileIcon } from "@/components/mobile/icons";
 import {
@@ -147,7 +147,7 @@ export default function DirectorioMobile({
                 style={{ background: "#ffffff", borderRadius: 22, overflow: "hidden", boxShadow: "0 8px 22px rgba(0,60,66,0.1)", display: "flex", flexDirection: "column", color: "#143840" }}
               >
                 <div style={{ height: 150, position: "relative" }}>
-                  <ImagePlaceholder caption={b.placeholder} />
+                  <ListingImage src={b.photoUrl} caption={b.placeholder} />
                   <span style={{ position: "absolute", top: 12, left: 12, background: "#ffffff", color: "#009BA4", fontSize: 10, fontWeight: 700, letterSpacing: "0.05em", padding: "4px 10px", borderRadius: 999 }}>
                     {b.category}
                   </span>
@@ -211,7 +211,7 @@ export default function DirectorioMobile({
                 }}
               >
                 <div style={{ width: 56, height: 56, borderRadius: 12, overflow: "hidden", flexShrink: 0 }}>
-                  <ImagePlaceholder caption={b.placeholder} />
+                  <ListingImage src={b.photoUrl} caption={b.placeholder} />
                 </div>
                 <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 2 }}>
                   <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.05em", color: "#009BA4" }}>{b.category}</span>

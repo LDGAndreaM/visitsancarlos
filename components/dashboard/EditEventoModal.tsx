@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import ListingImage from "@/components/ListingImage";
+import { deleteListingImage, uploadListingImage } from "@/lib/supabase/listingUploads";
 import { EVENT_CATEGORIES } from "@/lib/eventsData";
 import type { EventListing } from "@/lib/dashboardData";
 
 type EditEventoModalProps = {
   listing: EventListing;
+  ownerId: string;
   onClose: () => void;
   onSave: (listing: EventListing) => void;
 };
@@ -14,7 +17,7 @@ const fieldStyle: React.CSSProperties = { display: "flex", flexDirection: "colum
 const labelStyle: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: "#143840" };
 const inputStyle: React.CSSProperties = { border: "1px solid #E2ECED", outline: "none", borderRadius: 10, padding: "11px 14px", fontSize: 14, fontFamily: "inherit" };
 
-export default function EditEventoModal({ listing, onClose, onSave }: EditEventoModalProps) {
+export default function EditEventoModal({ listing, ownerId, onClose, onSave }: EditEventoModalProps) {
   const [form, setForm] = useState({
     name: listing.name,
     date: listing.date,
@@ -33,9 +36,23 @@ export default function EditEventoModal({ listing, onClose, onSave }: EditEvento
     website: listing.website,
     visibility: listing.visibility,
   });
+  const [photoUrl, setPhotoUrl] = useState(listing.photoUrl);
+  const [photoUploading, setPhotoUploading] = useState(false);
+
+  const handlePhotoFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setPhotoUploading(true);
+    const { url } = await uploadListingImage(ownerId, "events", file);
+    setPhotoUploading(false);
+    if (!url) return;
+    if (photoUrl) deleteListingImage(photoUrl);
+    setPhotoUrl(url);
+  };
 
   const handleSave = () => {
-    onSave({ ...listing, ...form });
+    onSave({ ...listing, ...form, photoUrl });
   };
 
   return (
@@ -49,6 +66,14 @@ export default function EditEventoModal({ listing, onClose, onSave }: EditEvento
         <div style={fieldStyle}>
           <label style={labelStyle}>Nombre del evento</label>
           <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} type="text" style={inputStyle} />
+        </div>
+
+        <div style={fieldStyle}>
+          <label style={labelStyle}>Foto del evento</label>
+          <label style={{ height: 130, borderRadius: 14, overflow: "hidden", cursor: photoUploading ? "default" : "pointer", display: "block" }}>
+            <input type="file" accept="image/*" disabled={photoUploading} style={{ display: "none" }} onChange={handlePhotoFile} />
+            <ListingImage src={photoUrl} caption={photoUploading ? "Subiendo…" : "Foto del evento"} />
+          </label>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>

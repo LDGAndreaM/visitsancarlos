@@ -16,6 +16,7 @@ export type Clasificado = {
   placeholder: string;
   description?: string;
   sellerName?: string;
+  photoUrl?: string;
 };
 
 export const CLASIFICADOS_CATEGORIES: ClasificadoCategory[] = [

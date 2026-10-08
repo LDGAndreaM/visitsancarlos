@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ImagePlaceholder from "@/components/ImagePlaceholder";
+import ListingImage from "@/components/ListingImage";
 import type { Clasificado } from "@/lib/clasificadosData";
 import { priceLabel } from "@/lib/clasificadosUtils";
 
@@ -17,7 +17,7 @@ export default function RelatedClasificados({ items }: { items: Clasificado[] })
             style={{ display: "block", background: "#ffffff", borderRadius: 16, overflow: "hidden", boxShadow: "0 8px 20px rgba(0,60,66,0.08)", color: "inherit" }}
           >
             <div style={{ height: 130 }}>
-              <ImagePlaceholder caption={it.placeholder} />
+              <ListingImage src={it.photoUrl} caption={it.placeholder} />
             </div>
             <div style={{ padding: 14, display: "flex", flexDirection: "column", gap: 6 }}>
               <span style={{ fontSize: 14, fontWeight: 700, color: "#143840" }}>{it.title}</span>

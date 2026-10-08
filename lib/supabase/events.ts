@@ -22,6 +22,7 @@ type EventRow = {
   instagram: string | null;
   website: string | null;
   photo_placeholder: string | null;
+  photo_url: string | null;
   status: "pendiente" | "aprobado" | "rechazado" | "archivado";
   featured: boolean;
   created_at: string;
@@ -48,6 +49,7 @@ export function toPublicEvent(row: EventRow): EventItem {
     instagram: row.instagram ?? "",
     website: row.website ?? "",
     featured: row.featured,
+    photoUrl: row.photo_url ?? "",
   };
 }
 
@@ -83,6 +85,7 @@ export function toEventListing(row: EventRow): EventListing {
     website: row.website ?? "",
     visibility: s.visibility,
     pendingApproval: s.pending,
+    photoUrl: row.photo_url ?? "",
   };
 }
 
@@ -177,6 +180,7 @@ export async function updateEventFromDashboard(id: string, listing: EventListing
       facebook: listing.facebook,
       instagram: listing.instagram,
       website: listing.website,
+      photo_url: listing.photoUrl || null,
     })
     .eq("id", id);
 }

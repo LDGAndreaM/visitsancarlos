@@ -5,7 +5,7 @@ export type Spec = { label: string; value: string };
 export type ClasificadoDetail = {
   description: string;
   specs: Spec[];
-  images: { id: string; placeholder: string }[];
+  images: { id: string; placeholder: string; url?: string }[];
   sellerName: string;
 };
 
@@ -25,7 +25,7 @@ export function getClasificadoDetail(item: Clasificado): ClasificadoDetail {
   return {
     description: item.description ?? "",
     specs: defaultSpecs(item),
-    images: [{ id: `${item.id}-img-0`, placeholder: item.placeholder }],
+    images: [{ id: `${item.id}-img-0`, placeholder: item.placeholder, url: item.photoUrl || undefined }],
     sellerName: item.sellerName || "Vendedor",
   };
 }

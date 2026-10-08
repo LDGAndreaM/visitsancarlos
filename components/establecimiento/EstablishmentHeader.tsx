@@ -1,3 +1,4 @@
+import ListingImage from "@/components/ListingImage";
 import type { Business } from "@/lib/directorioData";
 import { badgeColor, starsArr } from "@/lib/directorioUtils";
 
@@ -9,7 +10,14 @@ type EstablishmentHeaderProps = {
 export default function EstablishmentHeader({ business, tags }: EstablishmentHeaderProps) {
   return (
     <section style={{ padding: "16px 48px 0", maxWidth: 1180, margin: "0 auto" }}>
-      <h1 style={{ margin: "0 0 10px", fontSize: 30, fontWeight: 800, color: "#143840" }}>{business.name}</h1>
+      <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 10 }}>
+        {business.logoUrl && (
+          <span style={{ width: 52, height: 52, borderRadius: "50%", overflow: "hidden", flexShrink: 0, boxShadow: "0 2px 8px rgba(0,60,66,0.15)" }}>
+            <ListingImage src={business.logoUrl} caption={business.name} round />
+          </span>
+        )}
+        <h1 style={{ margin: 0, fontSize: 30, fontWeight: 800, color: "#143840" }}>{business.name}</h1>
+      </div>
       <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
         {business.badge && (
           <span style={{ background: badgeColor(business.badge), color: "#ffffff", fontSize: 11, fontWeight: 700, padding: "5px 12px", borderRadius: 999 }}>{business.badge}</span>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ImagePlaceholder from "@/components/ImagePlaceholder";
+import ListingImage from "@/components/ListingImage";
 import type { Clasificado } from "@/lib/clasificadosData";
 import { categoryColor, priceLabel } from "@/lib/clasificadosUtils";
 
@@ -10,7 +10,7 @@ export default function ClasificadoGridCard({ item }: { item: Clasificado }) {
       style={{ display: "block", background: "#ffffff", borderRadius: 18, overflow: "hidden", boxShadow: "0 10px 24px rgba(0,60,66,0.08)", color: "inherit" }}
     >
       <div style={{ position: "relative", height: 180 }}>
-        <ImagePlaceholder caption={item.placeholder} />
+        <ListingImage src={item.photoUrl} caption={item.placeholder} />
         <span style={{ position: "absolute", top: 10, left: 10, background: categoryColor(item.category), color: "#ffffff", fontSize: 11, fontWeight: 700, padding: "5px 12px", borderRadius: 999, zIndex: 2 }}>
           {item.category}
         </span>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ImagePlaceholder from "@/components/ImagePlaceholder";
+import ListingImage from "@/components/ListingImage";
 import EventDetailModal from "./EventDetailModal";
 import type { EventItem } from "@/lib/eventsData";
 import { fetchApprovedEvents } from "@/lib/supabase/events";
@@ -60,7 +60,7 @@ export default function FeaturedEvents() {
                 PATROCINADO
               </span>
               <div style={{ height: 140 }}>
-                <ImagePlaceholder caption={`Foto: ${e.name}`} />
+                <ListingImage src={e.photoUrl} caption={`Foto: ${e.name}`} />
               </div>
               <div style={{ padding: 14, display: "flex", flexDirection: "column", gap: 4 }}>
                 <span style={{ fontSize: 11, fontWeight: 700, color: "#009BA4" }}>{e.category}</span>

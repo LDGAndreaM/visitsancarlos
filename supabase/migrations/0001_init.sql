@@ -126,6 +126,13 @@ create table if not exists public.businesses (
   created_at timestamptz not null default now()
 );
 
+-- Fotos reales del negocio (antes solo existía photo_placeholder, un texto
+-- de muestra). logo_url y photo_url son una sola imagen cada una;
+-- gallery_urls es la galería (hasta 10, ese límite se valida en la app).
+alter table public.businesses add column if not exists logo_url text;
+alter table public.businesses add column if not exists photo_url text;
+alter table public.businesses add column if not exists gallery_urls text[] not null default '{}'::text[];
+
 alter table public.businesses enable row level security;
 
 drop policy if exists "businesses: lectura pública de aprobados" on public.businesses;
@@ -215,6 +222,9 @@ create table if not exists public.classifieds (
   created_at timestamptz not null default now()
 );
 
+-- Foto real del artículo (antes solo existía photo_placeholder, un texto de muestra).
+alter table public.classifieds add column if not exists photo_url text;
+
 alter table public.classifieds enable row level security;
 
 drop policy if exists "classifieds: lectura pública de aprobados" on public.classifieds;
@@ -257,6 +267,10 @@ create table if not exists public.events (
   featured boolean not null default false,
   created_at timestamptz not null default now()
 );
+
+-- Foto real del evento (existe photo_placeholder desde el inicio pero la app
+-- nunca lo leía ni lo escribía).
+alter table public.events add column if not exists photo_url text;
 
 alter table public.events enable row level security;
 
@@ -597,3 +611,25 @@ create policy "ad_orders: solo admin actualiza" on public.ad_orders
 drop policy if exists "ad_orders: dueño borra su borrador sin pagar" on public.ad_orders;
 create policy "ad_orders: dueño borra su borrador sin pagar" on public.ad_orders
   for delete to authenticated using (owner_id = auth.uid() and status = 'pendiente_pago');
+
+-- ============ FOTOS DE NEGOCIOS/EVENTOS/CLASIFICADOS (subidas por su dueño) ============
+-- A diferencia de "gallery" y "ads" (solo admin sube), aquí cualquier usuario
+-- autenticado puede subir — pero solo dentro de su propia carpeta: cada
+-- archivo se guarda como "<auth.uid()>/..." y la policy exige que el primer
+-- segmento de la ruta sea igual a auth.uid(), así nadie puede subir o borrar
+-- dentro de la carpeta de otro usuario.
+insert into storage.buckets (id, name, public)
+values ('listings', 'listings', true)
+on conflict (id) do nothing;
+
+drop policy if exists "listings bucket: lectura pública" on storage.objects;
+create policy "listings bucket: lectura pública" on storage.objects
+  for select using (bucket_id = 'listings');
+
+drop policy if exists "listings bucket: el dueño sube en su carpeta" on storage.objects;
+create policy "listings bucket: el dueño sube en su carpeta" on storage.objects
+  for insert to authenticated with check (bucket_id = 'listings' and (storage.foldername(name))[1] = auth.uid()::text);
+
+drop policy if exists "listings bucket: el dueño borra lo suyo" on storage.objects;
+create policy "listings bucket: el dueño borra lo suyo" on storage.objects
+  for delete to authenticated using (bucket_id = 'listings' and (storage.foldername(name))[1] = auth.uid()::text);

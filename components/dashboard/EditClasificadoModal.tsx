@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import ImagePlaceholder from "@/components/ImagePlaceholder";
+import ListingImage from "@/components/ListingImage";
+import { deleteListingImage, uploadListingImage } from "@/lib/supabase/listingUploads";
 import { CLASIFICADOS_CATEGORIES, type ClasificadoCategory } from "@/lib/clasificadosData";
 import type { ClasificadoListing } from "@/lib/dashboardData";
 
 type EditClasificadoModalProps = {
   listing: ClasificadoListing;
+  ownerId: string;
   onClose: () => void;
   onSave: (listing: ClasificadoListing) => void;
 };
@@ -15,7 +17,7 @@ const fieldStyle: React.CSSProperties = { display: "flex", flexDirection: "colum
 const labelStyle: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: "#143840" };
 const inputStyle: React.CSSProperties = { border: "1px solid #E2ECED", outline: "none", borderRadius: 10, padding: "11px 14px", fontSize: 14, fontFamily: "inherit" };
 
-export default function EditClasificadoModal({ listing, onClose, onSave }: EditClasificadoModalProps) {
+export default function EditClasificadoModal({ listing, ownerId, onClose, onSave }: EditClasificadoModalProps) {
   const [form, setForm] = useState({
     title: listing.title,
     category: listing.category,
@@ -26,9 +28,23 @@ export default function EditClasificadoModal({ listing, onClose, onSave }: EditC
     description: listing.description,
     visibility: listing.visibility,
   });
+  const [photoUrl, setPhotoUrl] = useState(listing.photoUrl);
+  const [photoUploading, setPhotoUploading] = useState(false);
+
+  const handlePhotoFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setPhotoUploading(true);
+    const { url } = await uploadListingImage(ownerId, "classifieds", file);
+    setPhotoUploading(false);
+    if (!url) return;
+    if (photoUrl) deleteListingImage(photoUrl);
+    setPhotoUrl(url);
+  };
 
   const handleSave = () => {
-    onSave({ ...listing, ...form });
+    onSave({ ...listing, ...form, photoUrl });
   };
 
   return (
@@ -39,9 +55,10 @@ export default function EditClasificadoModal({ listing, onClose, onSave }: EditC
       >
         <h3 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#143840" }}>Anuncio clasificado — {listing.title}</h3>
 
-        <div style={{ height: 130, borderRadius: 14, overflow: "hidden" }}>
-          <ImagePlaceholder caption="Foto del artículo" />
-        </div>
+        <label style={{ height: 130, borderRadius: 14, overflow: "hidden", cursor: photoUploading ? "default" : "pointer", display: "block" }}>
+          <input type="file" accept="image/*" disabled={photoUploading} style={{ display: "none" }} onChange={handlePhotoFile} />
+          <ListingImage src={photoUrl} caption={photoUploading ? "Subiendo…" : "Foto del artículo"} />
+        </label>
 
         <div style={fieldStyle}>
           <label style={labelStyle}>Título</label>

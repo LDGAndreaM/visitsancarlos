@@ -2,10 +2,13 @@
 
 import { useState } from "react";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
+import ListingImage from "@/components/ListingImage";
+import { deleteListingImage, uploadListingImage } from "@/lib/supabase/listingUploads";
 import { ALL_FEATURES, DIRECTORIO_CATEGORIES, type DirectorioListing } from "@/lib/dashboardData";
 
 type EditDirectorioModalProps = {
   listing: DirectorioListing;
+  ownerId: string;
   onClose: () => void;
   onSave: (listing: DirectorioListing) => void;
 };
@@ -14,7 +17,7 @@ const fieldStyle: React.CSSProperties = { display: "flex", flexDirection: "colum
 const labelStyle: React.CSSProperties = { fontSize: 13, fontWeight: 700, color: "#143840" };
 const inputStyle: React.CSSProperties = { border: "1px solid #E2ECED", outline: "none", borderRadius: 10, padding: "11px 14px", fontSize: 14, fontFamily: "inherit" };
 
-export default function EditDirectorioModal({ listing, onClose, onSave }: EditDirectorioModalProps) {
+export default function EditDirectorioModal({ listing, ownerId, onClose, onSave }: EditDirectorioModalProps) {
   const [form, setForm] = useState({
     name: listing.name,
     category: listing.category,
@@ -26,13 +29,60 @@ export default function EditDirectorioModal({ listing, onClose, onSave }: EditDi
     visibility: listing.visibility,
     features: listing.features,
   });
+  const [logoUrl, setLogoUrl] = useState(listing.logoUrl);
+  const [photoUrl, setPhotoUrl] = useState(listing.photoUrl);
+  const [galleryUrls, setGalleryUrls] = useState(listing.galleryUrls);
+  const [logoUploading, setLogoUploading] = useState(false);
+  const [photoUploading, setPhotoUploading] = useState(false);
+  const [galleryUploading, setGalleryUploading] = useState(false);
 
   const toggleFeature = (name: string) => {
     setForm((f) => ({ ...f, features: f.features.includes(name) ? f.features.filter((x) => x !== name) : [...f.features, name] }));
   };
 
+  const handleLogoFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setLogoUploading(true);
+    const { url } = await uploadListingImage(ownerId, "businesses", file);
+    setLogoUploading(false);
+    if (!url) return;
+    if (logoUrl) deleteListingImage(logoUrl);
+    setLogoUrl(url);
+  };
+
+  const handlePhotoFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setPhotoUploading(true);
+    const { url } = await uploadListingImage(ownerId, "businesses", file);
+    setPhotoUploading(false);
+    if (!url) return;
+    if (photoUrl) deleteListingImage(photoUrl);
+    setPhotoUrl(url);
+  };
+
+  const handleGalleryFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file || galleryUrls.length >= 10) return;
+    setGalleryUploading(true);
+    const { url } = await uploadListingImage(ownerId, "businesses", file);
+    setGalleryUploading(false);
+    if (!url) return;
+    setGalleryUrls((prev) => [...prev, url]);
+  };
+
+  const removeGalleryImage = (index: number) => {
+    const url = galleryUrls[index];
+    if (url) deleteListingImage(url);
+    setGalleryUrls((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleSave = () => {
-    onSave({ ...listing, ...form });
+    onSave({ ...listing, ...form, logoUrl, photoUrl, galleryUrls });
   };
 
   return (
@@ -100,26 +150,50 @@ export default function EditDirectorioModal({ listing, onClose, onSave }: EditDi
 
         <div style={fieldStyle}>
           <label style={labelStyle}>Logo</label>
-          <div style={{ width: 80, height: 80, borderRadius: 14, overflow: "hidden" }}>
-            <ImagePlaceholder caption="Logo" />
-          </div>
+          <label style={{ width: 80, height: 80, borderRadius: 14, overflow: "hidden", cursor: logoUploading ? "default" : "pointer", display: "block" }}>
+            <input type="file" accept="image/*" disabled={logoUploading} style={{ display: "none" }} onChange={handleLogoFile} />
+            <ListingImage src={logoUrl} caption={logoUploading ? "Subiendo…" : "Logo"} round />
+          </label>
         </div>
 
         <div style={fieldStyle}>
           <label style={labelStyle}>Foto principal</label>
-          <div style={{ height: 120, borderRadius: 12, overflow: "hidden" }}>
-            <ImagePlaceholder caption="Foto del negocio" />
-          </div>
+          <label style={{ height: 120, borderRadius: 12, overflow: "hidden", cursor: photoUploading ? "default" : "pointer", display: "block" }}>
+            <input type="file" accept="image/*" disabled={photoUploading} style={{ display: "none" }} onChange={handlePhotoFile} />
+            <ListingImage src={photoUrl} caption={photoUploading ? "Subiendo…" : "Foto del negocio"} />
+          </label>
         </div>
 
         <div style={fieldStyle}>
-          <label style={labelStyle}>Galería (hasta 10 fotos)</label>
+          <label style={labelStyle}>Galería ({galleryUrls.length}/10 fotos)</label>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 8 }}>
-            {Array.from({ length: 10 }, (_, i) => (
-              <div key={i} style={{ height: 56, borderRadius: 8, overflow: "hidden" }}>
-                <ImagePlaceholder caption="+" />
-              </div>
-            ))}
+            {Array.from({ length: 10 }, (_, i) => {
+              const url = galleryUrls[i];
+              const isNext = i === galleryUrls.length;
+              return (
+                <div key={i} style={{ position: "relative", height: 56, borderRadius: 8, overflow: "hidden" }}>
+                  {url ? (
+                    <>
+                      <ListingImage src={url} caption="" />
+                      <button
+                        type="button"
+                        onClick={() => removeGalleryImage(i)}
+                        style={{ position: "absolute", top: 2, right: 2, width: 18, height: 18, borderRadius: "50%", border: "none", background: "rgba(20,56,64,0.75)", color: "#ffffff", fontSize: 11, lineHeight: 1, cursor: "pointer", padding: 0 }}
+                      >
+                        ×
+                      </button>
+                    </>
+                  ) : isNext ? (
+                    <label style={{ display: "block", width: "100%", height: "100%", cursor: galleryUploading ? "default" : "pointer" }}>
+                      <input type="file" accept="image/*" disabled={galleryUploading} style={{ display: "none" }} onChange={handleGalleryFile} />
+                      <ImagePlaceholder caption={galleryUploading ? "…" : "+"} />
+                    </label>
+                  ) : (
+                    <ImagePlaceholder caption="" />
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
 

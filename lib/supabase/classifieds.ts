@@ -14,6 +14,7 @@ type ClasificadoRow = {
   phone: string | null;
   description: string | null;
   photo_placeholder: string | null;
+  photo_url: string | null;
   status: "pendiente" | "aprobado" | "rechazado" | "archivado";
   views: number;
   created_at: string;
@@ -36,6 +37,7 @@ export function toPublicClasificado(row: ClasificadoRow): Clasificado {
     views: row.views,
     placeholder: row.photo_placeholder ?? `Foto: ${row.title}`,
     description: row.description ?? "",
+    photoUrl: row.photo_url ?? "",
   };
 }
 
@@ -63,6 +65,7 @@ export function toClasificadoListing(row: ClasificadoRow): ClasificadoListing {
     description: row.description ?? "",
     visibility: s.visibility,
     pendingApproval: s.pending,
+    photoUrl: row.photo_url ?? "",
   };
 }
 
@@ -150,7 +153,16 @@ export async function updateClasificadoFromDashboard(id: string, listing: Clasif
   const supabase = createClient();
   await supabase
     .from("classifieds")
-    .update({ title: listing.title, category: listing.category, price: Number(listing.price) || 0, condition: listing.condition, location: listing.location, phone: listing.phone, description: listing.description })
+    .update({
+      title: listing.title,
+      category: listing.category,
+      price: Number(listing.price) || 0,
+      condition: listing.condition,
+      location: listing.location,
+      phone: listing.phone,
+      description: listing.description,
+      photo_url: listing.photoUrl || null,
+    })
     .eq("id", id);
 }
 

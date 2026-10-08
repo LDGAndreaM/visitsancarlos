@@ -293,9 +293,9 @@ export default function DashboardApp() {
           onChooseEvento={handleChooseEvento}
         />
       )}
-      {editing && editing.type === "directorio" && <EditDirectorioModal listing={editing} onClose={() => setEditingId(null)} onSave={handleSaveListing} />}
-      {editing && editing.type === "clasificado" && <EditClasificadoModal listing={editing} onClose={() => setEditingId(null)} onSave={handleSaveListing} />}
-      {editing && editing.type === "evento" && <EditEventoModal listing={editing} onClose={() => setEditingId(null)} onSave={handleSaveListing} />}
+      {editing && editing.type === "directorio" && <EditDirectorioModal listing={editing} ownerId={currentUser.id} onClose={() => setEditingId(null)} onSave={handleSaveListing} />}
+      {editing && editing.type === "clasificado" && <EditClasificadoModal listing={editing} ownerId={currentUser.id} onClose={() => setEditingId(null)} onSave={handleSaveListing} />}
+      {editing && editing.type === "evento" && <EditEventoModal listing={editing} ownerId={currentUser.id} onClose={() => setEditingId(null)} onSave={handleSaveListing} />}
       {showAdModal && <AdModal listings={listingRows} onClose={() => setShowAdModal(false)} onConfirm={handleConfirmAdModal} />}
     </div>
   );

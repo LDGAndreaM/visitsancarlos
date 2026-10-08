@@ -26,6 +26,9 @@ export type DirectorioListing = ListingBase & {
   hours: string;
   priceRange: string;
   features: string[];
+  logoUrl: string;
+  photoUrl: string;
+  galleryUrls: string[];
 };
 
 export type ClasificadoListing = ListingBase & {
@@ -34,6 +37,7 @@ export type ClasificadoListing = ListingBase & {
   category: ClasificadoCategory;
   price: number | "";
   condition: "Nuevo" | "Usado";
+  photoUrl: string;
 };
 
 export type EventListing = ListingBase & {
@@ -50,126 +54,10 @@ export type EventListing = ListingBase & {
   facebook: string;
   instagram: string;
   website: string;
+  photoUrl: string;
 };
 
 export type DashboardListing = DirectorioListing | ClasificadoListing | EventListing;
-
-export const INITIAL_LISTINGS: DashboardListing[] = [
-  {
-    id: "db-1",
-    type: "directorio",
-    name: "Hotel Playa Bonita",
-    category: "Hoteles",
-    location: "San Carlos, Sonora",
-    hours: "Lun–Dom 8:00–22:00",
-    phone: "622 114 5316",
-    status: "Activo",
-    statusColor: "#009BA4",
-    statusBg: "#E5F6F7",
-    description: "Hotel frente al mar con alberca y restaurante propio.",
-    priceRange: "$$",
-    visibility: "Publicado",
-    pendingApproval: false,
-    features: ["WiFi gratis", "Estacionamiento", "Alberca", "Aire acondicionado"],
-  },
-  {
-    id: "db-2",
-    type: "directorio",
-    name: "Buceo Sonora Adventures",
-    category: "Negocios",
-    location: "San Carlos, Sonora",
-    hours: "Lun–Sáb 7:00–17:00",
-    phone: "622 155 6677",
-    status: "En revisión",
-    statusColor: "#EB600A",
-    statusBg: "#FDEEE4",
-    description: "Tours de buceo y snorkel en la bahía de San Carlos.",
-    priceRange: "$$",
-    visibility: "Invisible",
-    pendingApproval: true,
-    features: ["Reservaciones", "Equipo incluido"],
-  },
-  {
-    id: "cl-1",
-    type: "clasificado",
-    title: "Sedán compacto 2018, único dueño",
-    category: "Autos",
-    price: 145000,
-    condition: "Usado",
-    location: "San Carlos, Sonora",
-    phone: "622 114 2201",
-    status: "Activo",
-    statusColor: "#009BA4",
-    statusBg: "#E5F6F7",
-    description: "Único dueño, servicios de agencia al corriente.",
-    visibility: "Publicado",
-    pendingApproval: false,
-  },
-  {
-    id: "cl-2",
-    type: "clasificado",
-    title: "Kayak doble inflable, poco uso",
-    category: "Otros productos",
-    price: 4200,
-    condition: "Usado",
-    location: "San Carlos, Sonora",
-    phone: "622 118 4455",
-    status: "En revisión",
-    statusColor: "#EB600A",
-    statusBg: "#FDEEE4",
-    description: "Kayak doble, incluye remos y bomba de aire.",
-    visibility: "Invisible",
-    pendingApproval: true,
-  },
-  {
-    id: "ev-1",
-    type: "evento",
-    name: "Torneo de Pesca",
-    category: "DEPORTIVO",
-    date: "2026-09-22",
-    endDate: "2026-09-22",
-    time: "07:00",
-    endTime: "13:00",
-    location: "Marina San Carlos, San Carlos, Sonora",
-    phone: "622 114 5316",
-    status: "Activo",
-    statusColor: "#009BA4",
-    statusBg: "#E5F6F7",
-    description: "Competencia anual de pesca deportiva abierta a locales y visitantes.",
-    cost: "$500 MXN por equipo",
-    organizers: "Club de Pesca San Carlos",
-    email: "eventos@visitsancarlos.com",
-    facebook: "https://facebook.com",
-    instagram: "",
-    website: "",
-    visibility: "Publicado",
-    pendingApproval: false,
-  },
-  {
-    id: "ev-2",
-    type: "evento",
-    name: "Noche de Música en Vivo",
-    category: "ENTRETENIMIENTO",
-    date: "2026-09-25",
-    endDate: "2026-09-25",
-    time: "19:30",
-    endTime: "23:00",
-    location: "Plaza San Carlos, San Carlos, Sonora",
-    phone: "622 114 5316",
-    status: "En revisión",
-    statusColor: "#EB600A",
-    statusBg: "#FDEEE4",
-    description: "Bandas locales en vivo con food trucks y ambiente familiar.",
-    cost: "Gratis",
-    organizers: "Visit San Carlos",
-    email: "visit.sancarlos.son@gmail.com",
-    facebook: "https://facebook.com",
-    instagram: "https://instagram.com",
-    website: "",
-    visibility: "Invisible",
-    pendingApproval: true,
-  },
-];
 
 export type DashboardAd = {
   id: string;

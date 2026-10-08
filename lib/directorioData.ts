@@ -18,6 +18,9 @@ export type Business = {
   description?: string;
   features?: string[];
   ownerId?: string;
+  logoUrl?: string;
+  photoUrl?: string;
+  galleryUrls?: string[];
 };
 
 export const PRICE_OPTIONS = ["Todos", "$", "$$", "$$$"] as const;

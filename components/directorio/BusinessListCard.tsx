@@ -1,5 +1,5 @@
 import Link from "next/link";
-import ImagePlaceholder from "@/components/ImagePlaceholder";
+import ListingImage from "@/components/ListingImage";
 import type { Business } from "@/lib/directorioData";
 
 export default function BusinessListCard({ business: biz }: { business: Business }) {
@@ -9,7 +9,7 @@ export default function BusinessListCard({ business: biz }: { business: Business
       style={{ display: "flex", gap: 16, background: "#ffffff", borderRadius: 16, padding: 14, boxShadow: "0 8px 20px rgba(0,60,66,0.08)", alignItems: "center", color: "inherit" }}
     >
       <div style={{ width: 110, height: 80, borderRadius: 12, overflow: "hidden", flexShrink: 0 }}>
-        <ImagePlaceholder caption={biz.placeholder} />
+        <ListingImage src={biz.photoUrl} caption={biz.placeholder} />
       </div>
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 4 }}>
         <span style={{ fontSize: 11, fontWeight: 700, color: "#6AC7E2", letterSpacing: "0.04em" }}>{biz.category}</span>

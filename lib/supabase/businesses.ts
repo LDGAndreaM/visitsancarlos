@@ -15,6 +15,9 @@ type BusinessRow = {
   description: string | null;
   features: string[];
   photo_placeholder: string | null;
+  logo_url: string | null;
+  photo_url: string | null;
+  gallery_urls: string[];
   status: "pendiente" | "aprobado" | "rechazado" | "archivado";
   featured: boolean;
   rating: number;
@@ -48,6 +51,9 @@ export function toPublicBusiness(row: BusinessRow): Business {
     description: row.description ?? "",
     features: row.features ?? [],
     ownerId: row.owner_id,
+    logoUrl: row.logo_url ?? "",
+    photoUrl: row.photo_url ?? "",
+    galleryUrls: row.gallery_urls ?? [],
   };
 }
 
@@ -76,6 +82,9 @@ export function toDirectorioListing(row: BusinessRow): DirectorioListing {
     visibility: s.visibility,
     pendingApproval: s.pending,
     features: row.features ?? [],
+    logoUrl: row.logo_url ?? "",
+    photoUrl: row.photo_url ?? "",
+    galleryUrls: row.gallery_urls ?? [],
   };
 }
 
@@ -154,7 +163,19 @@ export async function updateBusinessFromDashboard(id: string, listing: Directori
   const supabase = createClient();
   await supabase
     .from("businesses")
-    .update({ name: listing.name, category: listing.category, location: listing.location, hours: listing.hours, price_range: listing.priceRange, phone: listing.phone, description: listing.description, features: listing.features })
+    .update({
+      name: listing.name,
+      category: listing.category,
+      location: listing.location,
+      hours: listing.hours,
+      price_range: listing.priceRange,
+      phone: listing.phone,
+      description: listing.description,
+      features: listing.features,
+      logo_url: listing.logoUrl || null,
+      photo_url: listing.photoUrl || null,
+      gallery_urls: listing.galleryUrls,
+    })
     .eq("id", id);
 }
 
