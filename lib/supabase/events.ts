@@ -104,6 +104,7 @@ export function toAdminEvent(row: EventRow): AdminEvent {
     category: row.category,
     status: ADMIN_STATUS[row.status],
     featured: row.featured,
+    photoUrl: row.photo_url ?? "",
   };
 }
 

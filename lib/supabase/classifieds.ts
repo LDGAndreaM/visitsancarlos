@@ -88,6 +88,7 @@ export function toAdminClasificado(row: ClasificadoRowWithOwner): AdminClasifica
     location: row.location ?? "",
     status: ADMIN_STATUS[row.status],
     submitted: fmtDateShort(row.created_at),
+    photoUrl: row.photo_url ?? "",
   };
 }
 

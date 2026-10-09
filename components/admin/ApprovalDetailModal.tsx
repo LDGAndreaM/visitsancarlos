@@ -1,4 +1,4 @@
-import ImagePlaceholder from "@/components/ImagePlaceholder";
+import ListingImage from "@/components/ListingImage";
 import type { AdminBusiness } from "@/lib/adminData";
 
 type ApprovalDetailModalProps = {
@@ -17,7 +17,7 @@ export default function ApprovalDetailModal({ business, onClose, onApprove, onRe
       >
         <h3 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#143840" }}>{business.name}</h3>
         <div style={{ width: "100%", height: 140, borderRadius: 12, overflow: "hidden" }}>
-          <ImagePlaceholder caption="Foto del negocio" />
+          <ListingImage src={business.photoUrl} caption="Foto del negocio" />
         </div>
         <span style={{ fontSize: 13, color: "#5C7679" }}>
           {business.category} · {business.location}

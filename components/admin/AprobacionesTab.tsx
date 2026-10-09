@@ -1,4 +1,4 @@
-import ImagePlaceholder from "@/components/ImagePlaceholder";
+import ListingImage from "@/components/ListingImage";
 import type { AdminBusiness, AdminClasificado, AdminEvent } from "@/lib/adminData";
 
 type AprobacionesTabProps = {
@@ -49,7 +49,7 @@ export default function AprobacionesTab({
           {pendingBusinesses.map((biz) => (
             <div key={biz.id} style={cardStyle}>
               <div style={{ width: 64, height: 64, borderRadius: 14, overflow: "hidden", flexShrink: 0 }}>
-                <ImagePlaceholder caption="Logo" />
+                <ListingImage src={biz.photoUrl || biz.logoUrl} caption="Logo" />
               </div>
               <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 4 }}>
                 <span style={{ fontSize: 16, fontWeight: 700, color: "#143840" }}>{biz.name}</span>
@@ -78,7 +78,7 @@ export default function AprobacionesTab({
           {pendingEvents.map((ev) => (
             <div key={ev.id} style={cardStyle}>
               <div style={{ width: 64, height: 64, borderRadius: 14, overflow: "hidden", flexShrink: 0 }}>
-                <ImagePlaceholder caption="Evento" />
+                <ListingImage src={ev.photoUrl} caption="Evento" />
               </div>
               <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 4 }}>
                 <span style={{ fontSize: 16, fontWeight: 700, color: "#143840" }}>{ev.name}</span>
@@ -103,7 +103,7 @@ export default function AprobacionesTab({
           {pendingClasificados.map((it) => (
             <div key={it.id} style={cardStyle}>
               <div style={{ width: 64, height: 64, borderRadius: 14, overflow: "hidden", flexShrink: 0 }}>
-                <ImagePlaceholder caption="Artículo" />
+                <ListingImage src={it.photoUrl} caption="Artículo" />
               </div>
               <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 4 }}>
                 <span style={{ fontSize: 16, fontWeight: 700, color: "#143840" }}>{it.title}</span>

@@ -107,6 +107,8 @@ export function toAdminBusiness(row: BusinessRowWithOwner): AdminBusiness {
     phone: row.phone ?? "",
     submitted: fmtDateShort(row.created_at),
     description: row.description ?? "",
+    logoUrl: row.logo_url ?? "",
+    photoUrl: row.photo_url ?? "",
   };
 }
 

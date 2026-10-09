@@ -22,6 +22,8 @@ export type AdminBusiness = {
   phone: string;
   submitted: string;
   description: string;
+  logoUrl: string;
+  photoUrl: string;
 };
 
 export const ADMIN_BUSINESS_CATEGORIES = ["Todas", "Hoteles", "Restaurantes", "Doctores", "Negocios", "Clasificados"];
@@ -52,6 +54,7 @@ export type AdminEvent = {
   category: string;
   status: AdminEventStatus;
   featured: boolean;
+  photoUrl: string;
 };
 
 export type AdminAd = {
@@ -100,6 +103,7 @@ export type AdminClasificado = {
   location: string;
   status: AdminClasificadoStatus;
   submitted: string;
+  photoUrl: string;
 };
 
 export const CLASIFICADO_STATUS_COLORS: Record<AdminClasificadoStatus, [string, string]> = {

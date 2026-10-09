@@ -1,4 +1,4 @@
-import ImagePlaceholder from "@/components/ImagePlaceholder";
+import ListingImage from "@/components/ListingImage";
 import type { AdminBusiness, Chat } from "@/lib/adminData";
 import type { AdminTab } from "@/lib/adminAuth";
 
@@ -48,7 +48,7 @@ export default function ResumenTab({ stats, pendingBusinesses, unreadChats, onAp
             {pendingBusinesses.map((biz) => (
               <div key={biz.id} style={{ display: "flex", alignItems: "center", gap: 14, padding: 12, border: "1px solid #EEF3F3", borderRadius: 12 }}>
                 <div style={{ width: 44, height: 44, borderRadius: 10, overflow: "hidden", flexShrink: 0 }}>
-                  <ImagePlaceholder caption="Logo" />
+                  <ListingImage src={biz.photoUrl || biz.logoUrl} caption="Logo" />
                 </div>
                 <div style={{ flex: 1 }}>
                   <span style={{ fontSize: 14, fontWeight: 700, color: "#143840", display: "block" }}>{biz.name}</span>
