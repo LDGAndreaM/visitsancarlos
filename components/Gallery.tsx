@@ -15,7 +15,7 @@ export default function Gallery({ images }: GalleryProps) {
   return (
     <div>
       <div style={{ height: 420, borderRadius: 20, overflow: "hidden", boxShadow: "0 16px 36px rgba(0,60,66,0.1)" }}>
-        <ListingImage src={images[active].url} caption={images[active].placeholder} />
+        <ListingImage src={images[active].url} caption={images[active].placeholder} fit="contain" />
       </div>
       {images.length > 1 && (
         <div className="vsc-scroll" style={{ display: "flex", gap: 12, marginTop: 14, overflowX: "auto" }}>

@@ -3,8 +3,12 @@
 import { useState } from "react";
 import ImagePlaceholder from "@/components/ImagePlaceholder";
 import ListingImage from "@/components/ListingImage";
+import ImageCropModal from "./ImageCropModal";
 import { deleteListingImage, uploadListingImage } from "@/lib/supabase/listingUploads";
 import { ALL_FEATURES, DIRECTORIO_CATEGORIES, type DirectorioListing } from "@/lib/dashboardData";
+
+type CropField = "logo" | "photo" | "gallery";
+type CropTarget = { field: CropField; file: File; previewUrl: string };
 
 type EditDirectorioModalProps = {
   listing: DirectorioListing;
@@ -35,44 +39,52 @@ export default function EditDirectorioModal({ listing, ownerId, onClose, onSave 
   const [logoUploading, setLogoUploading] = useState(false);
   const [photoUploading, setPhotoUploading] = useState(false);
   const [galleryUploading, setGalleryUploading] = useState(false);
+  const [cropTarget, setCropTarget] = useState<CropTarget | null>(null);
 
   const toggleFeature = (name: string) => {
     setForm((f) => ({ ...f, features: f.features.includes(name) ? f.features.filter((x) => x !== name) : [...f.features, name] }));
   };
 
-  const handleLogoFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const pickFile = (field: CropField) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = "";
     if (!file) return;
-    setLogoUploading(true);
-    const { url } = await uploadListingImage(ownerId, "businesses", file);
-    setLogoUploading(false);
-    if (!url) return;
-    if (logoUrl) deleteListingImage(logoUrl);
-    setLogoUrl(url);
+    if (field === "gallery" && galleryUrls.length >= 10) return;
+    setCropTarget({ field, file, previewUrl: URL.createObjectURL(file) });
   };
 
-  const handlePhotoFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    e.target.value = "";
-    if (!file) return;
-    setPhotoUploading(true);
-    const { url } = await uploadListingImage(ownerId, "businesses", file);
-    setPhotoUploading(false);
-    if (!url) return;
-    if (photoUrl) deleteListingImage(photoUrl);
-    setPhotoUrl(url);
+  const closeCrop = () => {
+    if (cropTarget) URL.revokeObjectURL(cropTarget.previewUrl);
+    setCropTarget(null);
   };
 
-  const handleGalleryFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    e.target.value = "";
-    if (!file || galleryUrls.length >= 10) return;
-    setGalleryUploading(true);
-    const { url } = await uploadListingImage(ownerId, "businesses", file);
-    setGalleryUploading(false);
-    if (!url) return;
-    setGalleryUrls((prev) => [...prev, url]);
+  const confirmCrop = async (blob: Blob) => {
+    if (!cropTarget) return;
+    const { field, file } = cropTarget;
+    const croppedFile = new File([blob], file.name, { type: blob.type });
+    closeCrop();
+
+    if (field === "logo") {
+      setLogoUploading(true);
+      const { url } = await uploadListingImage(ownerId, "businesses", croppedFile);
+      setLogoUploading(false);
+      if (!url) return;
+      if (logoUrl) deleteListingImage(logoUrl);
+      setLogoUrl(url);
+    } else if (field === "photo") {
+      setPhotoUploading(true);
+      const { url } = await uploadListingImage(ownerId, "businesses", croppedFile);
+      setPhotoUploading(false);
+      if (!url) return;
+      if (photoUrl) deleteListingImage(photoUrl);
+      setPhotoUrl(url);
+    } else {
+      setGalleryUploading(true);
+      const { url } = await uploadListingImage(ownerId, "businesses", croppedFile);
+      setGalleryUploading(false);
+      if (!url) return;
+      setGalleryUrls((prev) => [...prev, url]);
+    }
   };
 
   const removeGalleryImage = (index: number) => {
@@ -151,7 +163,7 @@ export default function EditDirectorioModal({ listing, ownerId, onClose, onSave 
         <div style={fieldStyle}>
           <label style={labelStyle}>Logo</label>
           <label style={{ width: 80, height: 80, borderRadius: 14, overflow: "hidden", cursor: logoUploading ? "default" : "pointer", display: "block" }}>
-            <input type="file" accept="image/*" disabled={logoUploading} style={{ display: "none" }} onChange={handleLogoFile} />
+            <input type="file" accept="image/*" disabled={logoUploading} style={{ display: "none" }} onChange={pickFile("logo")} />
             <ListingImage src={logoUrl} caption={logoUploading ? "Subiendo…" : "Logo"} round />
           </label>
         </div>
@@ -159,7 +171,7 @@ export default function EditDirectorioModal({ listing, ownerId, onClose, onSave 
         <div style={fieldStyle}>
           <label style={labelStyle}>Foto principal</label>
           <label style={{ height: 120, borderRadius: 12, overflow: "hidden", cursor: photoUploading ? "default" : "pointer", display: "block" }}>
-            <input type="file" accept="image/*" disabled={photoUploading} style={{ display: "none" }} onChange={handlePhotoFile} />
+            <input type="file" accept="image/*" disabled={photoUploading} style={{ display: "none" }} onChange={pickFile("photo")} />
             <ListingImage src={photoUrl} caption={photoUploading ? "Subiendo…" : "Foto del negocio"} />
           </label>
         </div>
@@ -185,7 +197,7 @@ export default function EditDirectorioModal({ listing, ownerId, onClose, onSave 
                     </>
                   ) : isNext ? (
                     <label style={{ display: "block", width: "100%", height: "100%", cursor: galleryUploading ? "default" : "pointer" }}>
-                      <input type="file" accept="image/*" disabled={galleryUploading} style={{ display: "none" }} onChange={handleGalleryFile} />
+                      <input type="file" accept="image/*" disabled={galleryUploading} style={{ display: "none" }} onChange={pickFile("gallery")} />
                       <ImagePlaceholder caption={galleryUploading ? "…" : "+"} />
                     </label>
                   ) : (
@@ -225,6 +237,15 @@ export default function EditDirectorioModal({ listing, ownerId, onClose, onSave 
           </button>
         </div>
       </div>
+      {cropTarget && (
+        <ImageCropModal
+          imageSrc={cropTarget.previewUrl}
+          aspect={cropTarget.field === "logo" ? 1 : 4 / 3}
+          round={cropTarget.field === "logo"}
+          onCancel={closeCrop}
+          onConfirm={confirmCrop}
+        />
+      )}
     </div>
   );
 }

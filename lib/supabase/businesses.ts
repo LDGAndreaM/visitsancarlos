@@ -109,6 +109,7 @@ export function toAdminBusiness(row: BusinessRowWithOwner): AdminBusiness {
     description: row.description ?? "",
     logoUrl: row.logo_url ?? "",
     photoUrl: row.photo_url ?? "",
+    galleryUrls: row.gallery_urls ?? [],
   };
 }
 

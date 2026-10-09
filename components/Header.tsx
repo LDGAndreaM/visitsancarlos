@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -8,6 +8,7 @@ import { NAV_LINKS } from "@/lib/nav";
 import MobileAppBar from "@/components/mobile/MobileAppBar";
 import MobileDrawer from "@/components/mobile/MobileDrawer";
 import MobileTabBar from "@/components/mobile/MobileTabBar";
+import { getCurrentUser } from "@/lib/supabase/session";
 
 type HeaderProps = {
   ctaLabel?: string;
@@ -52,7 +53,20 @@ export default function Header({
 }: HeaderProps) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const resolvedTitle = mobileTitle ?? PAGE_TITLES[pathname] ?? "Visit San Carlos";
+
+  useEffect(() => {
+    getCurrentUser().then((u) => setLoggedIn(!!u));
+  }, []);
+
+  // Cuando nadie personalizó el botón (ni onCtaClick ni ctaHref/ctaLabel
+  // propios, como en Clasificados), y hay sesión iniciada, lo convertimos en
+  // el acceso de vuelta al Dashboard — si no, un usuario logueado no tiene
+  // forma de regresar ahí desde el resto del sitio.
+  const usingDefaultCta = !onCtaClick && ctaHref === "/login" && ctaLabel === "AGREGAR NEGOCIO";
+  const resolvedCtaLabel = usingDefaultCta && loggedIn ? "MI CUENTA" : ctaLabel;
+  const resolvedCtaHref = usingDefaultCta && loggedIn ? "/dashboard" : ctaHref;
 
   return (
     <>
@@ -91,11 +105,11 @@ export default function Header({
           </nav>
           {onCtaClick ? (
             <button onClick={onCtaClick} style={ctaStyle}>
-              {ctaLabel}
+              {resolvedCtaLabel}
             </button>
           ) : (
-            <Link href={ctaHref} style={ctaStyle}>
-              {ctaLabel}
+            <Link href={resolvedCtaHref} style={ctaStyle}>
+              {resolvedCtaLabel}
             </Link>
           )}
         </div>

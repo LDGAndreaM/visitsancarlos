@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FOOTER_LINKS } from "@/lib/nav";
+import { getCurrentUser, type CurrentUser } from "@/lib/supabase/session";
 import { MobileIcon } from "./icons";
 
 const MENU_GROUPS: { title: string; items: { icon: string; label: string; href: string }[] }[] = [
@@ -30,7 +32,15 @@ const MENU_GROUPS: { title: string; items: { icon: string; label: string; href: 
 ];
 
 export default function MobileDrawer({ open, onClose, activeHref }: { open: boolean; onClose: () => void; activeHref?: string }) {
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
+
+  useEffect(() => {
+    if (open) getCurrentUser().then(setCurrentUser);
+  }, [open]);
+
   if (!open) return null;
+
+  const initials = currentUser ? currentUser.name.slice(0, 2).toUpperCase() : "VS";
 
   return (
     <>
@@ -65,16 +75,16 @@ export default function MobileDrawer({ open, onClose, activeHref }: { open: bool
         </div>
 
         <Link
-          href="/login"
+          href={currentUser ? "/dashboard" : "/login"}
           onClick={onClose}
           style={{ margin: "0 20px 16px", display: "flex", alignItems: "center", gap: 12, background: "#E5F6F7", borderRadius: 18, padding: "12px 14px" }}
         >
           <span style={{ width: 40, height: 40, borderRadius: "50%", background: "#009BA4", color: "#ffffff", display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 700, fontSize: 15, flexShrink: 0 }}>
-            VS
+            {initials}
           </span>
           <span style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-            <span style={{ fontSize: 14, fontWeight: 700, color: "#143840" }}>Inicia sesión</span>
-            <span style={{ fontSize: 12, color: "#3B5C61" }}>Administra tus publicaciones</span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: "#143840" }}>{currentUser ? currentUser.name : "Inicia sesión"}</span>
+            <span style={{ fontSize: 12, color: "#3B5C61" }}>{currentUser ? "Ir a mi Dashboard" : "Administra tus publicaciones"}</span>
           </span>
           <span style={{ color: "#009BA4", fontSize: 18 }}>›</span>
         </Link>
@@ -117,7 +127,7 @@ export default function MobileDrawer({ open, onClose, activeHref }: { open: bool
 
         <div style={{ padding: "14px 20px 0", display: "flex", flexDirection: "column", gap: 10, borderTop: "1px solid #EEF3F3", marginTop: 8 }}>
           <Link
-            href="/login"
+            href={currentUser ? "/dashboard" : "/login"}
             onClick={onClose}
             style={{
               height: 48,
@@ -133,7 +143,7 @@ export default function MobileDrawer({ open, onClose, activeHref }: { open: bool
               boxShadow: "0 6px 16px rgba(235,96,10,0.3)",
             }}
           >
-            AGREGAR NEGOCIO
+            {currentUser ? "MI CUENTA" : "AGREGAR NEGOCIO"}
           </Link>
           <a
             href="tel:911"

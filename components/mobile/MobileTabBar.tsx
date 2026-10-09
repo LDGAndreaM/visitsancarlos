@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { getCurrentUser } from "@/lib/supabase/session";
 import { MobileIcon } from "./icons";
 
 const TABS = [
@@ -14,6 +16,11 @@ const TABS = [
 
 export default function MobileTabBar() {
   const pathname = usePathname();
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    getCurrentUser().then((u) => setLoggedIn(!!u));
+  }, []);
 
   return (
     <div className="vsc-mobile-only">
@@ -38,7 +45,7 @@ export default function MobileTabBar() {
           return (
             <Link
               key={t.label}
-              href={t.href}
+              href={loggedIn ? "/dashboard" : t.href}
               aria-label={t.label}
               style={{
                 justifySelf: "center",

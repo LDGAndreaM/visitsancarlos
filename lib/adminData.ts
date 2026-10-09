@@ -24,6 +24,7 @@ export type AdminBusiness = {
   description: string;
   logoUrl: string;
   photoUrl: string;
+  galleryUrls: string[];
 };
 
 export const ADMIN_BUSINESS_CATEGORIES = ["Todas", "Hoteles", "Restaurantes", "Doctores", "Negocios", "Clasificados"];

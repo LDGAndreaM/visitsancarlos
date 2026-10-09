@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import ListingImage from "@/components/ListingImage";
+import ImageCropModal from "./ImageCropModal";
 import { deleteListingImage, uploadListingImage } from "@/lib/supabase/listingUploads";
 import { CLASIFICADOS_CATEGORIES, type ClasificadoCategory } from "@/lib/clasificadosData";
 import type { ClasificadoListing } from "@/lib/dashboardData";
@@ -30,13 +31,26 @@ export default function EditClasificadoModal({ listing, ownerId, onClose, onSave
   });
   const [photoUrl, setPhotoUrl] = useState(listing.photoUrl);
   const [photoUploading, setPhotoUploading] = useState(false);
+  const [cropSrc, setCropSrc] = useState<{ file: File; previewUrl: string } | null>(null);
 
-  const handlePhotoFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const pickPhotoFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     e.target.value = "";
     if (!file) return;
+    setCropSrc({ file, previewUrl: URL.createObjectURL(file) });
+  };
+
+  const closeCrop = () => {
+    if (cropSrc) URL.revokeObjectURL(cropSrc.previewUrl);
+    setCropSrc(null);
+  };
+
+  const confirmCrop = async (blob: Blob) => {
+    if (!cropSrc) return;
+    const croppedFile = new File([blob], cropSrc.file.name, { type: blob.type });
+    closeCrop();
     setPhotoUploading(true);
-    const { url } = await uploadListingImage(ownerId, "classifieds", file);
+    const { url } = await uploadListingImage(ownerId, "classifieds", croppedFile);
     setPhotoUploading(false);
     if (!url) return;
     if (photoUrl) deleteListingImage(photoUrl);
@@ -56,7 +70,7 @@ export default function EditClasificadoModal({ listing, ownerId, onClose, onSave
         <h3 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "#143840" }}>Anuncio clasificado — {listing.title}</h3>
 
         <label style={{ height: 130, borderRadius: 14, overflow: "hidden", cursor: photoUploading ? "default" : "pointer", display: "block" }}>
-          <input type="file" accept="image/*" disabled={photoUploading} style={{ display: "none" }} onChange={handlePhotoFile} />
+          <input type="file" accept="image/*" disabled={photoUploading} style={{ display: "none" }} onChange={pickPhotoFile} />
           <ListingImage src={photoUrl} caption={photoUploading ? "Subiendo…" : "Foto del artículo"} />
         </label>
 
@@ -138,6 +152,7 @@ export default function EditClasificadoModal({ listing, ownerId, onClose, onSave
           </button>
         </div>
       </div>
+      {cropSrc && <ImageCropModal imageSrc={cropSrc.previewUrl} aspect={4 / 3} onCancel={closeCrop} onConfirm={confirmCrop} />}
     </div>
   );
 }
